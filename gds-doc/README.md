@@ -44,5 +44,5 @@ Note that entries where year is one of `from` and `until` are included in the re
 To get the data specific to a given country, add a `country` parameter to the query string:
 
 ```
-[URL]?country=ch
+[URL]?country=switzerland
 ```

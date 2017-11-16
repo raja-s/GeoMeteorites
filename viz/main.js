@@ -3,7 +3,7 @@
     Imports
 */
 
-import * as CONSTANTS from '/constants';
+import * as CONSTANTS from '/GeoMeteorites/constants';
 
 /*
     Exports

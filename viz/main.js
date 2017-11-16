@@ -3,7 +3,7 @@
     Imports
 */
 
-import * as CONSTANTS from '/GeoMeteorites/constants';
+import * as CONSTANTS from '/GeoMeteorites/constants.js';
 
 /*
     Exports

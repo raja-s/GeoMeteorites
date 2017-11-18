@@ -1,14 +1,67 @@
 <!DOCTYPE html>
 <html>
-    
     <head>
-        <title>GeoMeteorites</title>
         <meta charset='UTF-8'/>
+        <title>Projet: GeoMeteorites</title>
         
-        <!-- Main script -->
-        <script type='module' src='/GeoMeteorites/script.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="interface/bootstrap3-typeahead.min.js"></script>
+        <script src="interface/autocompletion.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.0.0/d3.js"></script>
+        <!-- <script type="module" src="/GeoMeteorites/script.js"></script> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css" />
     </head>
-    
-    <body></body>
-    
+    <body>
+        <header id="top">
+            <h1>Logo</h1>
+        </header>
+        <article>
+            <dialog open>
+                <div>
+                    <header>Map</header>
+                    <p>Mode: 
+                    <select id="mapMode">
+                        <option value="3d">3d</option>
+                        <option value="mercator">Mercator</option>
+                    </select></p>
+                </div>
+                <div>
+                    <header>Country</header>
+                    <p><input type="text" id="country" placeHolder="Australia" /></p>
+                </div>
+                <div>
+                    <header>Meteorites</header>
+                    <p>mass range: <input type="text" id="minMass" value="0" />
+                    <input type="text" id="maxMass" value="10000" /></p>
+                </div>
+                <div>
+                    <header>Speed</header>
+                    <p>
+                        <input type="range" id="speedFactor" list="tickmarks">
+                        <datalist id="tickmarks">
+                            <option value="0">
+                            <option value="10">
+                            <option value="20">
+                            <option value="30">
+                            <option value="40">
+                            <option value="50">
+                            <option value="60">
+                            <option value="70">
+                            <option value="80">
+                            <option value="90">
+                            <option value="100">
+                        </datalist>
+                    </p>
+                </div>
+                <button id="startButton">Start Animation</button>
+            </dialog>
+            <div id="main">
+                <div id="mapArea"></div>
+                <svg id="timeline"></svg>
+            </div>
+        </article>
+        <script src="viz/brush.js"></script>
+        <script src="viz/main.js"></script>
+    </body>
 </html>

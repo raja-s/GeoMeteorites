@@ -3,16 +3,19 @@
     <head>
         <meta charset='UTF-8'/>
         <title>Projet: GeoMeteorites</title>
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="interface/bootstrap3-typeahead.min.js"></script>
         <script src="interface/autocompletion.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.0.0/d3.js"></script>
+        <script src="//d3js.org/topojson.v1.min.js"></script>
+
         <!-- <script type="module" src="/GeoMeteorites/script.js"></script> -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/main.css" />
     </head>
     <body>
+
         <header id="top">
             <h1>Logo</h1>
         </header>
@@ -20,7 +23,7 @@
             <dialog open>
                 <div>
                     <header>Map</header>
-                    <p>Mode: 
+                    <p>Mode:
                     <select id="mapMode">
                         <option value="3d">3d</option>
                         <option value="mercator">Mercator</option>
@@ -62,6 +65,11 @@
             </div>
         </article>
         <script src="viz/brush.js"></script>
+
+
+
         <script src="viz/main.js"></script>
+        <style media="screen">
+
     </body>
 </html>

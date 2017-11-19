@@ -25,43 +25,43 @@ document.getElementById("startButton").onclick = function() {
 
 //----------------------------------Globe-----------------------------------------------
 
-var width2 = document.getElementById("mapArea").clientWidth,
+let width2 = document.getElementById("mapArea").clientWidth,
     height2 = document.getElementById("mapArea").clientHeight;
 
-var radius = height2 / 2 - 10,
+let radius = height2 / 2 - 10,
     scale = radius,
     velocity = .01;
 
-var projection = d3.geoOrthographic()
+let projection = d3.geoOrthographic()
     .translate([width2 / 2, height2 / 2])
     .scale(scale)
     .clipAngle(90);
 
 
 
-var canvas = d3.select("#mapArea").append("canvas")
+let canvas = d3.select("#mapArea").append("canvas")
     .attr("width", width2)
     .attr("height", height2)
     .attr("fill","white");
 
-var context2 = canvas.node().getContext("2d");
+let context2 = canvas.node().getContext("2d");
 
-var path = d3.geoPath()
+let path = d3.geoPath()
     .projection(projection)
     .context(context2);
 
 
-var graticule = d3.geoGraticule();
+let graticule = d3.geoGraticule();
 
 
 //Get the json file with countries + rotation + circle around globe + graticule
-var url = "https://unpkg.com/world-atlas@1/world/110m.json";
+let url = "https://unpkg.com/world-atlas@1/world/110m.json";
 
     d3.json(url, function(error, world) {
       if (error) throw error;
 
       //Get countries
-      var countries = topojson.feature(world, world.objects.countries);
+      let countries = topojson.feature(world, world.objects.countries);
 
 
       d3.timer(function(elapsed) {

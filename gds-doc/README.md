@@ -46,3 +46,16 @@ To get the data specific to a given country, add a `country` parameter to the qu
 ```
 [URL]?country=switzerland
 ```
+
+### Data grouped by year
+
+To get the whole data grouped by year, add a `groupByYear` parameter with no value to the query string:
+
+```
+[URL]?groupByYear
+```
+
+The returned data includes the following aggregations:
+
+- A `number` column containing the total count of meteorites for a given year
+- A `totalMass` column containing the total mass of those meteorites

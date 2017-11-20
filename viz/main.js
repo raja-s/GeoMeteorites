@@ -25,30 +25,35 @@ document.getElementById("startButton").onclick = function() {
 
 //----------------------------------Globe-----------------------------------------------
 
+//Define height and width
 let width2 = document.getElementById("mapArea").clientWidth,
     height2 = document.getElementById("mapArea").clientHeight;
 
+//Define radius and scale of the globe
 let radius = height2 / 2 - 10,
     scale = radius;
 
-
+//Define projection of the globe and inclination angle
 let projection = d3.geoOrthographic()
     .translate([width2 / 2, height2 / 2])
     .scale(scale)
     .clipAngle(90);
 
 
+//Append svg to div mapArea
 let svg2 = d3.select("#mapArea").append("svg")
         .attr("width", width2)
         .attr("height", height2);
 
-
+//Define sphere and graticule
 let sphere = {type: 'Sphere'},
 graticule = d3.geoGraticule();
 
+//Path
 let path = d3.geoPath()
     .projection(projection);
 
+//Name the graticule as grid (called when we create gridlines)
 let grid = graticule();
 
 

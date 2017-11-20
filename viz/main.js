@@ -29,8 +29,8 @@ let width2 = document.getElementById("mapArea").clientWidth,
     height2 = document.getElementById("mapArea").clientHeight;
 
 let radius = height2 / 2 - 10,
-    scale = radius,
-    velocity = .01;
+    scale = radius;
+
 
 let projection = d3.geoOrthographic()
     .translate([width2 / 2, height2 / 2])
@@ -38,20 +38,20 @@ let projection = d3.geoOrthographic()
     .clipAngle(90);
 
 
+let svg2 = d3.select("#mapArea").append("svg")
+        .attr("width", width2)
+        .attr("height", height2);
 
-let canvas = d3.select("#mapArea").append("canvas")
-    .attr("width", width2)
-    .attr("height", height2)
-    .attr("fill","white");
 
-let context2 = canvas.node().getContext("2d");
+let sphere = {type: 'Sphere'},
+graticule = d3.geoGraticule();
 
 let path = d3.geoPath()
-    .projection(projection)
-    .context(context2);
+    .projection(projection);
+
+let grid = graticule();
 
 
-let graticule = d3.geoGraticule();
 
 
 //Get the json file with countries + rotation + circle around globe + graticule
@@ -60,46 +60,63 @@ let url = "https://unpkg.com/world-atlas@1/world/110m.json";
     d3.json(url, function(error, world) {
       if (error) throw error;
 
-      //Get countries
-      let countries = topojson.feature(world, world.objects.countries);
+    //Get countries
+    let countries = topojson.feature(world, world.objects.countries);
+
+    //Add outer circle
+    let outerCircle = svg2
+          .append('path')
+            .datum(sphere)
+            .attr('d', path)
+            .attr('fill', 'none')
+            .attr('stroke', 'grey')
+            .attr('stroke-width', 1);
+
+    //Add graticule
+    let gridlines = svg2.selectAll('.grid')
+                  .data([grid])
+                  .enter()
+                .append('path')
+                  .attr('d', path)
+                  .attr('fill', 'none')
+                  .attr('stroke', 'grey')
+                  .attr('stroke-width', .5);
+
+    //Add countries
+    let globe = svg2.selectAll('.countries')
+                  .data([countries])
+                  .enter()
+                .append('path')
+                  .attr('d', path)
+                  .attr("class","country")
+                  .attr('fill', 'black')
+                  .attr('stroke', 'white')
+                  .attr('stroke-width', 1)
 
 
-      d3.timer(function(elapsed) {
+        //Rotate
+        rotation();
 
 
+});
+
+// Rotation variables
+let time = Date.now(),
+rotate = [0, 0],
+velocity = [.009, -0];
 
 
-        //Remove rectangles of movements
-        context2.clearRect(0, 0, width2, height2);
+function rotation(){
+   d3.timer(function() {
 
-        //Rotation
-        projection.rotate([velocity * elapsed, 0]);
+      // DeltaT
+      let dt = Date.now() - time;
 
-        //Add countries
-        context2.beginPath();
-        path(countries);
-        context2.strokeStyle = "white";
-        context2.lineWidth = .3;
-        context2.fill();
-        context2.stroke();
+      // Get the new position from modified projection function
+      projection.rotate([rotate[0] + velocity[0] * dt, rotate[1] + velocity[1] * dt]);
 
-        //Add circle aaround the globe
-        context2.beginPath();
-        context2.arc(width2 / 2, height2 / 2, radius, 0, 2 * Math.PI, true);
-        context2.strokeStyle = "black";
-        context2.lineWidth = 2.5;
-        context2.stroke();
+      // Update countries position
+      svg2.selectAll("path").attr("d", path);
+   });
 
-        //Add graticule
-        context2.beginPath();
-        path(graticule());
-        context2.strokeStyle = "grey";
-        context2.lineWidth = .3;
-        context2.stroke();
-
-
-
-      });
-    });
-
-    d3.select(self.frameElement).style("height", height2 + "%");
+}

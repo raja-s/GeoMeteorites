@@ -33,11 +33,11 @@ let width2 = document.getElementById("mapArea").clientWidth,
 let radius = height2 / 2 - 10,
     scale = radius;
 
-//Define projection of the globe and inclination angle
+//Define projection of the globe
 let projection = d3.geoOrthographic()
     .translate([width2 / 2, height2 / 2])
     .scale(scale)
-    .clipAngle(90);
+    .clipAngle(90); //Where to clip
 
 
 //Append svg to div mapArea

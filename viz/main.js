@@ -25,103 +25,100 @@ document.getElementById("startButton").onclick = function() {
 
 //----------------------------------Globe-----------------------------------------------
 
+
 //Define height and width
-let width2 = document.getElementById("mapArea").clientWidth,
-    height2 = document.getElementById("mapArea").clientHeight;
-
-//Define radius and scale of the globe
-let radius = height2 / 2 - 10,
-    scale = radius;
-
-//Define projection of the globe
-let projection = d3.geoOrthographic()
-    .translate([width2 / 2, height2 / 2])
-    .scale(scale)
-    .clipAngle(90); //Where to clip
+let height2 = window.innerHeight*0.8,
+width2 = window.innerWidth;
 
 
-//Append svg to div mapArea
-let svg2 = d3.select("#mapArea").append("svg")
-        .attr("width", width2)
-        .attr("height", height2);
+let radius = 228;
 
-//Define sphere and graticule
-let sphere = {type: 'Sphere'},
-graticule = d3.geoGraticule();
+//New scene
+let scene = new THREE.Scene();
 
-//Path
-let path = d3.geoPath()
-    .projection(projection);
+//New camera
+let camera = new THREE.PerspectiveCamera(35,width2/height2,1,1000);
 
-//Name the graticule as grid (called when we create gridlines)
-let grid = graticule();
+//New renderer
+let renderer = new THREE.WebGLRenderer({alpha: true});
+
+let graticule,
+mesh;
 
 
+//Position of the camera
+camera.position.z = 800;
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(width2, height2);
+document.getElementById("mapArea").appendChild(renderer.domElement);
 
 
-//Get the json file with countries + rotation + circle around globe + graticule
-let url = "https://unpkg.com/world-atlas@1/world/110m.json";
-
-    d3.json(url, function(error, world) {
-      if (error) throw error;
-
-    //Get countries
-    let countries = topojson.feature(world, world.objects.countries);
-
-    //Add outer circle
-    let outerCircle = svg2
-          .append('path')
-            .datum(sphere)
-            .attr('d', path)
-            .attr('fill', 'none')
-            .attr('stroke', 'grey')
-            .attr('stroke-width', 1);
-
-    //Add graticule
-    let gridlines = svg2.selectAll('.grid')
-                  .data([grid])
-                  .enter()
-                .append('path')
-                  .attr('d', path)
-                  .attr('fill', 'none')
-                  .attr('stroke', 'grey')
-                  .attr('stroke-width', .5);
-
-    //Add countries
-    let globe = svg2.selectAll('.countries')
-                  .data([countries])
-                  .enter()
-                .append('path')
-                  .attr('d', path)
-                  .attr("class","country")
-                  .attr('fill', 'black')
-                  .attr('stroke', 'white')
-                  .attr('stroke-width', 1)
+let sphere = new THREE.Mesh(new THREE.SphereGeometry(radius,32,32),new THREE.MeshBasicMaterial({color:0xffffff}));
+scene.add(sphere);
 
 
-        //Rotate
-        rotation();
-
-
+d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topology) {
+  if (error) throw error;
+  scene.add(graticule = wireframe(graticule10(), new THREE.LineBasicMaterial({color: 0xaaaaaa})));
+  scene.add(mesh = wireframe(topojson.mesh(topology, topology.objects.countries), new THREE.LineBasicMaterial({color: 0xff0000})));
+  //d3.timer(function(t) {
+    graticule.rotation.x =  -Math.PI / 2;
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.rotation.z = -Math.PI/2;
+  graticule.rotation.z = -Math.PI/2;
+  // graticule.rotation.x = mesh.rotation.x = Math.sin(t / 11000) * Math.PI / 3 - Math.PI / 2;
+  //   graticule.rotation.z = mesh.rotation.z = t / 10000;
+    renderer.render(scene, camera);
+//});
 });
 
-// Rotation variables
-let time = Date.now(),
-rotate = [0, 0],
-velocity = [.009, -0];
+// Converts a point [longitude, latitude] in degrees to a THREE.Vector3.
+function vertex(point) {
+  var lambda = point[0] * Math.PI / 180,
+      phi = point[1] * Math.PI / 180,
+      cosPhi = Math.cos(phi);
+  return new THREE.Vector3(
+    radius * cosPhi * Math.cos(lambda),
+    radius * cosPhi * Math.sin(lambda),
+    radius * Math.sin(phi)
+  );
+}
 
+// Converts a GeoJSON MultiLineString in spherical coordinates to a THREE.LineSegments.
+function wireframe(multilinestring, material) {
+  var geometry = new THREE.Geometry();
+  multilinestring.coordinates.forEach(function(line) {
+    d3.pairs(line.map(vertex), function(a, b) {
+      geometry.vertices.push(a, b);
+    });
+  });
+  return new THREE.LineSegments(geometry, material);
+}
 
-function rotation(){
-   d3.timer(function() {
+// See https://github.com/d3/d3-geo/issues/95
+function graticule10() {
+  var epsilon = 1e-6,
+      x1 = 180, x0 = -x1, y1 = 80, y0 = -y1, dx = 10, dy = 10,
+      X1 = 180, X0 = -X1, Y1 = 90, Y0 = -Y1, DX = 90, DY = 360,
+      x = graticuleX(y0, y1, 2.5), y = graticuleY(x0, x1, 2.5),
+      X = graticuleX(Y0, Y1, 2.5), Y = graticuleY(X0, X1, 2.5);
 
-      // DeltaT
-      let dt = Date.now() - time;
+  function graticuleX(y0, y1, dy) {
+    var y = d3.range(y0, y1 - epsilon, dy).concat(y1);
+    return function(x) { return y.map(function(y) { return [x, y]; }); };
+  }
 
-      // Get the new position from modified projection function
-      projection.rotate([rotate[0] + velocity[0] * dt, rotate[1] + velocity[1] * dt]);
+  function graticuleY(x0, x1, dx) {
+    var x = d3.range(x0, x1 - epsilon, dx).concat(x1);
+    return function(y) { return x.map(function(x) { return [x, y]; }); };
+  }
 
-      // Update countries position
-      svg2.selectAll("path").attr("d", path);
-   });
-
+  return {
+    type: "MultiLineString",
+    coordinates: d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X)
+        .concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y))
+        .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) { return Math.abs(x % DX) > epsilon; }).map(x))
+        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1 + epsilon, dy).filter(function(y) { return Math.abs(y % DY) > epsilon; }).map(y))
+  };
 }

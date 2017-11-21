@@ -40,8 +40,12 @@ dialog p {
 }
 
 #mapArea {
-    width: 100%;
-    height: 90%;
     margin: 0px;
     background-color: white;
+}
+
+#timeline {
+position : fixed;
+bottom: 20px;
+
 }

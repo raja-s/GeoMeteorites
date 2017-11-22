@@ -1,16 +1,36 @@
 
+/*
+    Imports
+*/
+
+import { updateCameraZ, moveCameraTo } from './camera.js';
+import { modulo, clamp } from '../utils.js';
+
+/*
+    Code
+*/
+
 //Define height and width
-let height = window.innerHeight*0.8,
-width = window.innerWidth;
+let height = window.innerHeight * 0.8;
+let width  = window.innerWidth;
 
 
-let radius = 228;
+let radius = 60;
 
 //New scene
 let scene = new THREE.Scene();
 
 //New camera
-let camera = new THREE.PerspectiveCamera(35,width/height,1,2000);
+const CAMERA = new THREE.PerspectiveCamera(35, width / height, 1, 1000);
+CAMERA.rotation.order = 'YXZ';
+
+const CAMERA_BOUNDS = Object.freeze({
+    MIN : radius + 20,
+    MAX : 500
+});
+let cameraDistance = 240;
+
+CAMERA.translateZ(cameraDistance);
 
 //New renderer
 let renderer = new THREE.WebGLRenderer({
@@ -18,12 +38,9 @@ let renderer = new THREE.WebGLRenderer({
     antialias: true
 });
 
-let graticule,
-mesh;
+let graticule, mesh;
 
-
-//Position of the camera
-camera.position.z = 800;
+let animateGlobe = true;
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(width, height);
@@ -51,17 +68,17 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     scene.add(graticule);
     scene.add(mesh);
     
-    graticule.rotation.x = - Math.PI / 2;
-    mesh.rotation.x      = - Math.PI / 2;
+    graticule.rotateX(- Math.PI / 2);
+    mesh.rotateX(- Math.PI / 2);
     
-    graticule.rotation.z = - Math.PI / 2;
-    mesh.rotation.z      = - Math.PI / 2;
+    graticule.rotateZ(- Math.PI / 2);
+    mesh.rotateZ(- Math.PI / 2);
     
-    renderer.render(scene, camera);
+    renderLoop();
+    // d3.timer(t => render());
     
 });
 
-// Converts a point [longitude, latitude] in degrees to a THREE.Vector3.
 function vertex(point) {
     let lambda = point[0] * Math.PI / 180,
         phi = point[1] * Math.PI / 180,
@@ -73,7 +90,6 @@ function vertex(point) {
     );
 }
 
-// Converts a GeoJSON MultiLineString in spherical coordinates to a THREE.LineSegments.
 function wireframe(multilinestring, material) {
     let geometry = new THREE.Geometry();
     multilinestring.coordinates.forEach(line =>
@@ -81,7 +97,6 @@ function wireframe(multilinestring, material) {
     return new THREE.LineSegments(geometry, material);
 }
 
-// See https://github.com/d3/d3-geo/issues/95
 function graticule10() {
     let eps = 1e-6,
         x1 = 180, x0 = -x1, y1 = 80, y0 = -y1, dx = 10, dy = 10,
@@ -107,3 +122,86 @@ function graticule10() {
             .concat(d3.range(Math.ceil(y0 / dy) * dy, y1 + eps, dy).filter(y => Math.abs(y % DY) > eps).map(y))
     };
 }
+
+function render() {
+    renderer.render(scene, CAMERA);
+}
+
+function renderLoop() {
+    
+    requestAnimationFrame(renderLoop);
+    
+    if (animateGlobe) {
+        
+        const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + 0.1 + 180, 360) - 180;
+        const LAT = - Math.sin(THREE.Math.degToRad(LONG)) * 30;
+        
+        moveCameraTo(LONG, LAT);
+        
+    }
+    
+    render();
+    
+}
+
+document.getElementById('mapArea').children[0].onmousewheel = event => {
+    
+    // const SIGNED_LOG = (event.wheelDelta === 0) ? 0 :
+    //     Math.sign(event.wheelDelta) * Math.log10(Math.abs(event.wheelDelta));
+    const SIGNED_SQRT = Math.sign(event.wheelDelta) * Math.sqrt(Math.abs(event.wheelDelta));
+    
+    // console.group('Factors');
+    // console.log(`Wheel delta        : ${event.wheelDelta}`);
+    // console.log(`Signed log         : ${SIGNED_LOG}`);
+    // console.log(`Signed square root : ${SIGNED_SQRT}`);
+    // console.log(`Signed square root : ${SIGNED_SQRT / 2}`);
+    // console.groupEnd();
+    
+    // cameraDistance -= event.wheelDelta;
+    // cameraDistance -= SIGNED_LOG;
+    cameraDistance -= SIGNED_SQRT;
+    
+    if (cameraDistance < CAMERA_BOUNDS.MIN) {
+        cameraDistance = CAMERA_BOUNDS.MIN;
+    } else if (cameraDistance > CAMERA_BOUNDS.MAX) {
+        cameraDistance = CAMERA_BOUNDS.MAX;
+    }
+    updateCameraZ(cameraDistance);
+    
+    render();
+    
+};
+
+document.getElementById('mapArea').children[0].onmousemove = event => {
+    
+    if (event.buttons === 1) {
+        
+        animateGlobe = false;
+        
+        const DELTA_PHI   = - event.movementX;
+        const DELTA_THETA = - event.movementY;
+        
+        const FACTOR = ((cameraDistance / CAMERA_BOUNDS.MAX) ** 2) * 0.5;
+        
+        const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + DELTA_PHI * FACTOR + 180, 360) - 180;
+        const LAT  = clamp(THREE.Math.radToDeg(CAMERA.rotation.x) + DELTA_THETA * FACTOR, -90, 90);
+        
+        moveCameraTo(LONG, LAT);
+        
+    }
+    
+};
+
+/*
+    Exports
+*/
+
+export {
+    
+    // Constants
+    CAMERA,
+    
+    // Variables
+    cameraDistance
+    
+};

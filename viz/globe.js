@@ -14,18 +14,21 @@ import { modulo, clamp } from '../utils.js';
 let height = window.innerHeight * 0.8;
 let width  = window.innerWidth;
 
-
-let radius = 60;
+const RADIUS = 60;
 
 //New scene
-let scene = new THREE.Scene();
+const SCENE = new THREE.Scene();
+
+// Light
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
+SCENE.add(AMBIANT_LIGHT);
 
 //New camera
 const CAMERA = new THREE.PerspectiveCamera(35, width / height, 1, 1000);
 CAMERA.rotation.order = 'YXZ';
 
 const CAMERA_BOUNDS = Object.freeze({
-    MIN : radius + 20,
+    MIN : RADIUS + 20,
     MAX : 500
 });
 let cameraDistance = 240;
@@ -46,14 +49,13 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(width, height);
 document.getElementById("mapArea").appendChild(renderer.domElement);
 
+let sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS,32,32),
+    new THREE.MeshLambertMaterial({ color : 0xffffff }));
+SCENE.add(sphere);
 
-let sphere = new THREE.Mesh(new THREE.SphereGeometry(radius,32,32),
-    new THREE.MeshBasicMaterial({color:0xffffff}));
-scene.add(sphere);
-
-// let circle = new THREE.Mesh(new THREE.CircleGeometry(radius, 32),
+// let circle = new THREE.Mesh(new THREE.CircleGeometry(RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
-// scene.add(circle);
+// SCENE.add(circle);
 
 d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topology) {
     
@@ -65,8 +67,8 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     mesh = wireframe(topojson.mesh(topology, topology.objects.countries),
         new THREE.LineBasicMaterial({color: 0xaaaaaa}));
     
-    scene.add(graticule);
-    scene.add(mesh);
+    SCENE.add(graticule);
+    SCENE.add(mesh);
     
     graticule.rotateX(- Math.PI / 2);
     mesh.rotateX(- Math.PI / 2);
@@ -84,9 +86,9 @@ function vertex(point) {
         phi = point[1] * Math.PI / 180,
         cosPhi = Math.cos(phi);
     return new THREE.Vector3(
-        radius * cosPhi * Math.cos(lambda),
-        radius * cosPhi * Math.sin(lambda),
-        radius * Math.sin(phi)
+        RADIUS * cosPhi * Math.cos(lambda),
+        RADIUS * cosPhi * Math.sin(lambda),
+        RADIUS * Math.sin(phi)
     );
 }
 
@@ -123,8 +125,17 @@ function graticule10() {
     };
 }
 
+function addToScene(object) {
+    SCENE.add(object);
+}
+
+function removeFromScene(object) {
+    // TODO: Check if need to do more work here
+    SCENE.remove(object);
+}
+
 function render() {
-    renderer.render(scene, CAMERA);
+    renderer.render(SCENE, CAMERA);
 }
 
 function renderLoop() {
@@ -200,8 +211,13 @@ export {
     
     // Constants
     CAMERA,
+    RADIUS,
     
     // Variables
-    cameraDistance
+    cameraDistance,
+    
+    // Functions
+    addToScene,
+    removeFromScene
     
 };

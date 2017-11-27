@@ -10,17 +10,28 @@ import { RADIUS, addToScene, removeFromScene } from './globe.js';
     Code
 */
 
-const FALL_DURATION = 2400;
+const FALL_DURATION      = 2400;
+const EXPLOSION_DURATION = 600;
+
+const STEP_TIME  = 16;
 
 const METEORITES = [];
 
 const METEORITE_GEOMETRY = new THREE.SphereGeometry(1, 7, 7);
-const METEORITE_MATERIAL = new THREE.MeshBasicMaterial({ color : 0xffad5b });
+
+const MATERIAL = new THREE.MeshBasicMaterial({
+    color       : 0xffad5b,
+    transparent : true
+});
+
+const EXPLOSION_GEOMETRY = new THREE.SphereGeometry(0, 16, 16);
 
 function dropMeteorite(long, lat, mass) {
     
-    let meteorite = new THREE.Mesh(METEORITE_GEOMETRY, METEORITE_MATERIAL);
+    let meteorite = new THREE.Mesh(METEORITE_GEOMETRY, MATERIAL.clone());
     addToScene(meteorite);
+    
+    let explosion = new THREE.Mesh(EXPLOSION_GEOMETRY, MATERIAL.clone());
     
     // let meteoriteLight = new THREE.PointLight(0xffad5b, 2, 1000);
     // addToScene(meteoriteLight);
@@ -42,41 +53,73 @@ function dropMeteorite(long, lat, mass) {
     
     METEORITES.push(meteorite);
     
-    const STEP_TIME  = 16;
     const STEP_PHI   = (PHI   - START_PHI)   * STEP_TIME / FALL_DURATION;
     const STEP_THETA = (THETA - START_THETA) * STEP_TIME / FALL_DURATION;
     const STEP_R     = (R     - START_R)     * STEP_TIME / FALL_DURATION;
     
     let j = 0;
     
-    function delta() {
+    function deltaFall() {
+        j++;
         let { x , y , z } = sphericalToCartesian(START_R + j * STEP_R,
             START_PHI + j * STEP_PHI, START_THETA + j * STEP_THETA + (Math.PI / 2));
         meteorite.position.set(x, y, z);
-        j++;
     }
     
     for (let i = 0 ; i < FALL_DURATION ; i += STEP_TIME) {
-        setTimeout(delta, i);
+        setTimeout(deltaFall, i);
     }
     
+    const STEP_MASS    = Math.log(mass) * STEP_TIME / EXPLOSION_DURATION;
+    const STEP_OPACITY = STEP_TIME / EXPLOSION_DURATION;
+    
     setTimeout(() => {
+        
+        addToScene(explosion);
+        
+        let { x , y , z } = sphericalToCartesian(R, PHI, THETA + (Math.PI / 2));
+        explosion.position.set(x, y, z);
+        
+        let k = 0;
+        
+        function deltaExplosion() {
+            explosion.scale.setLength(++k * STEP_MASS);
+            explosion.material.opacity -= STEP_OPACITY;
+            meteorite.material.opacity -= STEP_OPACITY;
+        }
+        
+        for (let i = 0 ; i < EXPLOSION_DURATION ; i += STEP_TIME) {
+            setTimeout(deltaExplosion, i);
+        }
+        
+    }, FALL_DURATION);
+    
+    setTimeout(() => {
+        
+        // Dispose of meteorite
         removeFromScene(meteorite);
         meteorite.geometry.dispose();
         meteorite.material.dispose();
-    }, FALL_DURATION);
+        
+        // Dispose of explosion
+        removeFromScene(explosion);
+        explosion.geometry.dispose();
+        explosion.material.dispose();
+        
+    }, FALL_DURATION + EXPLOSION_DURATION);
     
 }
 
-function test() {
+function testMeteorites() {
     for (let i = 0 ; i < 1000 ; i++) {
         let long = (Math.random() - 0.5) * 360;
         let lat = (Math.random() - 0.5) * 180;
-        setTimeout(() => dropMeteorite(long, lat, 0), i * 100);
+        let mass = (Math.random() * 100000);
+        setTimeout(() => dropMeteorite(long, lat, mass), i * 100);
     }
 }
 
-window.test = test;
+window.testMeteorites = testMeteorites;
 window.dropMeteorite = dropMeteorite;
 
 /*

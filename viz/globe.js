@@ -7,49 +7,57 @@ import { updateCameraZ, moveCameraTo } from './camera.js';
 import { modulo, clamp } from '../utils.js';
 
 /*
-    Code
+    Constants & Variables
 */
 
-//Define height and width
+// Canvas dimensions
 let height = window.innerHeight * 0.8;
 let width  = window.innerWidth;
 
 const RADIUS = 60;
 
-//New scene
+// Scene
 const SCENE = new THREE.Scene();
 
 // Light
 const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
-SCENE.add(AMBIANT_LIGHT);
 
-//New camera
-const CAMERA = new THREE.PerspectiveCamera(35, width / height, 1, 1000);
-CAMERA.rotation.order = 'YXZ';
+// Camera
+const FOV = 35;
+
+const CAMERA = new THREE.PerspectiveCamera(FOV, width / height, 1, 1000);
 
 const CAMERA_BOUNDS = Object.freeze({
     MIN : RADIUS + 20,
     MAX : 500
 });
-let cameraDistance = 240;
 
-CAMERA.translateZ(cameraDistance);
-
-//New renderer
-let renderer = new THREE.WebGLRenderer({
+// Renderer
+const RENDERER = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true
 });
+
+let cameraDistance = 240;
 
 let graticule, mesh;
 
 let animateGlobe = true;
 
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(width, height);
-document.getElementById("mapArea").appendChild(renderer.domElement);
+/*
+    Code
+*/
 
-let sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS,32,32),
+SCENE.add(AMBIANT_LIGHT);
+
+CAMERA.rotation.order = 'YXZ';
+CAMERA.translateZ(cameraDistance);
+
+RENDERER.setPixelRatio(window.devicePixelRatio);
+RENDERER.setSize(width, height);
+document.getElementById("mapArea").appendChild(RENDERER.domElement);
+
+let sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS, 32, 32),
     new THREE.MeshLambertMaterial({ color : 0xffffff }));
 SCENE.add(sphere);
 
@@ -135,7 +143,7 @@ function removeFromScene(object) {
 }
 
 function render() {
-    renderer.render(SCENE, CAMERA);
+    RENDERER.render(SCENE, CAMERA);
 }
 
 function renderLoop() {
@@ -157,19 +165,8 @@ function renderLoop() {
 
 document.getElementById('mapArea').children[0].onmousewheel = event => {
     
-    // const SIGNED_LOG = (event.wheelDelta === 0) ? 0 :
-    //     Math.sign(event.wheelDelta) * Math.log10(Math.abs(event.wheelDelta));
     const SIGNED_SQRT = Math.sign(event.wheelDelta) * Math.sqrt(Math.abs(event.wheelDelta));
     
-    // console.group('Factors');
-    // console.log(`Wheel delta        : ${event.wheelDelta}`);
-    // console.log(`Signed log         : ${SIGNED_LOG}`);
-    // console.log(`Signed square root : ${SIGNED_SQRT}`);
-    // console.log(`Signed square root : ${SIGNED_SQRT / 2}`);
-    // console.groupEnd();
-    
-    // cameraDistance -= event.wheelDelta;
-    // cameraDistance -= SIGNED_LOG;
     cameraDistance -= SIGNED_SQRT;
     
     if (cameraDistance < CAMERA_BOUNDS.MIN) {
@@ -202,6 +199,19 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
     }
     
 };
+
+window.addEventListener('resize', event => {
+    
+    height = window.innerHeight * 0.8;
+    width  = window.innerWidth;
+    
+    RENDERER.setSize(width, height);
+    
+    CAMERA.aspect = width / height;
+    
+    CAMERA.updateProjectionMatrix();
+    
+});
 
 /*
     Exports

@@ -3,7 +3,6 @@
     Imports
 */
 
-import { CUBIC_BEZIER_5_25_9_5_VALUES } from '../constants.js';
 import { sphericalToCartesian } from '../utils.js';
 import { RADIUS, addToScene, removeFromScene } from './globe.js';
 
@@ -11,11 +10,11 @@ import { RADIUS, addToScene, removeFromScene } from './globe.js';
     Code
 */
 
-const FALL_DURATION = 1500;
+const FALL_DURATION = 2400;
 
 const METEORITES = [];
 
-const METEORITE_GEOMETRY = new THREE.SphereGeometry(1, 32, 32);
+const METEORITE_GEOMETRY = new THREE.SphereGeometry(1, 7, 7);
 const METEORITE_MATERIAL = new THREE.MeshBasicMaterial({ color : 0xffad5b });
 
 function dropMeteorite(long, lat, mass) {
@@ -43,21 +42,22 @@ function dropMeteorite(long, lat, mass) {
     
     METEORITES.push(meteorite);
     
-    const STEP_PHI   = (PHI   - START_PHI)   * 15 / FALL_DURATION;
-    const STEP_THETA = (THETA - START_THETA) * 15 / FALL_DURATION;
-    const DIFF_R     = (R     - START_R);
+    const STEP_TIME  = 16;
+    const STEP_PHI   = (PHI   - START_PHI)   * STEP_TIME / FALL_DURATION;
+    const STEP_THETA = (THETA - START_THETA) * STEP_TIME / FALL_DURATION;
+    const STEP_R     = (R     - START_R)     * STEP_TIME / FALL_DURATION;
     
     let j = 0;
     
     function delta() {
-        let { x , y , z } = sphericalToCartesian(START_R + DIFF_R * CUBIC_BEZIER_5_25_9_5_VALUES[j],
+        let { x , y , z } = sphericalToCartesian(START_R + j * STEP_R,
             START_PHI + j * STEP_PHI, START_THETA + j * STEP_THETA + (Math.PI / 2));
         meteorite.position.set(x, y, z);
         j++;
     }
     
-    for (let i = 0 ; i < FALL_DURATION / 15 ; i++) {
-        setTimeout(delta, i * 15);
+    for (let i = 0 ; i < FALL_DURATION ; i += STEP_TIME) {
+        setTimeout(delta, i);
     }
     
     setTimeout(() => {

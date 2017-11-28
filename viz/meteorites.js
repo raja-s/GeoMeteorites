@@ -109,6 +109,8 @@ function testMeteorites() {
     }
 }
 
+testMeteorites();
+
 window.testMeteorites = testMeteorites;
 window.dropMeteorite = dropMeteorite;
 

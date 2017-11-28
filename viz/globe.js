@@ -79,7 +79,7 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     // let modeMap = document.getElementById("mapMode");
     //
     // let mapSelected = modeMap.options[modeMap.selectedIndex].value;
-    //
+
 
     graticule3d = wireframe3d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
     mesh3d = wireframe3d(topojson.mesh(topology, topology.objects.countries),
@@ -99,8 +99,10 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
 
 
 
-// if (modeSelected=='mercator') {
+// if (mapSelected=='mercator') {
+//       removeFromScene(sphere);
 //       globe2map(json2dto3d(topojson.mesh(topology, topology.objects.countries)),topojson.mesh(topology, topology.objects.countries),new THREE.LineBasicMaterial({color: 0xaaaaaa}));
+//       renderLoop();
 //
 // }
 
@@ -136,7 +138,7 @@ function coord2d(point) {
     );
 }
 
-
+//
 // function json2dto3d(multilinestring) {
 //
 //     multilinestring.coordinates.forEach(line =>d3.pairs(line.map(coord3d)));

@@ -1,12 +1,5 @@
 
 /*
-    Imports
-*/
-
-import { sphericalToCartesian } from '/GeoMeteorites/utils.js';
-import { RADIUS, addToScene, removeFromScene } from '/GeoMeteorites/viz/globe.js';
-
-/*
     Code
 */
 
@@ -34,11 +27,11 @@ function dropMeteorite(long, lat, mass) {
     
     const START_PHI   = PHI    + (Math.random() - 0.5) * MAX_RANDOM_RADIUS;
     const START_THETA = THETA  + (Math.random() - 0.5) * MAX_RANDOM_RADIUS;
-    const START_R     = RADIUS + 200;
+    const START_R     = GLOBE_RADIUS + 200;
     
     const STEP_PHI   = (PHI    - START_PHI)   * STEP_TIME / FALL_DURATION;
     const STEP_THETA = (THETA  - START_THETA) * STEP_TIME / FALL_DURATION;
-    const STEP_R     = (RADIUS - START_R)     * STEP_TIME / FALL_DURATION;
+    const STEP_R     = (GLOBE_RADIUS - START_R)     * STEP_TIME / FALL_DURATION;
     
     let meteorite = new THREE.Mesh(METEORITE_GEOMETRY, MATERIAL.clone());
     addToScene(meteorite);
@@ -68,7 +61,7 @@ function dropMeteorite(long, lat, mass) {
         
         addToScene(explosion);
         
-        let { x , y , z } = sphericalToCartesian(RADIUS, PHI, THETA + (Math.PI / 2));
+        let { x , y , z } = sphericalToCartesian(GLOBE_RADIUS, PHI, THETA + (Math.PI / 2));
         meteorite.position.set(x, y, z);
         explosion.position.set(x, y, z);
         
@@ -113,14 +106,3 @@ testMeteorites();
 
 window.testMeteorites = testMeteorites;
 window.dropMeteorite = dropMeteorite;
-
-/*
-    Exports
-*/
-
-export {
-    
-    // Functions
-    dropMeteorite
-    
-};

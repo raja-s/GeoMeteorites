@@ -1,13 +1,5 @@
 
 /*
-    Imports
-*/
-
-import { CUBIC_BEZIER_EASE_VALUES } from '/GeoMeteorites/constants.js';
-import { sphericalToCartesian } from '/GeoMeteorites/utils.js';
-import { CAMERA, cameraDistance } from '/GeoMeteorites/viz/globe.js';
-
-/*
     Code
 */
 
@@ -63,12 +55,3 @@ function moveCameraTo(long, lat, duration = 0) {
 }
 
 window.moveCameraTo = moveCameraTo;
-
-/*
-    Exports
-*/
-
-export {
-    updateCameraZ,
-    moveCameraTo
-};

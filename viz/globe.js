@@ -1,20 +1,13 @@
 
 /*
-    Imports
-*/
-
-import { updateCameraZ, moveCameraTo } from '/GeoMeteorites/viz/camera.js';
-import { modulo, clamp } from '/GeoMeteorites/utils.js';
-
-/*
     Constants & Variables
 */
 
 // Canvas dimensions
-let height = window.innerHeight * 0.8;
-let width  = window.innerWidth;
+let globeCanvasHeight = window.innerHeight * 0.8;
+let globeCanvasWidth  = window.innerWidth;
 
-const RADIUS = 60;
+const GLOBE_RADIUS = 60;
 
 // Scene
 const SCENE = new THREE.Scene();
@@ -25,10 +18,10 @@ const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
 // Camera
 const FOV = 35;
 
-const CAMERA = new THREE.PerspectiveCamera(FOV, width / height, 1, 1000);
+const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHeight, 1, 1000);
 
 const CAMERA_BOUNDS = Object.freeze({
-    MIN : RADIUS + 20,
+    MIN : GLOBE_RADIUS + 20,
     MAX : 500
 });
 
@@ -54,14 +47,14 @@ CAMERA.rotation.order = 'YXZ';
 CAMERA.translateZ(cameraDistance);
 
 RENDERER.setPixelRatio(window.devicePixelRatio);
-RENDERER.setSize(width, height);
+RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
 document.getElementById("mapArea").appendChild(RENDERER.domElement);
 
-let sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS, 32, 32),
+let sphere = new THREE.Mesh(new THREE.SphereGeometry(GLOBE_RADIUS, 32, 32),
     new THREE.MeshLambertMaterial({ color : 0xffffff }));
 SCENE.add(sphere);
 
-// let circle = new THREE.Mesh(new THREE.CircleGeometry(RADIUS, 32),
+// let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
 // SCENE.add(circle);
 
@@ -119,9 +112,9 @@ function coord3d(point) {
         phi = point[1] * Math.PI / 180,
         cosPhi = Math.cos(phi);
     return new THREE.Vector3(
-        RADIUS * cosPhi * Math.cos(lambda),
-        RADIUS * cosPhi * Math.sin(lambda),
-        RADIUS * Math.sin(phi)
+        GLOBE_RADIUS * cosPhi * Math.cos(lambda),
+        GLOBE_RADIUS * cosPhi * Math.sin(lambda),
+        GLOBE_RADIUS * Math.sin(phi)
     );
 }
 
@@ -291,32 +284,13 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
 
 window.addEventListener('resize', event => {
 
-    height = window.innerHeight * 0.8;
-    width  = window.innerWidth;
+    globeCanvasHeight = window.innerHeight * 0.8;
+    globeCanvasWidth  = window.innerWidth;
 
-    RENDERER.setSize(width, height);
+    RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
 
-    CAMERA.aspect = width / height;
+    CAMERA.aspect = globeCanvasWidth / globeCanvasHeight;
 
     CAMERA.updateProjectionMatrix();
 
 });
-
-/*
-    Exports
-*/
-
-export {
-
-    // Constants
-    CAMERA,
-    RADIUS,
-
-    // Variables
-    cameraDistance,
-
-    // Functions
-    addToScene,
-    removeFromScene
-
-};

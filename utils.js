@@ -15,13 +15,3 @@ function sphericalToCartesian(r, phi, theta) {
         z : r * sinTheta * Math.cos(phi)
     };
 }
-
-/*
-    Exports
-*/
-
-export {
-    modulo,
-    clamp,
-    sphericalToCartesian
-};

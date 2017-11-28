@@ -3,10 +3,10 @@
     Imports
 */
 
-import './interface/autocompletion.js';
+import '/GeoMeteorites/interface/autocompletion.js';
 
-import './viz/brush.js';
-import './viz/camera.js';
-import './viz/globe.js';
-import './viz/main.js';
-import './viz/meteorites.js';
+import '/GeoMeteorites/viz/brush.js';
+import '/GeoMeteorites/viz/camera.js';
+import '/GeoMeteorites/viz/globe.js';
+import '/GeoMeteorites/viz/main.js';
+import '/GeoMeteorites/viz/meteorites.js';

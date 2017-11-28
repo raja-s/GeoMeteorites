@@ -3,8 +3,8 @@
     Imports
 */
 
-import { sphericalToCartesian } from '../utils.js';
-import { RADIUS, addToScene, removeFromScene } from './globe.js';
+import { sphericalToCartesian } from '/GeoMeteorites/utils.js';
+import { RADIUS, addToScene, removeFromScene } from '/GeoMeteorites/viz/globe.js';
 
 /*
     Code

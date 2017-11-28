@@ -3,8 +3,8 @@
     Imports
 */
 
-import { updateCameraZ, moveCameraTo } from './camera.js';
-import { modulo, clamp } from '../utils.js';
+import { updateCameraZ, moveCameraTo } from '/GeoMeteorites/viz/camera.js';
+import { modulo, clamp } from '/GeoMeteorites/utils.js';
 
 /*
     Constants & Variables

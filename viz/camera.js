@@ -3,9 +3,9 @@
     Imports
 */
 
-import { CUBIC_BEZIER_EASE_VALUES } from '../constants.js';
-import { sphericalToCartesian } from '../utils.js';
-import { CAMERA, cameraDistance } from './globe.js';
+import { CUBIC_BEZIER_EASE_VALUES } from '/GeoMeteorites/constants.js';
+import { sphericalToCartesian } from '/GeoMeteorites/utils.js';
+import { CAMERA, cameraDistance } from '/GeoMeteorites/viz/globe.js';
 
 /*
     Code

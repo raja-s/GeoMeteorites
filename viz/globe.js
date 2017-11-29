@@ -33,9 +33,10 @@ const RENDERER = new THREE.WebGLRenderer({
 
 let cameraDistance = 240;
 
-let graticule3d, mesh3d;
+let mapGraticule, mapMesh;
 
 let animateGlobe = true;
+let allowGlobeNavigation = true;
 
 /*
     Code
@@ -52,66 +53,51 @@ document.getElementById("mapArea").appendChild(RENDERER.domElement);
 
 let sphere = new THREE.Mesh(new THREE.SphereGeometry(GLOBE_RADIUS, 32, 32),
     new THREE.MeshLambertMaterial({ color : 0xffffff }));
-//SCENE.add(sphere);
+addToScene(sphere);
 
 // let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
 // SCENE.add(circle);
 
 
+let topology;
 
 
 
-
-d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topology) {
+d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topology2) {
 
     if (error) {
         throw error;
     }
-
-    // let modeMap = document.getElementById("mapMode");
-    //
-    // let mapSelected = modeMap.options[modeMap.selectedIndex].value;
-
-
-    graticule3d = wireframe2d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
-    mesh3d = wireframe2d(topojson.mesh(topology, topology.objects.countries),
+    
+    topology = topology2;
+    
+    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
+    mapMesh = wireframe3d(topojson.mesh(topology2, topology2.objects.countries),
         new THREE.LineBasicMaterial({color: 0xaaaaaa}));
 
-        //addToScene(sphere);
-        addToScene(mesh3d);
-        addToScene(graticule3d);
+    addToScene(mapMesh);
+    addToScene(mapGraticule);
 
-        graticule3d.rotateX(- Math.PI / 2);
-        mesh3d.rotateX(- Math.PI / 2);
+    mapGraticule.rotateX(- Math.PI / 2);
+    mapMesh.rotateX(- Math.PI / 2);
 
-    graticule3d.rotateZ(- Math.PI / 2);
-    mesh3d.rotateZ(- Math.PI / 2);
-
-
-
-
-
-
-// if (mapSelected=='mercator') {
-//       removeFromScene(sphere);
-//       globe2map(json2dto3d(topojson.mesh(topology, topology.objects.countries)),topojson.mesh(topology, topology.objects.countries),new THREE.LineBasicMaterial({color: 0xaaaaaa}));
-//       renderLoop();
-//
-// }
-
-
-      renderLoop();
+    mapGraticule.rotateZ(- Math.PI / 2);
+    mapMesh.rotateZ(- Math.PI / 2);
+    
+    renderLoop();
 
 
 });
 
-
+function coord2d(point) {
+    return new THREE.Vector3(point[0], point[1], 0);
+}
 
 function coord3d(point) {
-    let lambda = point[0] * Math.PI / 180,
-        phi = point[1] * Math.PI / 180,
-        cosPhi = Math.cos(phi);
+    let lambda = point[0] * Math.PI / 180;
+    let phi    = point[1] * Math.PI / 180;
+    let cosPhi = Math.cos(phi);
     return new THREE.Vector3(
         GLOBE_RADIUS * cosPhi * Math.cos(lambda),
         GLOBE_RADIUS * cosPhi * Math.sin(lambda),
@@ -119,56 +105,35 @@ function coord3d(point) {
     );
 }
 
-function coord2d(point) {
-    let lon = point[0] ,
-        lat = point[1] ;
-        //z = 0;
-    return new THREE.Vector3(
-      lon,
-      lat
-
-    );
-}
-
-
-function json2dto3d(multilinestring) {
-
-    multilinestring.coordinates.forEach(line =>d3.pairs(line.map(coord3d)));
-
-    return multilinestring;
-
-}
-
-
-
-
-function globe2map(multilinestring3d,multilinestring2d,material) {
+function globe2map(lineSegments, multilinestring2d) {
     let geometry2d = new THREE.Geometry();
-    let geometry3d = new THREE.Geometry();
-
-
+    
     multilinestring2d.coordinates.forEach(line =>
         d3.pairs(line.map(coord2d), (a, b) => geometry2d.vertices.push(a, b)));
-
-    multilinestring3d.coordinates.forEach(line =>
-            d3.pairs(line.map(coord3d), (a, b) => geometry3d.vertices.push(a, b)));
-
-      for (let i=0;i<geometry3d.vertices.length;i++) {
-        geometry3d.vertices[i].x = geometry2d.vertices[i].x;
-        geometry3d.vertices[i].y = geometry2d.vertices[i].y;
-        geometry3d.vertices[i].z = geometry2d.vertices[i].z;
-        geometry3d.dynamic = true;
-        geometry3d.verticesNeedUpdate = true;
-
-        return new THREE.LineSegments(geometry3d,material);
+    
+    lineSegments.geometry.verticesNeedUpdate = true;
+    
+    for (let i = 0, j = 0 ; j < geometry2d.vertices.length ; j += 2) {
+        
+        let vertex     = lineSegments.geometry.vertices[i];
+        let nextVertex = lineSegments.geometry.vertices[i + 1];
+        
+        let vertex2d     = geometry2d.vertices[j];
+        let nextVertex2d = geometry2d.vertices[j + 1];
+        
+        let nextX = nextVertex2d.x;
+        
+        if ((vertex2d.x * nextVertex2d.x < 0) && (Math.abs(vertex2d.x)>90)) {
+            lineSegments.geometry.vertices.splice(i, 2);
+        } else {
+            vertex.set(vertex2d.x, vertex2d.y, vertex2d.z);
+            nextVertex.set(nextVertex2d.x, nextVertex2d.y, nextVertex2d.z);
+            i += 2;
+        }
+        
     }
-
-
-
+    
 }
-
-
-
 
 function wireframe3d(multilinestring, material) {
     let geometry = new THREE.Geometry();
@@ -176,21 +141,6 @@ function wireframe3d(multilinestring, material) {
         d3.pairs(line.map(coord3d), (a, b) => geometry.vertices.push(a, b)));
     return new THREE.LineSegments(geometry, material);
 }
-
-function wireframe2d(multilinestring, material) {
-    let geometry = new THREE.Geometry();
-    multilinestring.coordinates.forEach(line =>
-        d3.pairs(line.map(coord2d), (a, b) => {
-//console.log(a);
- if (a.x*b.x>0 || Math.abs(a.x)<90) {
-
-          geometry.vertices.push(a, b)}
-}
-
-      ));
-    return new THREE.LineSegments(geometry, material);
-}
-
 
 function graticule10() {
     let eps = 1e-6,
@@ -210,7 +160,7 @@ function graticule10() {
     }
 
     return {
-        type: "MultiLineString",
+        type: 'MultiLineString',
         coordinates: d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X)
             .concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y))
             .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(x => Math.abs(x % DX) > eps).map(x))
@@ -270,7 +220,7 @@ document.getElementById('mapArea').children[0].onmousewheel = event => {
 
 document.getElementById('mapArea').children[0].onmousemove = event => {
 
-    if (event.buttons === 1) {
+    if ((event.buttons === 1) && allowGlobeNavigation) {
 
         animateGlobe = false;
 
@@ -287,6 +237,38 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
     }
 
 };
+
+MAP_MODE_SELECT.addEventListener('change', event => {
+    
+    const MAP_MODE = getMapMode();
+    
+    switch (MAP_MODE) {
+        
+        case MAP_MODES.MERCATOR:
+            animateGlobe = false;
+            allowGlobeNavigation = false;
+            
+            moveCameraTo(0, 0, 1500).then(() => {
+                removeFromScene(sphere);
+                
+                mapGraticule.rotation.set(0, 0, 0);
+                mapMesh.rotation.set(0, 0, 0);
+                
+                globe2map(mapGraticule, graticule10());
+                globe2map(mapMesh, topojson.mesh(topology, topology.objects.countries));
+                
+            });
+            
+            break;
+        
+        case MAP_MODES.THREE_D:
+            animateGlobe = true;
+            allowGlobeNavigation = true;
+            break;
+        
+    }
+    
+});
 
 window.addEventListener('resize', event => {
 

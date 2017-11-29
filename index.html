@@ -31,8 +31,12 @@
 
         <!-- Local scripts -->
          <script src='constants.js' defer></script>
+         <script src='main.js' defer></script>
          <script src='utils.js' defer></script>
+         
          <script src='interface/autocompletion.js' defer></script>
+         <script src='interface/controls.js' defer></script>
+         
          <script src='viz/brush.js' defer></script>
          <script src='viz/camera.js' defer></script>
          <script src='viz/globe.js' defer></script>
@@ -48,13 +52,9 @@
             <dialog open>
                 <div>
                     <header>Map</header>
-                    <p>Mode:
-                    <select id="mapMode">
-
-                        <option value="3d">3d</option>
-                        <option value="mercator">Mercator</option>
-
-                    </select></p>
+                    <p>
+                        Mode:<select id="mapMode"></select>
+                    </p>
                 </div>
                 <div>
                     <header>Country</header>

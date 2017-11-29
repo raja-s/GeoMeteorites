@@ -52,7 +52,7 @@ document.getElementById("mapArea").appendChild(RENDERER.domElement);
 
 let sphere = new THREE.Mesh(new THREE.SphereGeometry(GLOBE_RADIUS, 32, 32),
     new THREE.MeshLambertMaterial({ color : 0xffffff }));
-SCENE.add(sphere);
+//SCENE.add(sphere);
 
 // let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
@@ -74,19 +74,20 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     // let mapSelected = modeMap.options[modeMap.selectedIndex].value;
 
 
-    graticule3d = wireframe3d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
-    mesh3d = wireframe3d(topojson.mesh(topology, topology.objects.countries),
+    graticule3d = wireframe2d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
+    mesh3d = wireframe2d(topojson.mesh(topology, topology.objects.countries),
         new THREE.LineBasicMaterial({color: 0xaaaaaa}));
 
-        addToScene(sphere);
+        //addToScene(sphere);
         addToScene(mesh3d);
         addToScene(graticule3d);
 
-    graticule3d.rotateX(- Math.PI / 2);
-    mesh3d.rotateX(- Math.PI / 2);
+        graticule3d.rotateX(- Math.PI / 2);
+        mesh3d.rotateX(- Math.PI / 2);
 
     graticule3d.rotateZ(- Math.PI / 2);
     mesh3d.rotateZ(- Math.PI / 2);
+
 
 
 
@@ -119,54 +120,52 @@ function coord3d(point) {
 }
 
 function coord2d(point) {
-    let lon = point[0]*Math.PI/180 ,
-        lat = point[0]*Math.PI/180 ,
-        z = 0;
+    let lon = point[0] ,
+        lat = point[1] ;
         //z = 0;
     return new THREE.Vector3(
       lon,
-      lat,
-      z
+      lat
 
     );
 }
 
-//
-// function json2dto3d(multilinestring) {
-//
-//     multilinestring.coordinates.forEach(line =>d3.pairs(line.map(coord3d)));
-//
-//     return multilinestring;
-//
-// }
+
+function json2dto3d(multilinestring) {
+
+    multilinestring.coordinates.forEach(line =>d3.pairs(line.map(coord3d)));
+
+    return multilinestring;
+
+}
 
 
 
 
-// function globe2map(multilinestring3d,multilinestring2d,material) {
-//     let geometry2d = new THREE.Geometry();
-//     let geometry3d = new THREE.Geometry();
-//
-//
-//     multilinestring2d.coordinates.forEach(line =>
-//         d3.pairs(line.map(coord2d), (a, b) => geometry2d.vertices.push(a, b)));
-//
-//     multilinestring3d.coordinates.forEach(line =>
-//             d3.pairs(line.map(coord3d), (a, b) => geometry3d.vertices.push(a, b)));
-//
-//       for (let i=0;i<geometry3d.vertices.length;i++) {
-//         geometry3d.vertices[i].x = geometry2d.vertices[i].x;
-//         geometry3d.vertices[i].y = geometry2d.vertices[i].y;
-//         geometry3d.vertices[i].z = geometry2d.vertices[i].z;
-//         geometry3d.dynamic = true;
-//         geometry3d.verticesNeedUpdate = true;
-//
-//         return new THREE.LineSegments(geometry3d,material);
-//     }
-//
-//
-//
-// }
+function globe2map(multilinestring3d,multilinestring2d,material) {
+    let geometry2d = new THREE.Geometry();
+    let geometry3d = new THREE.Geometry();
+
+
+    multilinestring2d.coordinates.forEach(line =>
+        d3.pairs(line.map(coord2d), (a, b) => geometry2d.vertices.push(a, b)));
+
+    multilinestring3d.coordinates.forEach(line =>
+            d3.pairs(line.map(coord3d), (a, b) => geometry3d.vertices.push(a, b)));
+
+      for (let i=0;i<geometry3d.vertices.length;i++) {
+        geometry3d.vertices[i].x = geometry2d.vertices[i].x;
+        geometry3d.vertices[i].y = geometry2d.vertices[i].y;
+        geometry3d.vertices[i].z = geometry2d.vertices[i].z;
+        geometry3d.dynamic = true;
+        geometry3d.verticesNeedUpdate = true;
+
+        return new THREE.LineSegments(geometry3d,material);
+    }
+
+
+
+}
 
 
 
@@ -181,7 +180,14 @@ function wireframe3d(multilinestring, material) {
 function wireframe2d(multilinestring, material) {
     let geometry = new THREE.Geometry();
     multilinestring.coordinates.forEach(line =>
-        d3.pairs(line.map(coord2d), (a, b) => geometry.vertices.push(a, b)));
+        d3.pairs(line.map(coord2d), (a, b) => {
+//console.log(a);
+ if (a.x*b.x>0 || Math.abs(a.x)<90) {
+
+          geometry.vertices.push(a, b)}
+}
+
+      ));
     return new THREE.LineSegments(geometry, material);
 }
 

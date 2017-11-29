@@ -25,7 +25,7 @@ function moveCameraTo(long, lat, duration = 0) {
         
         CAMERA.position.set(x, y, z);
         
-        return;
+        return new Promise((resolve, reject) => resolve());
     }
     
     const DIFF_PHI   = PHI   - CAMERA.rotation.y;
@@ -51,6 +51,8 @@ function moveCameraTo(long, lat, duration = 0) {
     for (let i = 0 ; i < CUBIC_BEZIER_EASE_VALUES.length ; i++) {
         setTimeout(() => deltaT(i), duration * i / 100);
     }
+    
+    return new Promise((resolve, reject) => setTimeout(resolve, duration));
     
 }
 

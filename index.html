@@ -7,35 +7,34 @@
         <!-- Stylesheets -->
 
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>
 
         <!-- Local CSS -->
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel='stylesheet' href='css/main.css' />
 
         <!-- Scripts -->
 
         <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
 
         <!-- Bootstrap typeahead plugin -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" defer></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js' defer></script>
 
         <!-- D3 -->
-        <script src="https://d3js.org/d3.v4.min.js" defer></script>
+        <script src='https://d3js.org/d3.v4.min.js' defer></script>
 
         <!-- TopoJSON -->
-        <script src="https://d3js.org/topojson.v1.min.js" defer></script>
+        <script src='https://d3js.org/topojson.v1.min.js' defer></script>
 
         <!-- THREE -->
-        <script src="https://threejs.org/build/three.min.js" defer></script>
+        <script src='https://threejs.org/build/three.min.js' defer></script>
 
         <!-- Local scripts -->
          <script src='constants.js' defer></script>
          <script src='main.js' defer></script>
          <script src='utils.js' defer></script>
          
-         <script src='interface/autocompletion.js' defer></script>
-         <script src='interface/controls.js' defer></script>
+         <script src='ui/controls.js' defer></script>
          
          <script src='viz/brush.js' defer></script>
          <script src='viz/camera.js' defer></script>
@@ -45,7 +44,7 @@
     </head>
     <body>
 
-        <header id="top">
+        <header id='top'>
             <h1>GeoMeteorites</h1>
         </header>
         <article>
@@ -53,44 +52,46 @@
                 <div>
                     <header>Map</header>
                     <p>
-                        Mode:<select id="mapMode"></select>
+                        Mode:<select id='mapMode'></select>
                     </p>
                 </div>
                 <div>
                     <header>Country</header>
-                    <p><input type="text" id="country" placeHolder="Australia" /></p>
+                    <p><input type='text' id='country-field' placeHolder='e.g. Switzerland' /></p>
                 </div>
                 <div>
                     <header>Meteorites</header>
-                    <p>mass range: <input type="text" id="minMass" value="0" />
-                    <input type="text" id="maxMass" value="10000" /></p>
+                    <p>mass range:
+                        <input type='text' id='minMass' value='0' />
+                        <input type='text' id='maxMass' value='10000'/>
+                    </p>
                 </div>
                 <div>
                     <header>Speed</header>
                     <p>
-                        <input type="range" id="speedFactor" list="tickmarks">
-                        <datalist id="tickmarks">
-                            <option value="0">
-                            <option value="10">
-                            <option value="20">
-                            <option value="30">
-                            <option value="40">
-                            <option value="50">
-                            <option value="60">
-                            <option value="70">
-                            <option value="80">
-                            <option value="90">
-                            <option value="100">
+                        <input type='range' id='speedFactor' list='tickmarks'>
+                        <datalist id='tickmarks'>
+                            <option value='0'>
+                            <option value='10'>
+                            <option value='20'>
+                            <option value='30'>
+                            <option value='40'>
+                            <option value='50'>
+                            <option value='60'>
+                            <option value='70'>
+                            <option value='80'>
+                            <option value='90'>
+                            <option value='100'>
                         </datalist>
                     </p>
                 </div>
-                <button id="startButton">Start Animation</button>
+                <button id='startAnimationButton'>Start Animation</button>
             </dialog>
-            <div id="main">
-                <div id="mapArea"></div>
-                <svg id="timeline"></svg>
+            <div id='main'>
+                <div id='mapArea'></div>
+                <svg id='timeline'></svg>
             </div>
         </article>
-        <style media="screen"></style>
+        <style media='screen'></style>
     </body>
 </html>

@@ -106,6 +106,7 @@ function coord3d(point) {
 }
 
 function globe2map(lineSegments, multilinestring2d) {
+    
     let geometry2d = new THREE.Geometry();
     
     multilinestring2d.coordinates.forEach(line =>
@@ -177,10 +178,36 @@ function removeFromScene(object) {
     SCENE.remove(object);
 }
 
+function switchVizToMercator() {
+    pauseGlobeAnimation();
+    allowGlobeNavigation = false;
+    
+    moveCameraTo(0, 0, 1500).then(() => {
+        removeFromScene(sphere);
+        
+        mapGraticule.rotation.set(0, 0, 0);
+        mapMesh.rotation.set(0, 0, 0);
+        
+        globe2map(mapGraticule, graticule10());
+        globe2map(mapMesh, topojson.mesh(topology, topology.objects.countries));
+        
+    });
+}
 
+function switchVizTo3d() {
+    resumeMainAnimation();
+    allowGlobeNavigation = true;
+}
+
+function pauseGlobeAnimation() {
+    animateGlobe = false;
+}
+
+function resumeGlobeAnimation() {
+    animateGlobe = true;
+}
 
 function render() {
-
     RENDERER.render(SCENE, CAMERA);
 }
 
@@ -222,7 +249,7 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
 
     if ((event.buttons === 1) && allowGlobeNavigation) {
 
-        animateGlobe = false;
+        pauseGlobeAnimation();
 
         const DELTA_PHI   = - event.movementX;
         const DELTA_THETA = - event.movementY;
@@ -238,37 +265,7 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
 
 };
 
-MAP_MODE_SELECT.addEventListener('change', event => {
-    
-    const MAP_MODE = getMapMode();
-    
-    switch (MAP_MODE) {
-        
-        case MAP_MODES.MERCATOR:
-            animateGlobe = false;
-            allowGlobeNavigation = false;
-            
-            moveCameraTo(0, 0, 1500).then(() => {
-                removeFromScene(sphere);
-                
-                mapGraticule.rotation.set(0, 0, 0);
-                mapMesh.rotation.set(0, 0, 0);
-                
-                globe2map(mapGraticule, graticule10());
-                globe2map(mapMesh, topojson.mesh(topology, topology.objects.countries));
-                
-            });
-            
-            break;
-        
-        case MAP_MODES.THREE_D:
-            animateGlobe = true;
-            allowGlobeNavigation = true;
-            break;
-        
-    }
-    
-});
+
 
 window.addEventListener('resize', event => {
 

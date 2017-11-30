@@ -1,71 +1,101 @@
-const svg = d3.select("svg");
-const svgWidth = document.getElementById("mapArea").clientWidth;
-const svgHeight = 100;
-const margin = {top: 20, right: 20, bottom: 30, left: 40};
-const brushWidth = svgWidth - margin.left - margin.right;
-const brushHeight = svgHeight - margin.top - margin.bottom;
 
-svg.attr("width", svgWidth);
-svg.attr("height", svgHeight);
+const BRUSH_SVG = d3.select('svg');
 
+const SVG_WIDTH = document.getElementById('mapArea').clientWidth;
+const SVG_HEIGHT = 100;
 
-const parseDate = d3.timeParse("%b %Y");
+const MARGINS = Object.freeze({
+    TOP    : 20,
+    RIGHT  : 20,
+    BOTTOM : 30,
+    LEFT   : 40
+});
 
-let x = d3.scaleTime().range([0, brushWidth]);
-let y = d3.scaleLinear().range([brushHeight, 0]);
+const BRUSH_WIDTH  = SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;
+const BRUSH_HEIGHT = SVG_HEIGHT - MARGINS.TOP  - MARGINS.BOTTOM;
+
+const BRUSH_SELECTION = {
+    start : 0,
+    end   : 0
+};
+
+BRUSH_SVG.attr('width', SVG_WIDTH);
+BRUSH_SVG.attr('height', SVG_HEIGHT);
+
+let x = d3.scaleTime().range([0, BRUSH_WIDTH]);
+let y = d3.scaleLinear().range([BRUSH_HEIGHT, 0]);
 
 let xAxis = d3.axisBottom(x);
 let yAxis = d3.axisLeft(y);
 
-const brush = d3.brushX()
-    .extent([[0, 0], [brushWidth, brushHeight]])
-    .on("brush end", brushed);
+const BRUSH = d3.brushX()
+    .extent([[0, 0], [BRUSH_WIDTH, BRUSH_HEIGHT]])
+    .on('brush end', brushed);
 
 const area = d3.area()
     .curve(d3.curveMonotoneX)
-    .x(function(d) { return x(d.date); })
-    .y0(brushHeight)
-    .y1(function(d) { return y(d.number); });
+    .x(d => x(d.year))
+    .y0(BRUSH_HEIGHT)
+    .y1(d => y(d.number));
 
-svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-    .append("rect")
-    .attr("width", brushWidth)
-    .attr("height", brushHeight);
+BRUSH_SVG.append('defs').append('clipPath')
+    .attr('id', 'clip')
+    .append('rect')
+    .attr('width', BRUSH_WIDTH)
+    .attr('height', BRUSH_HEIGHT);
 
-const context = svg.append("g")
-    .attr("class", "context")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+const context = BRUSH_SVG.append('g')
+    .attr('class', 'context')
+    .attr('transform', `translate(${MARGINS.LEFT}, ${MARGINS.TOP})`);
 
-d3.csv("fakeData.csv", type, function(error, data) {
-    if (error) throw error;
-
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.number; })]);
-
-    context.append("path")
+function setUpBrush(data) {
+    
+    x.domain(d3.extent(data, d => d.year));
+    y.domain([0, d3.max(data, d => d.number)]);
+    
+    context.append('path')
         .datum(data)
-        .attr("class", "area")
-        .attr("d", area);
-
-    context.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + brushHeight + ")")
+        .attr('class', 'area')
+        .attr('d', area);
+    
+    context.append('g')
+        .attr('class', 'axis axis--x')
+        .attr('transform', `translate(0, ${BRUSH_HEIGHT})`)
         .call(xAxis);
-
-    context.append("g")
-        .attr("class", "brush")
-        .call(brush)
-        .call(brush.move, x.range());
-
-});
-
-function brushed() {
-    // console.log("yes");
+    
+    context.append('g')
+        .attr('class', 'brush')
+        .call(BRUSH)
+        .call(BRUSH.move, x.range());
+    
+    updateSelection(x.domain());
+    
 }
 
-function type(d) {
-    d.date = parseDate(d.date);
-    d.number = +d.number;
-    return d;
+function brushed() {
+    
+    if ((d3.event.sourceEvent !== null) && (d3.event.sourceEvent.type === 'mouseup')) {
+        
+        let selection;
+        
+        if (d3.event.selection === null) {
+            selection = x.domain();
+            d3.select(this).call(BRUSH.move, x.range());
+        } else {
+            selection = d3.event.selection.map(x.invert, x);
+        }
+        
+        updateSelection(selection);
+        
+    }
+    
+}
+
+function updateSelection(selection) {
+    
+    selection = selection.map(date => date.getFullYear());
+    
+    BRUSH_SELECTION.start = selection[0];
+    BRUSH_SELECTION.end   = selection[1];
+    
 }

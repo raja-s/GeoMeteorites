@@ -1,24 +1,54 @@
 
-function getTimeRange() {
-    const svg = document.getElementById("timeline");
-    const totalWidth = svg.width.baseVal.value - 60; // margin
-    const group = svg.children[1].children[2].children[1];
-    const startX = group.x.baseVal.value;
-    const rangeWidth = group.width.baseVal.value;
-    const endX = startX + rangeWidth;
-    const startYear = 860 + startX / totalWidth * (2016 - 860);
-    const endYear = 860 + endX / totalWidth * (2016 - 860);
-    return [parseInt(startYear), parseInt(endYear)];
+/*
+    Variables
+*/
+
+let mainAnimationPlaying = false;
+
+let mainAnimationTimeout = -1;
+
+/*
+    Functions
+*/
+
+function startMainAnimation() {
+    
+    function iteration() {
+        
+        if (time >= BRUSH_SELECTION.end) {
+            return;
+        }
+        
+        const FILTERED_DATA = meteoriteData.filter(entry => entry.year.getFullYear() === time);
+        
+        console.log(time);
+        
+        FILTERED_DATA.forEach(meteorite => {
+            dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass);
+        });
+        
+        time++;
+        
+        if (mainAnimationPlaying) {
+            mainAnimationTimeout = setTimeout(iteration, speed * 1000);
+        }
+        
+    }
+    
+    time = BRUSH_SELECTION.start;
+    
+    resumeGlobeAnimation();
+    resumeMainAnimation();
+    
+    iteration();
+    
 }
 
-document.getElementById("startButton").onclick = function() {
+function pauseMainAnimation() {
+    mainAnimationPlaying = false;
+    clearTimeout(mainAnimationTimeout);
+}
 
-    let tmpMapMode = document.getElementById("mapMode");
-    let mapMode = tmpMapMode.options[tmpMapMode.selectedIndex].value;
-    let country = document.getElementById("country").value;
-    let minMass = document.getElementById("minMass").value;
-    let maxMass = document.getElementById("maxMass").value;
-    let [startYear, endYear] = getTimeRange();
-    let speedFactor = document.getElementById("speedFactor").value;
-
-};
+function resumeMainAnimation() {
+    mainAnimationPlaying = true;
+}

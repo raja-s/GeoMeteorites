@@ -92,17 +92,3 @@ function dropMeteorite(long, lat, mass) {
     }, FALL_DURATION + EXPLOSION_DURATION);
     
 }
-
-function testMeteorites() {
-    for (let i = 0 ; i < 1000 ; i++) {
-        let long = (Math.random() - 0.5) * 360;
-        let lat = (Math.random() - 0.5) * 180;
-        let mass = (Math.random() * 100000);
-        setTimeout(() => dropMeteorite(long, lat, mass), i * 100);
-    }
-}
-
-testMeteorites();
-
-window.testMeteorites = testMeteorites;
-window.dropMeteorite = dropMeteorite;

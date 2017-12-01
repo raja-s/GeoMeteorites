@@ -1,3 +1,4 @@
+'use strict';
 
 function modulo(a, n) {
     return ((a % n) + n) % n;

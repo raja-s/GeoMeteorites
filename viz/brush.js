@@ -1,13 +1,18 @@
+'use strict';
 
-const BRUSH_SVG = d3.select('svg');
+/*
+    Brush
+*/
+
+const BRUSH_SVG = d3.select('#timeline');
 
 const SVG_WIDTH = document.getElementById('mapArea').clientWidth;
 const SVG_HEIGHT = 100;
 
 const MARGINS = Object.freeze({
     TOP    : 20,
-    RIGHT  : 20,
-    BOTTOM : 30,
+    RIGHT  : 40,
+    BOTTOM : 20,
     LEFT   : 40
 });
 
@@ -97,5 +102,27 @@ function updateSelection(selection) {
     
     BRUSH_SELECTION.start = selection[0];
     BRUSH_SELECTION.end   = selection[1];
+    
+}
+
+/*
+    Time Indicator
+*/
+
+const TIME_INDICATOR = document.getElementById('time-indicator');
+const TIME_TEXT      = document.getElementById('time-text');
+
+const TIME_HANDLE_HEIGHT = 37.5;
+const TIME_HANDLE_WIDTH  = 50;
+
+function updateTimeIndicator() {
+    
+    // Update the indicator's position
+    TIME_INDICATOR.setAttribute('transform',
+        `translate(${MARGINS.LEFT + x(new Date(time, 0)) - (TIME_HANDLE_WIDTH / 2)},
+            ${MARGINS.TOP - TIME_HANDLE_HEIGHT})`);
+    
+    // Update the year inside the indicator
+    TIME_TEXT.innerHTML = time;
     
 }

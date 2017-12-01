@@ -1,9 +1,5 @@
 'use strict';
 
-/* global GD_SERVER_ADDRESS */
-/* global d3 */
-/* global setUpBrush */
-
 /*
     Variables
 */
@@ -47,6 +43,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
     .then(data => {
         const DATA_GROUPED_BY_YEAR = d3.csvParse(data, row);
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
+        updateTimeIndicator();
         setUpBrush(DATA_GROUPED_BY_YEAR);
     }));
 

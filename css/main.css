@@ -45,7 +45,15 @@ dialog p {
 }
 
 #timeline {
-position : fixed;
-bottom: 20px;
+    position: fixed;
+    bottom: 20px;
+    overflow: visible;
+}
 
+#timeline .selection {
+    stroke-width: 0;
+}
+
+#time-handle, #time-text {
+    cursor: pointer;
 }

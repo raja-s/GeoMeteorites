@@ -27,10 +27,11 @@ function startMainAnimation() {
             dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass);
         });
         
-        time++;
-        
         if (mainAnimationPlaying) {
-            mainAnimationTimeout = setTimeout(iteration, speed * 1000);
+            mainAnimationTimeout = setTimeout(() => {
+                time++;
+                iteration();
+            }, 1000 / speed);
         }
         
     }

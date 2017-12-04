@@ -132,116 +132,116 @@ function renderStat() {
 
 
 
-let color = d3.scaleLinear()
-  .domain([0, 22097])
-  .clamp(true)
-  .range(['#f1eef6', '#045a8d']);
-
-
-
-//let mapLayer = g.append('g')
-    //.classed('map-layer', true);
-
-let width2=400;
-let height2=400;
-
-
-// let height2 = 700;
-// let width2 = 1000;
-
-let radius = height2 / 2 - 5,
-    scale = radius,
-    velocity = .02,
-    margin = { top: 300, right: 300, bottom: 60, left: 30 };
-
-let projection = d3.geoOrthographic()
-       .translate([width2 / 2, height2/2])
-       .scale(scale)
-       .clipAngle(90);
-
-
-let svg2 = d3.select("#FrequencyByCountry").append("svg")
-               .attr("align","center")
-               .attr("width", width2/2+ margin.left + margin.right)
-               .attr("height", height2+ margin.left + margin.right);
-
-
-
-let sphere2 = {type: 'Sphere'};
-
-
-
-// let drag = d3.drag()
-// 			.on("start", dragstarted)
-// 			.on("drag", dragged)
-// 			.on("end", dragended);
+// let color = d3.scaleLinear()
+//   .domain([0, 22097])
+//   .clamp(true)
+//   .range(['#f1eef6', '#045a8d']);
 //
 //
-//       svg2.call(drag);
-
-
-let path = d3.geoPath()
-             .projection(projection);
-
-let graticule2 = d3.geoGraticule();
-
-let grid = graticule2();
-
-
-d3.json('viz/geojson/world_meteorites.geojson', function(error, world) {
-     if (error) throw error;
 //
-  let countries2 = world.features;
-
-  //Add outer circle
- let outerCircle = svg2
-         .append('path')
-           .datum(sphere2)
-           .attr('d', path)
-           .attr('fill', 'none')
-           .attr('stroke', 'grey')
-           .attr('stroke-width', 1);
-
-   //Add graticule
- let gridlines = svg2.selectAll('.grid')
-                .data([grid])
-                .enter()
-                .append('path')
-                .attr('d', path)
-                .attr('fill', 'none')
-                .attr('stroke', 'grey')
-                .attr('stroke-width', .5);
-
-
-//Add countries
-  let globe = svg2.selectAll('.countries')
-                .data(countries2)
-                .enter()
-                .append('path')
-                .attr('d', path)
-                .attr("class","country")
-                .attr('fill', fillColor)
-                .attr('stroke', 'grey')
-                .attr('stroke-width', 1)
-
-
-//Get Mean mass
-function meanMass(d) {
-  return d && d.properties ? d.properties.meanmass:0;
-}
-
-
-//Color depending on data
-function fillColor(d) {
-  return color(meanMass(d));
-}
-
-
-
-
-
-});
+// //let mapLayer = g.append('g')
+//     //.classed('map-layer', true);
 //
+// let width2=400;
+// let height2=400;
+//
+//
+// // let height2 = 700;
+// // let width2 = 1000;
+//
+// let radius = height2 / 2 - 5,
+//     scale = radius,
+//     velocity = .02,
+//     margin = { top: 300, right: 300, bottom: 60, left: 30 };
+//
+// let projection = d3.geoOrthographic()
+//        .translate([width2 / 2, height2/2])
+//        .scale(scale)
+//        .clipAngle(90);
+//
+//
+// let svg2 = d3.select("#FrequencyByCountry").append("svg")
+//                .attr("align","center")
+//                .attr("width", width2/2+ margin.left + margin.right)
+//                .attr("height", height2+ margin.left + margin.right);
+//
+//
+//
+// let sphere2 = {type: 'Sphere'};
+//
+//
+//
+// // let drag = d3.drag()
+// // 			.on("start", dragstarted)
+// // 			.on("drag", dragged)
+// // 			.on("end", dragended);
+// //
+// //
+// //       svg2.call(drag);
+//
+//
+// let path = d3.geoPath()
+//              .projection(projection);
+//
+// let graticule2 = d3.geoGraticule();
+//
+// let grid = graticule2();
+//
+//
+// d3.json('viz/geojson/world_meteorites.geojson', function(error, world) {
+//      if (error) throw error;
+// //
+//   let countries2 = world.features;
+//
+//   //Add outer circle
+//  let outerCircle = svg2
+//          .append('path')
+//            .datum(sphere2)
+//            .attr('d', path)
+//            .attr('fill', 'none')
+//            .attr('stroke', 'grey')
+//            .attr('stroke-width', 1);
+//
+//    //Add graticule
+//  let gridlines = svg2.selectAll('.grid')
+//                 .data([grid])
+//                 .enter()
+//                 .append('path')
+//                 .attr('d', path)
+//                 .attr('fill', 'none')
+//                 .attr('stroke', 'grey')
+//                 .attr('stroke-width', .5);
+//
+//
+// //Add countries
+//   let globe = svg2.selectAll('.countries')
+//                 .data(countries2)
+//                 .enter()
+//                 .append('path')
+//                 .attr('d', path)
+//                 .attr("class","country")
+//                 .attr('fill', fillColor)
+//                 .attr('stroke', 'grey')
+//                 .attr('stroke-width', 1)
+//
+//
+// //Get Mean mass
+// function meanMass(d) {
+//   return d && d.properties ? d.properties.meanmass:0;
+// }
+//
+//
+// //Color depending on data
+// function fillColor(d) {
+//   return color(meanMass(d));
+// }
+//
+//
+//
+//
+//
+// });
+// //
 //
 //
 //

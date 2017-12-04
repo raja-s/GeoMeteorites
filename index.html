@@ -33,14 +33,15 @@
          <script src='constants.js' defer></script>
          <script src='main.js' defer></script>
          <script src='utils.js' defer></script>
-         
+
          <script src='ui/controls.js' defer></script>
-         
+
          <script src='viz/brush.js' defer></script>
          <script src='viz/camera.js' defer></script>
          <script src='viz/globe.js' defer></script>
          <script src='viz/main.js' defer></script>
          <script src='viz/meteorites.js' defer></script>
+         <script src="viz/statistics.js" charset="utf-8" defer></script>
     </head>
     <body>
 
@@ -70,6 +71,18 @@
                         <text id='time-text' text-anchor='middle' x='25' y='20'></text>
                     </g>
                 </svg>
+
+
+                <div id="statistics">
+
+                <div id="5BiggestMass" height='30%'><h3>The 5 biggest meteorites found</h3> </div>
+
+
+                </div>
+
+                  <div id='FrequencyByCountry'><h3>Mean mass by country</h3> </div>
+
+
             </div>
         </article>
         <style media='screen'></style>

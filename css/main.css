@@ -40,8 +40,9 @@ dialog p {
 }
 
 #mapArea {
-    margin: 0px;
+    /*margin: 0px;*/
     background-color: white;
+    width:70%;
 }
 
 #timeline {
@@ -56,4 +57,26 @@ dialog p {
 
 #time-handle, #time-text {
     cursor: pointer;
+}
+
+
+#statistics {
+    width:25%;
+    float:left;
+    left:5px;
+    margin:0px;
+    padding:0px;
+    position:absolute;
+    top:35px;
+    height:80%;
+
+
+}
+
+#FrequencyByCountry {
+    height:350px;
+    position:absolute;
+    top:300px;
+    left:5px;
+    float:right;
 }

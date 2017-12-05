@@ -27,7 +27,7 @@ dialog {
 }
 
 dialog p {
-    margin: 0px;
+    margin: 0;
 }
 
 #minMass, #maxMass {
@@ -40,7 +40,9 @@ dialog p {
 }
 
 #mapArea {
-    margin: 0px;
+    margin: 0;
+    /*background-color: white;*/
+    width:70%;
 }
 
 #timeline {
@@ -64,3 +66,72 @@ dialog p {
 #time-handle {
     fill: #ddd;
 }
+
+#statistics {
+    width:25%;
+    float:left;
+    left:5px;
+    margin:0px;
+    padding:0px;
+    position:fixed;
+    top:35px;
+    height:80%;
+
+
+}
+
+#MassDistribution {
+    height:350px;
+    position:fixed;
+    top:200px;
+    left:5px;
+    float:right;
+}
+
+path.bins1 {
+     stroke:' brown;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+#massdistrib {
+    position:fixed;
+   }
+
+   .bar1 rect {
+     fill: brown;
+   }
+
+   path.bins1 {
+     stroke: brown;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar1:hover rect {
+     fill: black;
+   }
+
+   .bar1 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }
+
+   .bar2 rect {
+     fill:orange;
+   }
+
+   path.bins2 {
+     stroke: orange;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar2:hover rect {
+     fill:black;
+   }
+
+   .bar2 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }

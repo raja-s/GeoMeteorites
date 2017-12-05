@@ -33,38 +33,48 @@
          <script src='constants.js' defer></script>
          <script src='main.js' defer></script>
          <script src='utils.js' defer></script>
-         
+
          <script src='ui/controls.js' defer></script>
-         
+
          <script src='viz/brush.js' defer></script>
          <script src='viz/camera.js' defer></script>
          <script src='viz/globe.js' defer></script>
          <script src='viz/main.js' defer></script>
          <script src='viz/meteorites.js' defer></script>
+         <script src="viz/statistics.js" charset="utf-8" defer></script>
     </head>
     <body>
-        <dialog open>
-            <div>
-                <header>Map</header>
-                <p>
-                    Mode:<select id='mapMode'></select>
-                </p>
-            </div>
-            <div>
-                <header>Country</header>
-                <p><input type='text' id='country-field' placeHolder='e.g. Switzerland' /></p>
-            </div>
-            <button id='startAnimationButton'>Start Animation</button>
-        </dialog>
-        <div id='main'>
-            <div id='mapArea'></div>
-            <svg id='timeline'>
-                <g id='time-indicator'>
-                    <path d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L26,37L26,97L24,97L24,37L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='none' stroke-width='2' stroke='#000'></path>
-                    <path id='time-handle' d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L25,37.5L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='transparent'></path>
-                    <text id='time-text' text-anchor='middle' x='25' y='20'></text>
-                </g>
-            </svg>
+            <dialog open>
+                <div>
+                    <header>Map</header>
+                    <p>
+                        Mode:<select id='mapMode'></select>
+                    </p>
+                </div>
+                <div>
+                    <header>Country</header>
+                    <p><input type='text' id='country-field' placeHolder='e.g. Switzerland' /></p>
+                </div>
+                <button id='startAnimationButton'>Start Animation</button>
+            </dialog>
+            <div id='main'>
+                <div id='mapArea'></div>
+                <svg id='timeline'>
+                    <g id='time-indicator'>
+                        <path d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L26,37L26,97L24,97L24,37L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='none' stroke-width='2' stroke='#000'></path>
+                        <path id='time-handle' d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L25,37.5L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='transparent'></path>
+                        <text id='time-text' text-anchor='middle' x='25' y='20'></text>
+                    </g>
+                </svg>
+
+
+                <div id="statistics">
+
+                <div id="5BiggestMass" height='30%'><h5>The 5 biggest meteorites found</h5> </div>
+                <div id='MassDistribution'><h5>Mass distribution</h5>
+                <svg width="380" height="200" id='massdistrib'></svg></div>
+
+                </div>
         </div>
     </body>
 </html>

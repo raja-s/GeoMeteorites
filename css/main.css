@@ -61,7 +61,7 @@ dialog p {
 
 
 #statistics {
-    width:25%;
+    width:30%;
     float:left;
     left:5px;
     margin:0px;
@@ -73,10 +73,60 @@ dialog p {
 
 }
 
-#FrequencyByCountry {
+#MassDistribution {
     height:350px;
+    width:100%;
     position:absolute;
     top:300px;
     left:5px;
     float:right;
 }
+
+path.bins1 {
+     stroke:' brown;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+#massdistrib {
+    position:absolute;
+    width:100%;
+   }
+
+   .bar1 rect {
+     fill: brown;
+   }
+
+   path.bins1 {
+     stroke: brown;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar1:hover rect {
+     fill: black;
+   }
+
+   .bar1 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }
+
+   .bar2 rect {
+     fill:orange;
+   }
+
+   path.bins2 {
+     stroke: orange;
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar2:hover rect {
+     fill:black;
+   }
+
+   .bar2 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }

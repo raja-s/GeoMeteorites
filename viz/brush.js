@@ -6,8 +6,8 @@
 
 const BRUSH_SVG = d3.select('#timeline');
 
-const SVG_WIDTH = document.getElementById('mapArea').clientWidth;
-const SVG_HEIGHT = 100;
+const BRUSH_SVG_WIDTH = window.innerWidth;
+const BRUSH_SVG_HEIGHT = 100;
 
 const MARGINS = Object.freeze({
     TOP    : 20,
@@ -16,16 +16,16 @@ const MARGINS = Object.freeze({
     LEFT   : 40
 });
 
-const BRUSH_WIDTH  = SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;
-const BRUSH_HEIGHT = SVG_HEIGHT - MARGINS.TOP  - MARGINS.BOTTOM;
+const BRUSH_WIDTH  = BRUSH_SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;
+const BRUSH_HEIGHT = BRUSH_SVG_HEIGHT - MARGINS.TOP  - MARGINS.BOTTOM;
 
 const BRUSH_SELECTION = {
     start : 0,
     end   : 0
 };
 
-BRUSH_SVG.attr('width', SVG_WIDTH);
-BRUSH_SVG.attr('height', SVG_HEIGHT);
+BRUSH_SVG.attr('width', BRUSH_SVG_WIDTH);
+BRUSH_SVG.attr('height', BRUSH_SVG_HEIGHT);
 
 let x = d3.scaleTime().range([0, BRUSH_WIDTH]);
 let y = d3.scaleLinear().range([BRUSH_HEIGHT, 0]);

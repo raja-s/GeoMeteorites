@@ -61,7 +61,7 @@ dialog p {
 
 
 #statistics {
-    width:30%;
+    width:25%;
     float:left;
     left:5px;
     margin:0px;
@@ -75,7 +75,6 @@ dialog p {
 
 #MassDistribution {
     height:350px;
-    width:100%;
     position:fixed;
     top:200px;
     left:5px;

@@ -64,7 +64,7 @@ function createMeteorite(size,x,y,z) {
     v.x += (Math.random());
     v.y += (Math.random());
     v.z += (Math.random());
-  })
+  });
   let material = new THREE.MeshBasicMaterial({
                   color: 0xaaaaaa,
                   wireframe: true,

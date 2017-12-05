@@ -6,8 +6,8 @@
 
 const BRUSH_SVG = d3.select('#timeline');
 
-const SVG_WIDTH = document.getElementById('mapArea').clientWidth;
-const SVG_HEIGHT = 100;
+const BRUSH_SVG_WIDTH = window.innerWidth;
+const BRUSH_SVG_HEIGHT = 150;
 
 const MARGINS = Object.freeze({
     TOP    : 20,
@@ -16,16 +16,16 @@ const MARGINS = Object.freeze({
     LEFT   : 40
 });
 
-const BRUSH_WIDTH  = SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;
-const BRUSH_HEIGHT = SVG_HEIGHT - MARGINS.TOP  - MARGINS.BOTTOM;
+const BRUSH_WIDTH  = BRUSH_SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;
+const BRUSH_HEIGHT = BRUSH_SVG_HEIGHT - MARGINS.TOP  - MARGINS.BOTTOM;
 
 const BRUSH_SELECTION = {
     start : 0,
     end   : 0
 };
 
-BRUSH_SVG.attr('width', SVG_WIDTH);
-BRUSH_SVG.attr('height', SVG_HEIGHT);
+BRUSH_SVG.attr('width', BRUSH_SVG_WIDTH);
+BRUSH_SVG.attr('height', BRUSH_SVG_HEIGHT);
 
 let x = d3.scaleTime().range([0, BRUSH_WIDTH]);
 let y = d3.scaleLinear().range([BRUSH_HEIGHT, 0]);
@@ -36,12 +36,6 @@ let yAxis = d3.axisLeft(y);
 const BRUSH = d3.brushX()
     .extent([[0, 0], [BRUSH_WIDTH, BRUSH_HEIGHT]])
     .on('brush end', brushed);
-
-const area = d3.area()
-    .curve(d3.curveMonotoneX)
-    .x(d => x(d.year))
-    .y0(BRUSH_HEIGHT)
-    .y1(d => y(d.number));
 
 BRUSH_SVG.append('defs').append('clipPath')
     .attr('id', 'clip')
@@ -55,13 +49,25 @@ const context = BRUSH_SVG.append('g')
 
 function setUpBrush(data) {
     
-    x.domain(d3.extent(data, d => d.year));
+    x.domain(d3.extent(data , d => d.year));
     y.domain([0, d3.max(data, d => d.number)]);
     
-    context.append('path')
-        .datum(data)
-        .attr('class', 'area')
-        .attr('d', area);
+    let xExtent      = x.domain().map(bound => bound.getFullYear());
+    let xBandwidth   = BRUSH_WIDTH / (xExtent[1] - xExtent[0]);
+    let barWidth     = xBandwidth - 1;
+    let halfBarWidth = barWidth / 2;
+    
+    context.append('g')
+        .selectAll('rect')
+             .data(data)
+            .enter()
+           .append('rect')
+             .attr('x'     , d => x(d.year) - halfBarWidth)
+             .attr('y'     , d => y(d.number))
+             .attr('width' , barWidth)
+             .attr('height', d => BRUSH_HEIGHT - y(d.number))
+             .attr('class' , 'bars-meteorites-found');
+            
     
     context.append('g')
         .attr('class', 'axis axis--x')

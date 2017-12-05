@@ -13,8 +13,12 @@ const GLOBE_RADIUS = 60;
 // Scene
 const SCENE = new THREE.Scene();
 
-// Light
-const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
+// Lights
+// const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
+// const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1.2);
+const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.5, 0, 2);
+POINT_LIGHT.position.set(-40, 40, 300);
 
 // Camera
 const FOV = 35;
@@ -32,6 +36,8 @@ const RENDERER = new THREE.WebGLRenderer({
     antialias: true
 });
 
+const TEXTURE_LOADER = new THREE.TextureLoader();
+
 let cameraDistance = 240;
 
 let mapGraticule, mapMesh;
@@ -44,6 +50,7 @@ let allowGlobeNavigation = true;
 */
 
 SCENE.add(AMBIANT_LIGHT);
+SCENE.add(POINT_LIGHT);
 
 CAMERA.rotation.order = 'YXZ';
 CAMERA.translateZ(cameraDistance);
@@ -52,8 +59,18 @@ RENDERER.setPixelRatio(window.devicePixelRatio);
 RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
 document.getElementById("mapArea").appendChild(RENDERER.domElement);
 
-let sphere = new THREE.Mesh(new THREE.SphereGeometry(GLOBE_RADIUS, 32, 32),
-    new THREE.MeshLambertMaterial({ color : 0xffffff }));
+let sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(GLOBE_RADIUS, 128, 128),
+    // new THREE.MeshLambertMaterial({ color : 0xffffff })
+    new THREE.MeshPhongMaterial({
+        // color       : 0xffffff,
+        map         : TEXTURE_LOADER.load('res/texture-w8192-h4096-q100.jpg'),
+        bumpMap     : TEXTURE_LOADER.load('res/elevation-w8192-h4096.jpg'),
+        specularMap : TEXTURE_LOADER.load('res/specular-map-w2048-h1024.png'),
+        bumpScale   : 0.5
+    })
+);
+sphere.rotateY(- Math.PI / 2);
 addToScene(sphere);
 
 // let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
@@ -73,11 +90,17 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     
     topology = topology2;
     
-    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
-    mapMesh = wireframe3d(topojson.mesh(topology2, topology2.objects.countries),
-        new THREE.LineBasicMaterial({color: 0xaaaaaa}));
+    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({
+        color     : 0x11122e
+    }));
+    mapMesh = wireframe3d(
+        topojson.mesh(topology2, topology2.objects.countries),
+        new THREE.LineBasicMaterial({
+            color     : 0x11122e
+        })
+    );
 
-    addToScene(mapMesh);
+    // addToScene(mapMesh);
     addToScene(mapGraticule);
 
     mapGraticule.rotateX(- Math.PI / 2);
@@ -87,7 +110,6 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     mapMesh.rotateZ(- Math.PI / 2);
     
     renderLoop();
-
 
 });
 

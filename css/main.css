@@ -1,15 +1,15 @@
+
+html {
+    /*--color-bg: #000614;*/
+    --color-bg: #01021e;
+}
+
 body {
-    margin: 0px;
+    margin: 0;
+    background-color: var(--color-bg);
 }
 
-header#top {
-    color: white;
-    background-color: black;
-}
-
-header h1 {
-    margin: 0px;
-}
+/**/
 
 dialog {
     margin-top: 20px;
@@ -21,7 +21,7 @@ dialog:hover {
     opacity: 0.8;
 }
 
-dialog header {
+dialog {
     font-size: 1.1em;
     font-weight: bold;
 }
@@ -41,7 +41,6 @@ dialog p {
 
 #mapArea {
     margin: 0px;
-    background-color: white;
 }
 
 #timeline {
@@ -54,6 +53,14 @@ dialog p {
     stroke-width: 0;
 }
 
+#time-indicator > path {
+    stroke: #ddd;
+}
+
 #time-handle, #time-text {
     cursor: pointer;
+}
+
+#time-handle {
+    fill: #ddd;
 }

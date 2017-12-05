@@ -218,7 +218,7 @@ legend.append("text")
                     .attr("y", function(d, i) {
                       return i * 30 + 5;
                     })
-                    .attr("x", 200)
+                    .attr("x",100)
                     .text(function(d) {
                       return d;
                     });
@@ -227,9 +227,9 @@ legend.append("text")
                     .attr("y", function(d, i) {
                       return i * 30 - 8;
                     })
-                    .attr("x", 167)
-                    .attr("width", 20)
-                    .attr("height", 20)
+                    .attr("x", 80)
+                    .attr("width", 10)
+                    .attr("height", 10)
                     .attr("fill", function(d) {
                       if (d == "massFound") {
                         return 'brown';

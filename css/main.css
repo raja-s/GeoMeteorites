@@ -66,7 +66,7 @@ dialog p {
     left:5px;
     margin:0px;
     padding:0px;
-    position:absolute;
+    position:fixed;
     top:35px;
     height:80%;
 
@@ -76,8 +76,8 @@ dialog p {
 #MassDistribution {
     height:350px;
     width:100%;
-    position:absolute;
-    top:300px;
+    position:fixed;
+    top:200px;
     left:5px;
     float:right;
 }
@@ -89,8 +89,7 @@ path.bins1 {
    }
 
 #massdistrib {
-    position:absolute;
-    width:100%;
+    position:fixed;
    }
 
    .bar1 rect {

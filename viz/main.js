@@ -8,9 +8,44 @@ let mainAnimationPlaying = false;
 
 let mainAnimationTimeout = -1;
 
+const YEAR_SCHEDULE = {};
+
 /*
     Functions
 */
+
+function scheduleCallback(years, callback) {
+    
+    years.forEach(year => {
+        
+        if (!(year in YEAR_SCHEDULE)) {
+            YEAR_SCHEDULE[year] = [];
+        }
+        
+        YEAR_SCHEDULE[year].push(callback);
+        
+    });
+    
+}
+
+function incrementTime() {
+    
+    // Increment time
+    time++;
+    
+    // Check if there are callbacks
+    // scheduled for this year
+    if (time in YEAR_SCHEDULE) {
+        
+        // Run the scheduled callbacks
+        YEAR_SCHEDULE[time].forEach(callback => callback(time));
+        
+        // Remove the callbacks
+        delete YEAR_SCHEDULE[time];
+        
+    }
+    
+}
 
 function startMainAnimation() {
     
@@ -41,7 +76,7 @@ function startMainAnimation() {
         
         if (mainAnimationPlaying) {
             mainAnimationTimeout = setTimeout(() => {
-                time++;
+                incrementTime();
                 iteration();
             }, 1000 / speed);
         }

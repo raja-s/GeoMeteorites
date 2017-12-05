@@ -7,7 +7,7 @@
 const BRUSH_SVG = d3.select('#timeline');
 
 const BRUSH_SVG_WIDTH = window.innerWidth;
-const BRUSH_SVG_HEIGHT = 100;
+const BRUSH_SVG_HEIGHT = 150;
 
 const MARGINS = Object.freeze({
     TOP    : 20,
@@ -37,12 +37,6 @@ const BRUSH = d3.brushX()
     .extent([[0, 0], [BRUSH_WIDTH, BRUSH_HEIGHT]])
     .on('brush end', brushed);
 
-const area = d3.area()
-    .curve(d3.curveMonotoneX)
-    .x(d => x(d.year))
-    .y0(BRUSH_HEIGHT)
-    .y1(d => y(d.number));
-
 BRUSH_SVG.append('defs').append('clipPath')
     .attr('id', 'clip')
     .append('rect')
@@ -55,13 +49,25 @@ const context = BRUSH_SVG.append('g')
 
 function setUpBrush(data) {
     
-    x.domain(d3.extent(data, d => d.year));
+    x.domain(d3.extent(data , d => d.year));
     y.domain([0, d3.max(data, d => d.number)]);
     
-    context.append('path')
-        .datum(data)
-        .attr('class', 'area')
-        .attr('d', area);
+    let xExtent      = x.domain().map(bound => bound.getFullYear());
+    let xBandwidth   = BRUSH_WIDTH / (xExtent[1] - xExtent[0]);
+    let barWidth     = xBandwidth - 1;
+    let halfBarWidth = barWidth / 2;
+    
+    context.append('g')
+        .selectAll('rect')
+             .data(data)
+            .enter()
+           .append('rect')
+             .attr('x'     , d => x(d.year) - halfBarWidth)
+             .attr('y'     , d => y(d.number))
+             .attr('width' , barWidth)
+             .attr('height', d => BRUSH_HEIGHT - y(d.number))
+             .attr('class' , 'bars-meteorites-found');
+            
     
     context.append('g')
         .attr('class', 'axis axis--x')

@@ -57,16 +57,21 @@ function setUpBrush(data) {
     let barWidth     = xBandwidth - 1;
     let halfBarWidth = barWidth / 2;
     
+    let transition = d3.transition()
+                         .duration(1000);
+    
     context.append('g')
         .selectAll('rect')
              .data(data)
             .enter()
            .append('rect')
              .attr('x'     , d => x(d.year) - halfBarWidth)
-             .attr('y'     , d => y(d.number))
+             .attr('y'     , BRUSH_HEIGHT)
              .attr('width' , barWidth)
-             .attr('height', d => BRUSH_HEIGHT - y(d.number))
-             .attr('class' , 'bars-meteorites-found');
+             .attr('class' , 'bars-meteorites-found')
+       .transition(transition)
+             .attr('y'     , d => y(d.number))
+             .attr('height', d => BRUSH_HEIGHT - y(d.number));
             
     
     context.append('g')

@@ -219,7 +219,7 @@ function renderLoop() {
     if (animateGlobe) {
 
         const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + 0.1 + 180, 360) - 180;
-        const LAT = - Math.sin(THREE.Math.degToRad(LONG)) * 30;
+        const LAT  = Math.sin(THREE.Math.degToRad(LONG)) * 30;
 
         moveCameraTo(LONG, LAT);
 
@@ -253,13 +253,13 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
         pauseGlobeAnimation();
 
         const DELTA_PHI   = - event.movementX;
-        const DELTA_THETA = - event.movementY;
+        const DELTA_THETA = event.movementY;
 
         const FACTOR = ((cameraDistance / CAMERA_BOUNDS.MAX) ** 2) * 0.5;
 
         const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + DELTA_PHI * FACTOR + 180, 360) - 180;
-        const LAT  = clamp(THREE.Math.radToDeg(CAMERA.rotation.x) + DELTA_THETA * FACTOR, -90, 90);
-
+        const LAT  = clamp(THREE.Math.radToDeg(- CAMERA.rotation.x) + DELTA_THETA * FACTOR, -90, 90);
+        
         moveCameraTo(LONG, LAT);
 
     }

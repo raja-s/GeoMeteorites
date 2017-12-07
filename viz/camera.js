@@ -6,8 +6,7 @@
 
 // TODO: Rename this function
 function updateCameraZ() {
-    let { x , y , z } = sphericalToCartesian(cameraDistance,
-        CAMERA.rotation.y, CAMERA.rotation.x + (Math.PI / 2));
+    let { x , y , z } = sphericalToCartesian(cameraDistance, CAMERA.rotation.y, - CAMERA.rotation.x);
     CAMERA.position.set(x, y, z);
 }
 
@@ -20,17 +19,17 @@ function moveCameraTo(long, lat, duration = 0) {
     
     if (duration === 0) {
         CAMERA.rotation.y = PHI;
-        CAMERA.rotation.x = THETA;
+        CAMERA.rotation.x = - THETA;
         
-        let { x , y , z } = sphericalToCartesian(cameraDistance, PHI, THETA + (Math.PI / 2));
+        let { x , y , z } = sphericalToCartesian(cameraDistance, PHI, THETA);
         
         CAMERA.position.set(x, y, z);
         
         return new Promise((resolve, reject) => resolve());
     }
     
-    const DIFF_PHI   = PHI   - CAMERA.rotation.y;
-    const DIFF_THETA = THETA - CAMERA.rotation.x;
+    const DIFF_PHI   =   PHI   - CAMERA.rotation.y;
+    const DIFF_THETA = - THETA - CAMERA.rotation.x;
     
     const PHIS   = [];
     const THETAS = [];
@@ -44,7 +43,7 @@ function moveCameraTo(long, lat, duration = 0) {
         CAMERA.rotation.y = PHIS[i];
         CAMERA.rotation.x = THETAS[i];
         
-        let { x , y , z } = sphericalToCartesian(cameraDistance, PHIS[i], THETAS[i] + (Math.PI / 2));
+        let { x , y , z } = sphericalToCartesian(cameraDistance, PHIS[i], - THETAS[i]);
         
         CAMERA.position.set(x, y, z);
     }

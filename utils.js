@@ -9,10 +9,10 @@ function clamp(value, min, max) {
 }
 
 function sphericalToCartesian(r, phi, theta) {
-    let sinTheta = Math.sin(theta);
+    let cosTheta = Math.cos(theta);
     return {
-        x : r * sinTheta * Math.sin(phi),
-        y : r * Math.cos(theta),
-        z : r * sinTheta * Math.cos(phi)
+        x : r * cosTheta * Math.sin(phi),
+        y : r * Math.sin(theta),
+        z : r * cosTheta * Math.cos(phi)
     };
 }

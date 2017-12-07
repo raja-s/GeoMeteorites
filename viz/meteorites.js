@@ -43,7 +43,7 @@ function dropMeteorite(long, lat, mass) {
     let explosion = new THREE.Mesh(EXPLOSION_GEOMETRY, MATERIAL.clone());
     
     let phi   = START_PHI;
-    let theta = START_THETA + (Math.PI / 2);
+    let theta = START_THETA;
     let r     = START_R;
     
     function deltaFall() {
@@ -68,7 +68,7 @@ function dropMeteorite(long, lat, mass) {
         
         addToScene(explosion);
         
-        let { x , y , z } = sphericalToCartesian(GLOBE_RADIUS, PHI, THETA + (Math.PI / 2));
+        let { x , y , z } = sphericalToCartesian(GLOBE_RADIUS, PHI, THETA);
         meteorite.position.set(x, y, z);
         explosion.position.set(x, y, z);
         

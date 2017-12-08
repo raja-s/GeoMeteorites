@@ -1,8 +1,7 @@
 
 html {
     /* TODO: Change these later? */
-    --color-meteorites-found: #a52a2a;
-    --color-meteorites-fell:  #ffa500;
+    --color-meteorites: #ffad5b;
 }
 
 body {
@@ -68,11 +67,11 @@ dialog p {
 }
 
 .bars-meteorites-found {
-    fill: var(--color-meteorites-found);
+    fill: var(--color-meteorites);
 }
 
 .bars-meteorites-fell {
-    fill: var(--color-meteorites-fell);
+    fill: var(--color-meteorites);
 }
 
 #messages {
@@ -103,7 +102,7 @@ dialog p {
 }
 
 path.bins1 {
-     stroke: var(--color-meteorites-found);
+     stroke: var(--color-meteorites);
      stroke-width: 4px;
      fill: none;
    }
@@ -113,11 +112,11 @@ path.bins1 {
    }
 
    .bar1 rect {
-     fill: var(--color-meteorites-found);
+     fill: var(--color-meteorites);
    }
 
    path.bins1 {
-     stroke: var(--color-meteorites-found);
+     stroke: var(--color-meteorites);
      stroke-width: 4px;
      fill: none;
    }
@@ -132,11 +131,11 @@ path.bins1 {
    }
 
    .bar2 rect {
-     fill:var(--color-meteorites-fell);
+     fill:var(--color-meteorites);
    }
 
    path.bins2 {
-     stroke: var(--color-meteorites-fell);
+     stroke: var(--color-meteorites);
      stroke-width: 4px;
      fill: none;
    }

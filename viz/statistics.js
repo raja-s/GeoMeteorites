@@ -187,8 +187,12 @@ bar1.append("rect")
 
 
 //---------------Meteorites classification-------------------------------------
-console.log(data.length);
-console.log(data);
+
+
+let typeIron = 'Iron';
+let typeStonyIron = 'Stony-Iron';
+let typeStony = 'Stony';
+
 //Iron Meteorites
 let ironMeteorites = data.filter(function (el) {
   let classMeteorites = el.recclass;
@@ -196,9 +200,20 @@ let ironMeteorites = data.filter(function (el) {
          classMeteorites.includes('Relict iron');
 
 
+
+
 });
 
-console.log(ironMeteorites);
+
+//ironMeteorites = ironMeteorites.map(x => Object.assign({}, ironMeteorites, { "Type": "Iron" }));
+ironMeteorites.forEach(function(e){
+  if (typeof e === "object" ){
+    e["Type"] = typeIron;
+  }
+});
+
+
+
 //Stony meteorites
 let stonyMeteorites = data.filter(function (el) {
   let classMeteorites = el.recclass;
@@ -218,12 +233,22 @@ let stonyMeteorites = data.filter(function (el) {
          classMeteorites.startsWith('S') ||
          classMeteorites.startsWith('U') ||
          classMeteorites.startsWith('W')
-         ;
-
+  // return !classMeteorites.includes('Pallasite') ||
+  //        !classMeteorites.includes('Mesosiderite') ||
+  //        !classMeteorites.includes('Iron') ||
+  //        !classMeteorites.includes('Relict iron');
 
 });
 
-console.log(stonyMeteorites);
+
+stonyMeteorites.forEach(function(e){
+  if (typeof e === "object" ){
+    e["Type"] = typeStony;
+  }
+});
+
+
+//console.log(stonyMeteorites);
 
 //Stony-iron meteorites
 let stonyIronMeteorites = data.filter(function (el) {
@@ -233,13 +258,27 @@ let stonyIronMeteorites = data.filter(function (el) {
 
 });
 
+stonyIronMeteorites.forEach(function(e){
+  if (typeof e === "object" ){
+    e["Type"] = typeStonyIron;
+  }
+});
 
 
 
-console.log(stonyIronMeteorites);
+//data classified
+let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
+//console.log(dataClassified);
+//console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
 
 
-console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
+let svgClasses = d3.select('#elementFrequency');
+
+
+//let nodes = [dataClassified.Type];
+
+
+
 
 
 

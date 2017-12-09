@@ -98,49 +98,22 @@
 d3.csv(GD_SERVER_ADDRESS, function(data) {
 
 
-  let massFound = new Array();
-  let massFell = new Array();
-  let i;
-
-
-  let found = data.filter(data => data.fall === 'Found');
-  let fell = data.filter(data=>data.fall==='Fell' );
-
-
   let t = d3.transition()
             .duration(1000)
             .ease(d3.easeLinear);
 
-//&& data.year>=t1 && data.year<=t2 && data.cid==countryid);
 
-
-
-
-
-
-found.forEach(function(element,i) {
-  massFound[i] = Math.log(element.mass);
-
-});
-
-fell.forEach(function(element,i) {
-massFell[i] = Math.log(element.mass);
-
+let mass = new Array();
+let i;
+data.forEach(function(element,i){
+mass[i] = Math.log(element.mass);
 });
 
 
-
-//console.log(mass.length);
-
-
-let formatCount = d3.format(",.0f");
 
 let svg = d3.select('#massdistrib');
 
 let margin = {top:10,right:30,bottom:30,left:30};
-
-
-let divMass = document.getElementById('#menu1');
 
 
 let width = +svg.attr("width") - margin.left - margin.right,
@@ -151,12 +124,12 @@ let width = +svg.attr("width") - margin.left - margin.right,
 
 let  y = d3.scaleLinear()
         .rangeRound([0,height])
-        .domain([0,d3.max(massFound)]);
+        .domain([0,d3.max(mass)]);
 
 let bins1 = d3.histogram()
         .domain(y.domain())
         .thresholds(y.ticks(40))
-        (massFound);
+        (mass);
 
 
 
@@ -167,20 +140,6 @@ let  x = d3.scaleLinear()
                        .range([0,width]);
 
 
-// let bins2 = d3.histogram()
-//         .domain(x.domain())
-//         .thresholds(x.ticks(50))
-//         (massFell);
-
-
-
-// let line = d3.line()
-//                   .y(function(d) { return y((d.x0 + d.x1)/2); })
-//                   .x(function(d) { return x(d.length); })
-//                   .curve(d3.curveCatmullRom.alpha(0.5));
-//
-//
-
 
 let bar1 = g.selectAll(".bar1")
                        .data(bins1)
@@ -190,14 +149,6 @@ let bar1 = g.selectAll(".bar1")
                          return "translate(0," + y(d.x0) + ")";
                        });
 
-// let bar2 = g.selectAll(".bar2")
-//             .data(bins2)
-//           .enter().append("g")
-//           .attr("class", "bar2")
-//         .attr("transform", function(d) {
-//           return "translate(" + x(d.x0) + "," + y(d.length) + ")";});
-
-
 
 
 bar1.append("rect")
@@ -205,51 +156,6 @@ bar1.append("rect")
      .attr('height',y(bins1[0].x1) - y(bins1[0].x0) +2)
      .transition(t)
      .attr('width', function(d) {return x(d.length);});
-
-// g.append("path")
-//        .transition(t)
-//        .attr("d", line(bins1))
-//        .attr("class", "bins1");
-
-// bar2.append("rect")
-//            .attr("x", 0.5)
-//            .attr("width", x(bins2[0].x1) - x(bins2[0].x0) - 1)
-//            .transition(t)
-//             .attr("height", function(d) {return height - y(d.length);});
-
-
-// let legend = svg.append("g")
-//                     .attr("class", "legend")
-//                     .attr("transform", "translate(" + (width - 245) + "," + 40 + ")")
-//                     .selectAll("g")
-//                     .data(["massFell", "massFound"])
-//                     .enter().append("g");
-//
-// legend.append("text")
-//                     .attr("y", function(d, i) {
-//                       return i * 30 + 5;
-//                     })
-//                     .attr("x",100)
-//                     .text(function(d) {
-//                       return d;
-//                     });
-//
-//                   legend.append("rect")
-//                     .attr("y", function(d, i) {
-//                       return i * 30 - 8;
-//                     })
-//                     .attr("x", 80)
-//                     .attr("width", 10)
-//                     .attr("height", 10)
-//                     .attr("fill", function(d) {
-//                       if (d == "massFound") {
-//                         return 'brown';
-//                       } else {
-//                         return 'orange';
-//                       }
-//                     });
-//
-
 
 
   g.append("g")
@@ -274,11 +180,82 @@ bar1.append("rect")
     .text("log(Mass) [gr]");
 
 
-
     // text label for the y
+
+
+
+
+
+//---------------Meteorites classification-------------------------------------
+console.log(data.length);
+console.log(data);
+//Iron Meteorites
+let ironMeteorites = data.filter(function (el) {
+  let classMeteorites = el.recclass;
+  return classMeteorites.includes('Iron') ||
+         classMeteorites.includes('Relict iron');
+
+
+});
+
+console.log(ironMeteorites);
+//Stony meteorites
+let stonyMeteorites = data.filter(function (el) {
+  let classMeteorites = el.recclass;
+  return classMeteorites.startsWith('A') ||
+         classMeteorites.startsWith('L') ||
+         classMeteorites.startsWith('C') ||
+         classMeteorites.startsWith('E') ||
+         classMeteorites.startsWith('B') ||
+         classMeteorites.startsWith('D') ||
+         classMeteorites.startsWith('F') ||
+         classMeteorites.startsWith('H') ||
+         classMeteorites.startsWith('K') ||
+         classMeteorites.includes('Martian') ||
+         classMeteorites.startsWith('O') ||
+         classMeteorites.startsWith('R') &&
+         !classMeteorites.includes('Relict iron') ||
+         classMeteorites.startsWith('S') ||
+         classMeteorites.startsWith('U') ||
+         classMeteorites.startsWith('W')
+         ;
+
+
+});
+
+console.log(stonyMeteorites);
+
+//Stony-iron meteorites
+let stonyIronMeteorites = data.filter(function (el) {
+  let classMeteorites = el.recclass;
+  return classMeteorites.includes('Pallasite') ||
+         classMeteorites.includes('Mesosiderite');
 
 });
 
 
 
-//---------------Frequency by element-------------------------------------
+
+console.log(stonyIronMeteorites);
+
+
+console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});

@@ -273,6 +273,7 @@ let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorite
 
 dataFiltered = dataClassified.map( function(item) { return {Type: item.Type, cid: item.cid, mass: item.mass};});
 
+
 console.log(dataFiltered);
 
 
@@ -283,26 +284,61 @@ console.log(dataFiltered);
 //console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
 
 
-const color2 ={ Iron: 'grey', StonyIron:"#0099C6", Stony:"steelblue"};
+const color ={ Iron: 'grey', StonyIron:"#0099C6", Stony:"steelblue"};
 
 
 let svg2=d3.select('#elementFrequency');
-let g2 = svg2.append("g").attr("transform","translate(20,30)");
-let bp2=viz.bP()
+let g2 = svg2.append("g").attr("transform","translate(30,30)");
+let bp=viz.bP()
 	.data(dataFiltered)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.cid)
-	.value(d=>d.mass)
-  .width(300)
+	.value(d=>(d.mass))
+  .width(200)
   .height(500)
 	.min(.8)
 	.pad(.5)
-	.barSize(10)
+	.barSize(6)
 	.orient("vertical")
-	.fill(d=>color2[d.primary]);
+  .edgeOpacity(.3)
+	.fill(d=>color[d.primary]);
 
-g2.call(bp2);
+g2.call(bp);
+
 //
+g2.selectAll(".mainBars")
+	.on("mouseover",mouseover)
+	.on("mouseout",mouseout)
 
+g2.selectAll(".mainBars").append("text").attr("class","label")
+	.attr("x",d=>(d.part=="primary"? -30: 30))
+	.attr("y",d=>+6)
+	.text(d=>d.key)
+	.attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+// g2.selectAll(".mainBars").append("text").attr("class","perc")
+// 	.attr("x",d=>(d.part=="primary"? -100: 80))
+// 	.attr("y",d=>+6)
+// 	.text(function(d){ return d3.format("0.0%")(d.percent)})
+// 	.attr("text-anchor",d=>(d.part=="primary"? "end": "start"))
+//   .style('color','black');
+
+
+g2.append("text").attr("x",-50).attr("y",-8).style("text-anchor","middle").text("Type");
+g2.append("text").attr("x", 250).attr("y",-8).style("text-anchor","middle").text("Country");
+
+
+function mouseover(d){
+	bp.mouseover(d);
+	g2.selectAll(".mainBars")
+	.select(".perc")
+	.text(function(d){ return d3.format("0.0%")(d.percent)})
+}
+function mouseout(d){
+	bp.mouseout(d);
+	g2.selectAll(".mainBars")
+		.select(".perc")
+	.text(function(d){ return d3.format("0.0%")(d.percent)})
+}
 //Need axis
 });

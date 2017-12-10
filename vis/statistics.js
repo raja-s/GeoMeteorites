@@ -298,9 +298,9 @@ console.log(dataFiltered);
 // 	.edgeMode("straight")
 // 	.fill(d=>color1[d.primary]);
 
-const color2 ={ Iron: 'grey',StonyIron:"#0099C6",Stony:"steelblue"};
+const color2 ={ Iron: 'grey', StonyIron:"#0099C6", Stony:"steelblue"};
 
-//const color2 = {Type:"rgb(56,43,61)", cid:"rgb(241,47,55)"};
+
 let svg2=d3.select('#elementFrequency');
 let g2 = svg2.append("g").attr("transform","translate(20,30)");
 let bp2=viz.bP()
@@ -319,5 +319,5 @@ let bp2=viz.bP()
 g2.call(bp2);
 //
 
-
+//Need axis 
 });

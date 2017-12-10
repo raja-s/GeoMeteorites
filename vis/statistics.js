@@ -190,7 +190,7 @@ bar1.append("rect")
 
 
 let typeIron = 'Iron';
-let typeStonyIron = 'Stony-Iron';
+let typeStonyIron = 'StonyIron';
 let typeStony = 'Stony';
 
 //Iron Meteorites
@@ -268,33 +268,56 @@ stonyIronMeteorites.forEach(function(e){
 
 //data classified
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
+
+
+
+dataFiltered = dataClassified.map( function(item) { return {Type: item.Type, cid: item.cid, mass: item.mass};});
+
+console.log(dataFiltered);
+
+
+
+
+//console.log(dataFiltered);
 //console.log(dataClassified);
 //console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
 
 
-let svgClasses = d3.select('#elementFrequency');
 
 
 //let nodes = [dataClassified.Type];
 
+// var bp1=viz.bP()
+// 	.data(_data)
+// 	.min(10)
+// 	.pad(2)
+// 	.height(400)
+// 	.width(200)
+// 	.barSize(35)
+// 	.orient("vertical")
+// 	.edgeMode("straight")
+// 	.fill(d=>color1[d.primary]);
 
+const color2 ={ Iron: 'grey',StonyIron:"#0099C6",Stony:"steelblue"};
 
+//const color2 = {Type:"rgb(56,43,61)", cid:"rgb(241,47,55)"};
+let svg2=d3.select('#elementFrequency');
+let g2 = svg2.append("g").attr("transform","translate(20,30)");
+let bp2=viz.bP()
+	.data(dataFiltered)
+	.keyPrimary(d=>d.Type)
+	.keySecondary(d=>d.cid)
+	.value(d=>d.mass)
+  .width(300)
+  .height(500)
+	.min(.8)
+	.pad(.5)
+	.barSize(10)
+	.orient("vertical")
+	.fill(d=>color2[d.primary]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+g2.call(bp2);
+//
 
 
 });

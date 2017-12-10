@@ -283,21 +283,6 @@ console.log(dataFiltered);
 //console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
 
 
-
-
-//let nodes = [dataClassified.Type];
-
-// var bp1=viz.bP()
-// 	.data(_data)
-// 	.min(10)
-// 	.pad(2)
-// 	.height(400)
-// 	.width(200)
-// 	.barSize(35)
-// 	.orient("vertical")
-// 	.edgeMode("straight")
-// 	.fill(d=>color1[d.primary]);
-
 const color2 ={ Iron: 'grey', StonyIron:"#0099C6", Stony:"steelblue"};
 
 
@@ -319,5 +304,5 @@ let bp2=viz.bP()
 g2.call(bp2);
 //
 
-//Need axis 
+//Need axis
 });

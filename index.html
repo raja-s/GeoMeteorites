@@ -29,20 +29,25 @@
         <!-- THREE -->
         <script src='https://threejs.org/build/three.min.js' defer></script>
 
+        <!-- viz -->
+        <script src='lib/viz.v1.1.0.min.js'></script>
+
         <!-- Local scripts -->
          <script src='constants.js' defer></script>
          <script src='main.js' defer></script>
          <script src='utils.js' defer></script>
-         <script src='viz/message.js' defer></script>
+
+         <script src='vis/message.js' defer></script>
 
          <script src='ui/controls.js' defer></script>
 
-         <script src='viz/brush.js' defer></script>
-         <script src='viz/camera.js' defer></script>
-         <script src='viz/globe.js' defer></script>
-         <script src='viz/main.js' defer></script>
-         <script src='viz/meteorites.js' defer></script>
-         <script src="viz/statistics.js" charset="utf-8" defer></script>
+         <script src='vis/globe/animation.js' defer></script>
+         <script src='vis/globe/camera.js' defer></script>
+         <script src='vis/globe/main.js' defer></script>
+         <script src='vis/globe/meteorites.js' defer></script>
+
+         <script src='vis/brush.js' defer></script>
+         <script src="vis/statistics.js" charset="utf-8" defer></script>
     </head>
     <body>
             <dialog open>
@@ -75,7 +80,7 @@
           <svg width="380" height="350" id='massdistrib'></svg>
     </div>
     <div id="menu2" class="tab-pane fade">
-      <h3>Meteorites classes</h3>
+      <svg width = '380' height = '1000' id='elementFrequency'></svg>
     </div>
   </div>
 </div>

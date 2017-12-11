@@ -53,7 +53,7 @@ START_ANIMATION_BUTTON.addEventListener('click', event => {
     
     pauseMainAnimation();
     
-    const dates = [1802, 1807, 1812]; // TODO change that
+    const dates = Array.from(messageMap.keys());
     scheduleCallback(dates, showMessage);
 
     startMainAnimation();

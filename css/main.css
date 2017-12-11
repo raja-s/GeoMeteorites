@@ -171,3 +171,29 @@ path.bins1 {
      fill: #fff;
      font: 10px sans-serif;
    }
+
+   .subBars{
+   	shape-rendering:crispEdges;
+   }
+   .edges{
+   	stroke:none;
+   	fill-opacity:0.3;
+   }
+
+
+   text.perc{
+   	font-size:7px;
+   }
+
+   text.label{
+     font-size: 7px;
+
+       }
+
+ .mainBars rect{
+     shape-rendering: auto;
+     fill-opacity: 0;
+     stroke-width: 0.5px;
+     stroke:grey;
+     stroke-opacity: 0;
+   }

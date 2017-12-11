@@ -62,7 +62,16 @@ dialog p {
     opacity: 0.4;
 }
 
-#time-handle, #time-text {
+#time-handle {
+    fill: #fff;
+    stroke-width: 2;
+    stroke: #000;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#time-text {
+    text-anchor: middle;
     cursor: pointer;
 }
 

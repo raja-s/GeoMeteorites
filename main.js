@@ -43,8 +43,8 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
     .then(data => {
         const DATA_GROUPED_BY_YEAR = d3.csvParse(data, row);
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
-        updateTimeIndicator();
         setUpBrush(DATA_GROUPED_BY_YEAR);
+        updateTimeIndicator();
     }));
 
 // Get the list of countries and their IDs and

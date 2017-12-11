@@ -16,8 +16,8 @@ const SCENE = new THREE.Scene();
 // Lights
 // const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
 // const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
-const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
-const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.5, 0, 2);
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 0.8);
+const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.3, 0, 2);
 POINT_LIGHT.position.set(-40, 40, 300);
 
 // Camera
@@ -80,7 +80,7 @@ addToScene(sphere);
 let sky = new THREE.Mesh(
     new THREE.SphereGeometry(CAMERA_BOUNDS.MAX * 2, 64, 64), 
     new THREE.MeshBasicMaterial({
-        map: THREE.ImageUtils.loadTexture('res/tycho-skymap-w8192-h4096-2.jpg'), 
+        map: THREE.ImageUtils.loadTexture('res/tycho-skymap-w8192-h4096.jpg'), 
         side: THREE.BackSide
     })
 );
@@ -110,7 +110,7 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     );
 
     // addToScene(mapMesh);
-    addToScene(mapGraticule);
+    // addToScene(mapGraticule);
 
     mapGraticule.rotateX(- Math.PI / 2);
     mapMesh.rotateX(- Math.PI / 2);

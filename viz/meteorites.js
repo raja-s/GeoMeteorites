@@ -7,7 +7,7 @@
 const FALL_DURATION      = 2400;
 const EXPLOSION_DURATION = 600;
 
-const STEP_TIME  = 16;
+const STEP_TIME  = 30;
 
 const METEORITE_GEOMETRY = new THREE.SphereGeometry(1, 7, 7);
 
@@ -34,8 +34,8 @@ function dropMeteorite(long, lat, mass) {
     const STEP_THETA = (THETA  - START_THETA) * STEP_TIME / FALL_DURATION;
     const STEP_R     = (GLOBE_RADIUS - START_R)     * STEP_TIME / FALL_DURATION;
     
-    let meteoriteLight = new THREE.PointLight(0xffad5b, 3, 150, 2);
-    addToScene(meteoriteLight);
+    // let meteoriteLight = new THREE.PointLight(0xffad5b, 3, 150, 2);
+    // addToScene(meteoriteLight);
     
     let meteorite = new THREE.Mesh(METEORITE_GEOMETRY, MATERIAL.clone());
     addToScene(meteorite);
@@ -52,7 +52,7 @@ function dropMeteorite(long, lat, mass) {
         r     += STEP_R;
         let { x , y , z } = sphericalToCartesian(r, phi, theta);
         meteorite.position.set(x, y, z);
-        meteoriteLight.position.set(x, y, z);
+        // meteoriteLight.position.set(x, y, z);
     }
     
     for (let i = 0 ; i < FALL_DURATION ; i += STEP_TIME) {
@@ -64,7 +64,7 @@ function dropMeteorite(long, lat, mass) {
     
     setTimeout(() => {
         
-        removeFromScene(meteoriteLight);
+        // removeFromScene(meteoriteLight);
         
         addToScene(explosion);
         

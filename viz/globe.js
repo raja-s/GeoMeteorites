@@ -5,7 +5,7 @@
 */
 
 // Canvas dimensions
-let globeCanvasHeight = window.innerHeight * 0.8;
+let globeCanvasHeight = window.innerHeight;
 let globeCanvasWidth  = window.innerWidth;
 
 const GLOBE_RADIUS = 60;
@@ -16,14 +16,14 @@ const SCENE = new THREE.Scene();
 // Lights
 // const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
 // const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
-const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1.2);
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
 const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.5, 0, 2);
 POINT_LIGHT.position.set(-40, 40, 300);
 
 // Camera
 const FOV = 35;
 
-const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHeight, 1, 1000);
+const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHeight, 1, 2000);
 
 const CAMERA_BOUNDS = Object.freeze({
     MIN : GLOBE_RADIUS + 20,
@@ -76,6 +76,15 @@ addToScene(sphere);
 // let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
 // SCENE.add(circle);
+
+let sky = new THREE.Mesh(
+    new THREE.SphereGeometry(CAMERA_BOUNDS.MAX * 2, 64, 64), 
+    new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture('res/tycho-skymap-w8192-h4096-2.jpg'), 
+        side: THREE.BackSide
+    })
+);
+addToScene(sky);
 
 
 let topology;

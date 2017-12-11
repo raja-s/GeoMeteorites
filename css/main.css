@@ -6,11 +6,15 @@ html {
 
 body {
     margin: 0px;
+    
+    color: #ddd;
 }
 
 html {
     /*--color-bg: #000614;*/
-    --color-bg: #01021e;
+    /*--color-bg: #01021e;*/
+    /*--color-bg: #040534;*/
+    --color-bg: #000;
 }
 
 body {
@@ -60,6 +64,10 @@ dialog p {
     overflow: visible;
 }
 
+.axis text {
+    fill: #ddd;
+}
+
 #timeline .selection {
     stroke-width: 0;
     opacity: 0.4;
@@ -71,6 +79,10 @@ dialog p {
 
 #time-handle, #time-text {
     cursor: pointer;
+}
+
+#time-text {
+    fill: #444;
 }
 
 #time-handle {

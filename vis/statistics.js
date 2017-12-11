@@ -165,7 +165,7 @@ bar1.append("rect")
 
   g.append("g")
       .attr("class", "axis axis--y")
-      .attr("transform", "translate(0,"+height+ ")")
+      .attr("transform", "translate(0,"-height+ ")")
       .call(d3.axisBottom(x))
 
 
@@ -181,10 +181,6 @@ bar1.append("rect")
 
 
     // text label for the y
-
-
-
-
 
 //---------------Meteorites classification-------------------------------------
 
@@ -271,24 +267,22 @@ let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorite
 
 
 
-dataFiltered = dataClassified.map( function(item) { return {Type: item.Type, cid: item.cid, mass: item.mass};});
+dataFiltered = dataClassified.map( function(item) {
 
 
-console.log(dataFiltered);
+    return {Type: item.Type, cid: item.cid, mass: item.mass}
 
 
+});
+
+dataFiltered = dataFiltered.filter(function (item){ return item.mass>50000; });
 
 
-//console.log(dataFiltered);
-//console.log(dataClassified);
-//console.log(stonyIronMeteorites.length+stonyMeteorites.length+ironMeteorites.length);
-
-
-const color ={ Iron: 'grey', StonyIron:"#0099C6", Stony:"steelblue"};
+const color ={ Iron: '#2171b5', StonyIron:"brown", Stony:"green"};
 
 
 let svg2=d3.select('#elementFrequency');
-let g2 = svg2.append("g").attr("transform","translate(30,30)");
+let g2 = svg2.append("g").attr("transform","translate(40,15)");
 let bp=viz.bP()
 	.data(dataFiltered)
 	.keyPrimary(d=>d.Type)
@@ -296,8 +290,8 @@ let bp=viz.bP()
 	.value(d=>(d.mass))
   .width(200)
   .height(500)
-	.min(.8)
-	.pad(.5)
+	.min(2)
+	.pad(3)
 	.barSize(6)
 	.orient("vertical")
   .edgeOpacity(.3)
@@ -306,39 +300,46 @@ let bp=viz.bP()
 g2.call(bp);
 
 //
+
+
+
+g2.append("text").attr("x",-5).attr("y",-2).style("text-anchor","end").text("Type");
+g2.append("text").attr("x", 205).attr("y",-2).style("text-anchor","start").text("Country");
+
+
+
+
+g2.selectAll(".mainBars").append("text").attr("class","label")
+  		.attr("x",d=>(d.part=="primary"? -35: 5))
+  		.attr("y",d=>+6)
+  		.text(d=>d.key)
+  		.attr("text-anchor",d=>(+d.part=="primary" ? "end": "start"));
+
+
+g2.selectAll(".mainBars").append("text").attr("class","perc")
+	.attr("x",d=>(d.part=="primary"? -35: 30))
+	.attr("y",d=>(d.part=="primary"? 15: 6))
+	.text(function(d){ return d3.format("0.1%")(+d.percent);})
+	.attr("text-anchor",d=>(+d.part=="primary"? "end": "start"));
+
+
 g2.selectAll(".mainBars")
 	.on("mouseover",mouseover)
 	.on("mouseout",mouseout)
-
-g2.selectAll(".mainBars").append("text").attr("class","label")
-	.attr("x",d=>(d.part=="primary"? -30: 30))
-	.attr("y",d=>+6)
-	.text(d=>d.key)
-	.attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
-
-// g2.selectAll(".mainBars").append("text").attr("class","perc")
-// 	.attr("x",d=>(d.part=="primary"? -100: 80))
-// 	.attr("y",d=>+6)
-// 	.text(function(d){ return d3.format("0.0%")(d.percent)})
-// 	.attr("text-anchor",d=>(d.part=="primary"? "end": "start"))
-//   .style('color','black');
-
-
-g2.append("text").attr("x",-50).attr("y",-8).style("text-anchor","middle").text("Type");
-g2.append("text").attr("x", 250).attr("y",-8).style("text-anchor","middle").text("Country");
 
 
 function mouseover(d){
 	bp.mouseover(d);
 	g2.selectAll(".mainBars")
 	.select(".perc")
-	.text(function(d){ return d3.format("0.0%")(d.percent)})
+	.text(function(d){ return d3.format("0.1%")(+d.percent)})
 }
 function mouseout(d){
 	bp.mouseout(d);
 	g2.selectAll(".mainBars")
 		.select(".perc")
-	.text(function(d){ return d3.format("0.0%")(d.percent)})
+	.text(function(d){ return d3.format("0.1%")(+d.percent)})
 }
-//Need axis
+
+
 });

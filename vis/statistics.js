@@ -113,7 +113,7 @@ mass[i] = Math.log(element.mass);
 
 let svg = d3.select('#massdistrib');
 
-let margin = {top:10,right:30,bottom:30,left:30};
+let margin = {top:20,right:30,bottom:30,left:30};
 
 
 let width = +svg.attr("width") - margin.left - margin.right,
@@ -160,13 +160,13 @@ bar1.append("rect")
 
   g.append("g")
     .attr("class", "axis axis--x")
-    .attr("transform", "translate(0,"-height +")")
+  //  .attr("transform", `translate(0,${height})`)
     .call(d3.axisLeft(y));
 
   g.append("g")
       .attr("class", "axis axis--y")
-      .attr("transform", "translate(0,"-height+ ")")
-      .call(d3.axisBottom(x))
+  //    .attr("transform", `translate(0,${height})`)
+      .call(d3.axisTop(x).ticks(5))
 
 
 

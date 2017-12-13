@@ -68,7 +68,7 @@ function setUpBrush(data) {
     }
     
     x.domain(d3.extent(data , d => d.year));
-    y.domain([1, d3.max(data, d => d.number)]);
+    y.domain([0.5, d3.max(data, d => d.number)]);
     
     let xExtent      = x.domain().map(bound => bound.getFullYear());
     let xBandwidth   = BRUSH_WIDTH / (xExtent[1] - xExtent[0]);
@@ -76,7 +76,7 @@ function setUpBrush(data) {
     let halfBarWidth = barWidth / 2;
     
     let transition = d3.transition()
-                         .duration(1000);
+                         .duration(SECOND);
     
     CONTEXT.append('g')
              .attr('id', 'timeline-bars-group')
@@ -90,8 +90,8 @@ function setUpBrush(data) {
              .attr('class' , 'bars-meteorites-found')
             .style('opacity', '0.7')
        .transition(transition)
-             .attr('y'     , d => y(d.number))
-             .attr('height', d => BRUSH_HEIGHT - y(d.number));
+             .attr('y'     , d => (d.number === 0) ? BRUSH_HEIGHT : y(d.number))
+             .attr('height', d => (d.number === 0) ? 0 : BRUSH_HEIGHT - y(d.number));
     
     CONTEXT.append('g')
         .attr('class', 'axis axis--x')
@@ -153,7 +153,7 @@ const TIME_HANDLE_WIDTH  = 50;
 const TIME_HANDLE_PATH = 'M40,0Q50,0,50,10L50,20Q50,25,45,27.5L25,37.5L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z';
 
 const TIME_INDICATOR_TRANSITION = d3.transition()
-                                      .duration(250);
+                                      .duration(SECOND / 4);
 
 function appendTimeIndicator() {
     
@@ -177,7 +177,7 @@ function updateTimeIndicator() {
     
     if (presentBar !== undefined) {
         d3.select(presentBar).transition(TIME_INDICATOR_TRANSITION)
-                                  .style('opacity', '0.7');
+           .style('opacity', '0.7');
     }
     
     presentBar = document.getElementById('timeline-bars-group')

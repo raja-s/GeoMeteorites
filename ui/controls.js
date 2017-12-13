@@ -55,9 +55,9 @@ START_ANIMATION_BUTTON.addEventListener('click', event => {
     
     const dates = Array.from(messageMap.keys());
     scheduleCallback(dates, showMessage);
+    setMinimumDuration(dates, 5000);
 
     startMainAnimation();
-    // setTimeout(startMainAnimation, 1000);
     
 });
 

@@ -54,11 +54,9 @@ const messageMap = new Map([
 function showMessage(year) {
     $("#messages").empty();
     const str = messageMap.get(year);
-    $("#messages").text(str);
-    /* With animation word by word
+    //  With animation word by word
     const spans = '<span>' + str.split(/\s+/).join(' </span><span>') + '</span>';
     $(spans).hide().appendTo('#messages').each(function(i) {
-        $(this).delay(300 * i).fadeIn(400);
+        $(this).delay(50 * i).fadeIn(300);
     });
-    */
 }

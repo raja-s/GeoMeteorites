@@ -1,5 +1,6 @@
 'use strict';
 
+// Google Drive server address
 const GD_SERVER_ADDRESS = 'https://script.google.com/macros/s/AKfycbwgjNyIvsT0NCp-TviTk5Tvc9i279eKE9hBWPxshoZwLCkJfd82/exec';
 
 // Cubic-Bezier(0.25,0.1,0.25,1)
@@ -29,3 +30,7 @@ const CUBIC_BEZIER_EASE_VALUES = Object.freeze([
     0.9954266984 , 0.9964101370 , 0.9972693099 , 0.9980066563 , 0.9986245414 ,
     0.9991252593 , 0.9995110355 , 0.9997840299 , 0.9999463394 , 1
 ]);
+
+// Time
+const SECOND = 1000;
+

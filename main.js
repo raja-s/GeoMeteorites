@@ -10,11 +10,6 @@ let meteoriteData;
 
 let countries;
 
-let time;
-
-// Animation speed in years/second
-let speed = 1;
-
 /*
     Functions
 */
@@ -44,7 +39,6 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
         const DATA_GROUPED_BY_YEAR = d3.csvParse(data, row);
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
         setUpBrush(DATA_GROUPED_BY_YEAR);
-        updateTimeIndicator();
     }));
 
 // Get the list of countries and their IDs and

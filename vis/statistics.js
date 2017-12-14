@@ -192,19 +192,22 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-const cidStored = groupByCountry.filter(d=>d.totalMass>500000).map(d=>Number(d.cid));
+const cidStored = groupByCountry.filter(d=>parseInt(d.totalMass)>500000).filter(d=>d.country!=='_').map(d=>d.country);
 
 
-//Store only 34 cid
-let dataFinal = data.filter(d=>cidStored.find(a=>d.cid==a));
+//Store only 34 country
+let dataFinal = data.filter(d=>cidStored.find(a=>d.country===a));
 
-d3.csv(GD_SERVER_ADDRESS+'?countries',function(countryData) {
-const countryFinal = countryData.filter(d=>cidStored.find(a=>d.cid==a));
+d3.csv(GD_SERVER_ADDRESS+'?countries',function(error,countryData) {
+  if (error) throw error;
 
+const countryFinal = countryData.filter(d=>cidStored.find(a=>d.country===a));
+
+console.log(countryFinal);
 
   dataFinal.forEach(function(e){
-    if (typeof e == 'object'){
-      e['CountryName'] = countryData.filter(d=>d.cid==e.cid).map(d=>d.country)[0];
+    if (typeof e === 'object'){
+      e['CountryName'] = countryData.filter(d=>d.country===e.country).map(d=>d.name)[0];
     }
 
   });

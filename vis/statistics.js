@@ -330,7 +330,7 @@ g2.selectAll('.mainBars').append('text').attr('class','perc')
 
 g2.selectAll('.mainBars')
 	.on('mouseover',mouseover)
-	.on('mouseout',mouseout)
+	.on('mouseout',mouseout);
 
 
 function mouseover(d){

@@ -199,8 +199,6 @@ let dataFinal = meteoriteData.filter(d=>cidStored.find(a=>d.country===a));
 
 const countryFinal = countries.filter(d=>cidStored.find(a=>d.country===a));
 
-console.log(countryFinal);
-
   dataFinal.forEach(function(e){
     if (typeof e === 'object'){
       e['CountryName'] = countries.filter(d=>d.country===e.country).map(d=>d.name)[0];
@@ -324,6 +322,7 @@ function mousemove(d){
     	.text(function(d){ return d3.format('0.1%')(+d.percent)});
     }
 }
+
 function mouseout(d){
     bpActivated = false;
 	bp.mouseout(d);

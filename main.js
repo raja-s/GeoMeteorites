@@ -10,22 +10,6 @@ let meteoriteData;
 
 let countries;
 
-let time;
-
-// Animation speed in years/second
-let speed = 1;
-
-/*
-    Functions
-*/
-
-function row(d) {
-    if ('year'      in d) { d.year = d3.timeParse('%Y')(d.year); }
-    if ('number'    in d) { d.number = parseInt(d.number); }
-    if ('totalMass' in d) { d.totalMass = parseFloat(d.totalMass); }
-    return d;
-}
-
 /*
     Execution
 */
@@ -34,16 +18,24 @@ function row(d) {
 PROMISES.push(fetch(GD_SERVER_ADDRESS)
     .then(response => response.text())
     .then(data => {
-        meteoriteData = d3.csvParse(data, row);
+        meteoriteData = d3.csvParse(data, d => {
+            d.year = d3.timeParse('%Y')(d.year);
+            return d;
+        });
     }));
 
 // Get the data grouped by year and set up the brush
 PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
     .then(response => response.text())
     .then(data => {
-        const DATA_GROUPED_BY_YEAR = d3.csvParse(data, row);
+        const DATA_GROUPED_BY_YEAR = d3.csvParse(data, d => {
+            return {
+                year      : d3.timeParse('%Y')(d.year),
+                number    : parseInt(d.number),
+                totalMass : parseFloat(d.totalMass)
+            };
+        });
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
-        updateTimeIndicator();
         setUpBrush(DATA_GROUPED_BY_YEAR);
     }));
 
@@ -58,6 +50,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?countries')
 
 
 Promise.all(PROMISES).then(() => {
+    setUpBipartiteGraph();
     startMainAnimation();
 });
 

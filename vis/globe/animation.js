@@ -4,11 +4,17 @@
     Variables
 */
 
+let time;
+
+// Animation speed in years/second
+let speed = 1;
+
 let mainAnimationPlaying = false;
 
 let mainAnimationTimeout = -1;
 
-const YEAR_SCHEDULE = {};
+const YEAR_CALLBACK_SCHEDULE = {};
+const YEAR_MINIMUM_DURATIONS = {};
 
 /*
     Functions
@@ -18,13 +24,28 @@ function scheduleCallback(years, callback) {
     
     years.forEach(year => {
         
-        if (!(year in YEAR_SCHEDULE)) {
-            YEAR_SCHEDULE[year] = [];
+        if (!(year in YEAR_CALLBACK_SCHEDULE)) {
+            YEAR_CALLBACK_SCHEDULE[year] = [];
         }
         
-        YEAR_SCHEDULE[year].push(callback);
+        YEAR_CALLBACK_SCHEDULE[year].push(callback);
         
     });
+    
+}
+
+function setMinimumDuration(years, duration) {
+    
+    if (duration > 0) {
+        
+        years.forEach(year => {
+            
+            YEAR_MINIMUM_DURATIONS[year] = (year in YEAR_MINIMUM_DURATIONS) ?
+                Math.max(YEAR_MINIMUM_DURATIONS[year], duration) : duration;
+            
+        });
+        
+    }
     
 }
 
@@ -35,21 +56,21 @@ function incrementTime() {
     
     // Check if there are callbacks
     // scheduled for this year
-    if (time in YEAR_SCHEDULE) {
+    if (time in YEAR_CALLBACK_SCHEDULE) {
         
         // Run the scheduled callbacks
-        YEAR_SCHEDULE[time].forEach(callback => callback(time));
+        YEAR_CALLBACK_SCHEDULE[time].forEach(callback => callback(time));
         
         // Remove the callbacks
-        delete YEAR_SCHEDULE[time];
+        delete YEAR_CALLBACK_SCHEDULE[time];
         
     }
     
 }
 
-function startMainAnimation() {
+function mainAnimation() {
     
-    function iteration() {
+    function dropMeteorites() {
         
         if (time >= BRUSH_SELECTION.end) {
             return;
@@ -58,45 +79,121 @@ function startMainAnimation() {
         updateTimeIndicator();
         
         const FILTERED_DATA = meteoriteData.filter(entry => entry.year.getFullYear() === time);
+        const COUNT = FILTERED_DATA.length;
         
-        if (FILTERED_DATA.length > 0) {
+        const LOG = Math.log10(COUNT);
+        
+        let totalDuration;
+        
+        if (COUNT === 0) {
             
-            speed = 2 / FILTERED_DATA.length;
+            totalDuration = SECOND;
             
-            FILTERED_DATA.forEach((meteorite, i) => {
-                setTimeout(() => dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass),
-                    i * 500);
-            });
+        // } else if (COUNT < 16) {
+            
+        //     totalDuration = FALL_DURATION;
             
         } else {
             
-            speed = 1;
+            const LAUNCH_DURATION = (LOG ** 3) * SECOND;
+            
+            const SQRT             = Math.sqrt(COUNT);
+            const GROUP_COUNT      = Math.round(SQRT);
+            const WHOLE_GROUP_SIZE = Math.ceil(SQRT);
+            
+            const DELTA_TIME = (GROUP_COUNT === 1) ? 0 : LAUNCH_DURATION / (GROUP_COUNT - 1);
+            
+            totalDuration = LAUNCH_DURATION + FALL_DURATION;
+            
+            let index = 0;
+            for (let i = 0 ; i < GROUP_COUNT ; i++) {
+                setTimeout(() => {
+                    
+                    FILTERED_DATA.slice(index, index + WHOLE_GROUP_SIZE).forEach((meteorite, i) =>
+                        dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass));
+                    
+                    index += WHOLE_GROUP_SIZE;
+                    
+                }, DELTA_TIME * i);
+            }
+            
+            /*let dur = 0;
+            FILTERED_DATA.forEach((meteorite, i) => {
+                
+                setTimeout(() => {
+                    dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass);
+                }, dur);
+                
+                dur += 50;
+                dur %= LAUNCH_DURATION;
+                
+            });*/
+            
+            /*FILTERED_DATA.forEach((meteorite, i) => {
+                setTimeout(() => dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass),
+                    i * 500);
+            });*/
             
         }
         
+        if ((time in YEAR_MINIMUM_DURATIONS) && (YEAR_MINIMUM_DURATIONS[time] > totalDuration)) {
+            totalDuration = YEAR_MINIMUM_DURATIONS[time];
+        }
+        delete YEAR_MINIMUM_DURATIONS[time];
+        
+        speed = SECOND / totalDuration;
+        
+    }
+    
+    function iteration(nextIteration) {
+        
         if (mainAnimationPlaying) {
+            
             mainAnimationTimeout = setTimeout(() => {
+                
+                // Increment the time
                 incrementTime();
-                iteration();
-            }, 1000 / speed);
+                
+                // Drop the meteorites for this iteration
+                dropMeteorites();
+                
+                // Do another iteration in `SECOND / speed` milliseconds
+                iteration(SECOND / speed);
+                
+            }, nextIteration);
+            
         }
         
     }
     
+    resumeGlobeAnimation();
+    
+    mainAnimationPlaying = true;
+    
+    iteration(0);
+    
+}
+
+function resumeMainAnimation() {
+    
+    if (!mainAnimationPlaying) {
+        mainAnimation();
+    }
+    
+}
+
+function startMainAnimation() {
+    
     time = BRUSH_SELECTION.start;
     
-    resumeGlobeAnimation();
-    resumeMainAnimation();
-    
-    iteration();
+    mainAnimation();
     
 }
 
 function pauseMainAnimation() {
+    
     mainAnimationPlaying = false;
+    
     clearTimeout(mainAnimationTimeout);
-}
-
-function resumeMainAnimation() {
-    mainAnimationPlaying = true;
+    
 }

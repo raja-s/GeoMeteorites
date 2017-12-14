@@ -33,21 +33,21 @@
         <script src='lib/viz.v1.1.0.min.js'></script>
 
         <!-- Local scripts -->
-         <script src='constants.js' defer></script>
-         <script src='main.js' defer></script>
-         <script src='utils.js' defer></script>
+        <script src='constants.js' defer></script>
+        <script src='main.js' defer></script>
+        <script src='utils.js' defer></script>
 
-         <script src='vis/message.js' defer></script>
+        <script src='vis/message.js' defer></script>
 
-         <script src='ui/controls.js' defer></script>
+        <script src='ui/controls.js' defer></script>
 
-         <script src='vis/globe/animation.js' defer></script>
-         <script src='vis/globe/camera.js' defer></script>
-         <script src='vis/globe/main.js' defer></script>
-         <script src='vis/globe/meteorites.js' defer></script>
+        <script src='vis/globe/animation.js' defer></script>
+        <script src='vis/globe/camera.js' defer></script>
+        <script src='vis/globe/main.js' defer></script>
+        <script src='vis/globe/meteorites.js' defer></script>
 
-         <script src='vis/brush.js' defer></script>
-         <script src="vis/statistics.js" charset="utf-8" defer></script>
+        <script src='vis/brush.js' defer></script>
+        <script src="vis/statistics.js" charset="utf-8" defer></script>
     </head>
     <body>
             <dialog open>
@@ -59,7 +59,7 @@
                 </div>
                 <div>
                     <header>Country</header>
-                    <p><input type='text' id='country-field' placeHolder='e.g. Switzerland' /></p>
+                    <p><input type='text' id='country-field' placeHolder='e.g. Switzerland'/></p>
                 </div>
                 <button id='startAnimationButton'>Start Animation</button>
             </dialog>
@@ -67,50 +67,35 @@
             <div id='main'>
                 <div id='mapArea'></div>
                 <div id="statistics">
-
-                  <ul class="nav nav-tabs">
-                     <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
-                      <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
+                    <ul class="nav nav-tabs">
+                        <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
+                        <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
                     </ul>
-
                     <div class="tab-content">
+                        <div id="menu1" class="tab-pane fade">
+                            <h3>Mass distribution</h3>
+                            <svg width="250" height="350" id='massdistrib'></svg>
+                        </div>
+                        <div id="menu2" class="tab-pane fade">
+                            <svg width = '380' height = '500' id='elementFrequency'></svg>
 
-    <div id="menu1" class="tab-pane fade">
-      <h3>Mass distribution</h3>
-          <svg width="380" height="350" id='massdistrib'></svg>
-    </div>
-    <div id="menu2" class="tab-pane fade">
-      <svg width = '380' height = '1000' id='elementFrequency'></svg>
-    </div>
-  </div>
-</div>
+                      <!-- <div id='classesInfo' style='visibility:collapse'>
+                                  <h5>Iron meteorites are meteorites that consist overwhelmingly of an iron–nickel alloy known as meteoric iron.</h5>
+                                  <h5>The iron found in these meteorites was one of the earliest sources of usable iron available to humans.</h5>
+                            </div> -->
 
-
-
-
-
-                    <!-- <div id="5BiggestMass" height='30%'>
-                        <h5>The 5 biggest meteorites found</h5>
-                    </div> -->
-                    <!-- <div id='MassDistribution'>
-                        <h5>Mass distribution</h5>
-                        <svg width="380" height="200" id='massdistrib'></svg>
-                    </div> -->
+                        </div>
+                    </div>
                 </div>
-                <svg id='timeline'>
-                    <g id='time-indicator'>
-                        <path d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L26,37L26,147L24,147L24,37L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='none' stroke-width='2' stroke='#000'></path>
-                        <path id='time-handle' d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L25,37.5L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='transparent'></path>
-                        <text id='time-text' text-anchor='middle' x='25' y='20'></text>
-                    </g>
-                </svg>
-                <!--<div id="statistics">
+            </div>
+            <svg id='timeline'>
+                <!--<g id='time-indicator'>-->
+                    <!--<path d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L26,37L26,147L24,147L24,37L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z' fill='none' stroke-width='2' stroke='#000'></path>-->
+                    <!--<path id='time-handle' d='M40,0Q50,0,50,10L50,20Q50,25,45,27.5L25,37.5L5,27.5Q0,25,0,20L0,10Q0,0,10,0Z'></path>-->
+                    <!--<text id='time-text' x='25' y='20'></text>-->
+                <!--</g>-->
+            </svg>
 
-                <div id="5BiggestMass" height='30%'><h5>The 5 biggest meteorites found</h5> </div>
-                <div id='MassDistribution'><h5>Mass distribution</h5>
-                <svg width="380" height="200" id='massdistrib'></svg></div>
-
-                </div>-->
-        <!--</div>-->
+        </article>
     </body>
 </html>

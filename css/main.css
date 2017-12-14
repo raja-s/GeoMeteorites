@@ -73,11 +73,16 @@ dialog p {
     opacity: 0.4;
 }
 
-#time-indicator > path {
-    stroke: #ddd;
+#time-handle {
+    fill: #fff;
+    stroke-width: 2;
+    stroke: #000;
+    cursor: pointer;
+    z-index: 2;
 }
 
-#time-handle, #time-text {
+#time-text {
+    text-anchor: middle;
     cursor: pointer;
 }
 

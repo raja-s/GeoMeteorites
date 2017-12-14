@@ -199,8 +199,6 @@ let dataFinal = meteoriteData.filter(d=>cidStored.find(a=>d.country===a));
 
 const countryFinal = countries.filter(d=>cidStored.find(a=>d.country===a));
 
-console.log(countryFinal);
-
   dataFinal.forEach(function(e){
     if (typeof e === 'object'){
       e['CountryName'] = countries.filter(d=>d.country===e.country).map(d=>d.name)[0];
@@ -309,17 +307,6 @@ g2.selectAll('.mainBars').append('text').attr('class','perc')
 
 
 g2.selectAll('.mainBars')
-<<<<<<< HEAD
-	.on('mouseover',mouseover)
-	.on('mouseout',mouseout);
-
-
-function mouseover(d){
-	bp.mouseover(d);
-	g2.selectAll('.mainBars')
-	.select('.perc')
-	.text(function(d){ return d3.format('0.1%')(+d.percent)})
-=======
 	.on('mousemove',mousemove)
 	.on('mouseout',mouseout);
 
@@ -334,8 +321,8 @@ function mousemove(d){
     	.select('.perc')
     	.text(function(d){ return d3.format('0.1%')(+d.percent)});
     }
->>>>>>> a67125619bda34bc5344e844db1f8361a7fbd6e3
 }
+
 function mouseout(d){
     bpActivated = false;
 	bp.mouseout(d);

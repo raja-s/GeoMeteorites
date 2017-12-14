@@ -110,7 +110,7 @@ function mainAnimation() {
                 setTimeout(() => {
                     
                     FILTERED_DATA.slice(index, index + WHOLE_GROUP_SIZE).forEach((meteorite, i) =>
-                        dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass));
+                        dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass));
                     
                     index += WHOLE_GROUP_SIZE;
                     
@@ -121,7 +121,7 @@ function mainAnimation() {
             FILTERED_DATA.forEach((meteorite, i) => {
                 
                 setTimeout(() => {
-                    dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass);
+                    dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass);
                 }, dur);
                 
                 dur += 50;
@@ -130,7 +130,7 @@ function mainAnimation() {
             });*/
             
             /*FILTERED_DATA.forEach((meteorite, i) => {
-                setTimeout(() => dropMeteorite(meteorite.reclong, meteorite.reclat, meteorite.mass),
+                setTimeout(() => dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass),
                     i * 500);
             });*/
             

@@ -50,6 +50,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?countries')
 
 
 Promise.all(PROMISES).then(() => {
+    setUpBipartiteGraph();
     startMainAnimation();
 });
 

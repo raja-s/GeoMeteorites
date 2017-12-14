@@ -95,8 +95,7 @@
 
 //----------------Mass distribution-------------------------------------
 
-d3.csv(GD_SERVER_ADDRESS, function(data) {
-
+function setUpBipartiteGraph() {
 
 let t = d3.transition()
             .duration(1000)
@@ -105,7 +104,7 @@ let t = d3.transition()
 
 let mass = new Array();
 let i;
-data.forEach(function(element,i){
+meteoriteData.forEach(function(element,i){
 mass[i] = Math.log(element.mass);
 });
 
@@ -196,18 +195,15 @@ const cidStored = groupByCountry.filter(d=>parseInt(d.totalMass)>500000).filter(
 
 
 //Store only 34 country
-let dataFinal = data.filter(d=>cidStored.find(a=>d.country===a));
+let dataFinal = meteoriteData.filter(d=>cidStored.find(a=>d.country===a));
 
-d3.csv(GD_SERVER_ADDRESS+'?countries',function(error,countryData) {
-  if (error) throw error;
-
-const countryFinal = countryData.filter(d=>cidStored.find(a=>d.country===a));
+const countryFinal = countries.filter(d=>cidStored.find(a=>d.country===a));
 
 console.log(countryFinal);
 
   dataFinal.forEach(function(e){
     if (typeof e === 'object'){
-      e['CountryName'] = countryData.filter(d=>d.country===e.country).map(d=>d.name)[0];
+      e['CountryName'] = countries.filter(d=>d.country===e.country).map(d=>d.name)[0];
     }
 
   });
@@ -231,29 +227,13 @@ ironMeteorites.forEach(function(e){
 
 
 //----------------Stony meteorites----------------------------------------------
+const CLASSES_TO_KEEP = ['A', 'L', 'C', 'E', 'B', 'D', 'F', 'H', 'K', 'O', 'R', 'S', 'U', 'W'];
+
 let stonyMeteorites = dataFinal.filter(function (el) {
   let classMeteorites = el.recclass;
-  return classMeteorites.startsWith('A') ||
-         classMeteorites.startsWith('L') ||
-         classMeteorites.startsWith('C') ||
-         classMeteorites.startsWith('E') ||
-         classMeteorites.startsWith('B') ||
-         classMeteorites.startsWith('D') ||
-         classMeteorites.startsWith('F') ||
-         classMeteorites.startsWith('H') ||
-         classMeteorites.startsWith('K') ||
-         classMeteorites.includes('Martian') ||
-         classMeteorites.startsWith('O') ||
-         classMeteorites.startsWith('R') &&
-         !classMeteorites.includes('Relict iron') ||
-         classMeteorites.startsWith('S') ||
-         classMeteorites.startsWith('U') ||
-         classMeteorites.startsWith('W')
-  // return !classMeteorites.includes('Pallasite') ||
-  //        !classMeteorites.includes('Mesosiderite') ||
-  //        !classMeteorites.includes('Iron') ||
-  //        !classMeteorites.includes('Relict iron');
-
+  return (CLASSES_TO_KEEP.includes(classMeteorites[0]) ||
+         classMeteorites.includes('Martian')) &&
+         !classMeteorites.includes('Relict iron');
 });
 
 
@@ -329,6 +309,7 @@ g2.selectAll('.mainBars').append('text').attr('class','perc')
 
 
 g2.selectAll('.mainBars')
+<<<<<<< HEAD
 	.on('mouseover',mouseover)
 	.on('mouseout',mouseout);
 
@@ -338,14 +319,31 @@ function mouseover(d){
 	g2.selectAll('.mainBars')
 	.select('.perc')
 	.text(function(d){ return d3.format('0.1%')(+d.percent)})
+=======
+	.on('mousemove',mousemove)
+	.on('mouseout',mouseout);
+
+let bpActivated = false;
+
+function mousemove(d){
+    const SQRT = d3.event.movementX ** 2 + d3.event.movementY ** 2;
+    if ((SQRT <= 4) && !bpActivated) {
+        bpActivated = true;
+	    bp.mouseover(d);
+    	g2.selectAll('.mainBars')
+    	.select('.perc')
+    	.text(function(d){ return d3.format('0.1%')(+d.percent)});
+    }
+>>>>>>> a67125619bda34bc5344e844db1f8361a7fbd6e3
 }
 function mouseout(d){
+    bpActivated = false;
 	bp.mouseout(d);
 	g2.selectAll('.mainBars')
 		.select('.perc')
-	.text(function(d){ return d3.format('0.1%')(+d.percent)})
+	.text(function(d){ return d3.format('0.1%')(+d.percent)});
 }
 
 });
-  });
-});
+
+}

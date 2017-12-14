@@ -4,6 +4,15 @@
     Constants & Variables
 */
 
+let USER_HOUR = new Date().getHours();
+let ambiantLightIntensity = 0.9;
+let textureTime = 'night';
+
+if ((USER_HOUR > 6) && (USER_HOUR < 18)) {
+    ambiantLightIntensity = 0.7;
+    textureTime = 'day';
+}
+
 // Canvas dimensions
 let globeCanvasHeight = window.innerHeight;
 let globeCanvasWidth  = window.innerWidth;
@@ -16,9 +25,9 @@ const SCENE = new THREE.Scene();
 // Lights
 // const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
 // const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
-const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 0.8);
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, ambiantLightIntensity);
 const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.3, 0, 2);
-POINT_LIGHT.position.set(-40, 40, 300);
+POINT_LIGHT.position.set(-40, 70, 300);
 
 // Camera
 const FOV = 35;
@@ -68,7 +77,7 @@ let sphere = new THREE.Mesh(
     // new THREE.MeshLambertMaterial({ color : 0xffffff })
     new THREE.MeshPhongMaterial({
         // color       : 0xffffff,
-        map         : TEXTURE_LOADER.load('res/texture-w8192-h4096-q100.jpg'),
+        map         : TEXTURE_LOADER.load(`res/texture-w8192-h4096-${textureTime}.jpg`),
         bumpMap     : TEXTURE_LOADER.load('res/elevation-w8192-h4096.jpg'),
         specularMap : TEXTURE_LOADER.load('res/specular-map-w2048-h1024.png'),
         bumpScale   : 0.5
@@ -84,8 +93,8 @@ addToScene(sphere);
 let sky = new THREE.Mesh(
     new THREE.SphereGeometry(CAMERA_BOUNDS.MAX * 2, 64, 64), 
     new THREE.MeshBasicMaterial({
-        map: THREE.ImageUtils.loadTexture('res/tycho-skymap-w8192-h4096.jpg'), 
-        side: THREE.BackSide
+        map  : TEXTURE_LOADER.load('res/tycho-skymap-w8192-h4096.jpg'), 
+        side : THREE.BackSide
     })
 );
 addToScene(sky);

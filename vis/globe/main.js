@@ -26,6 +26,10 @@ const CAMERA_BOUNDS = Object.freeze({
     MAX : 500
 });
 
+// Raycaster
+const RAYCASTER = new THREE.Raycaster();
+const MOUSE_RELATIVE_POSITION = new THREE.Vector2();
+
 // Renderer
 const RENDERER = new THREE.WebGLRenderer({
     alpha: true,
@@ -208,8 +212,32 @@ function resumeGlobeAnimation() {
     animateGlobe = true;
 }
 
+function getGlobeMouseIntersection() {
+    
+    RAYCASTER.setFromCamera(MOUSE_RELATIVE_POSITION, CAMERA);
+    
+    let intersects = RAYCASTER.intersectObject(sphere);
+    
+    if (intersects.length === 0) {
+        
+        return null;
+        
+    } else {
+        
+        const INTERSECT = intersects[0].point;
+        
+        const SPHERICAL = cartesianToSpherical(INTERSECT.x, INTERSECT.y, INTERSECT.z);
+        
+        return sphericalToGeographical(SPHERICAL.phi, SPHERICAL.theta);
+        
+    }
+    
+}
+
 function render() {
+    
     RENDERER.render(SCENE, CAMERA);
+    
 }
 
 function renderLoop() {
@@ -263,10 +291,19 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
         moveCameraTo(LONG, LAT);
 
     }
-
+    
+    MOUSE_RELATIVE_POSITION.set(
+          (event.offsetX / globeCanvasWidth)  * 2 - 1,
+        - (event.offsetY / globeCanvasHeight) * 2 + 1
+    );
+    
 };
 
-
+document.getElementById('mapArea').children[0].onclick = event => {
+    
+    console.log(getGlobeMouseIntersection());
+    
+};
 
 window.addEventListener('resize', event => {
 

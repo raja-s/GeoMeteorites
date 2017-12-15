@@ -116,9 +116,14 @@ path.bins1 {
      fill: none;
    }
 
-#massdistrib {
-    position:fixed;
+#divMassDist{
+    position:relative;
    }
+
+
+#biggestMeteorite {
+    position:relative;
+}
 
    .bar1 rect {
      fill: var(--color-meteorites);

@@ -1,191 +1,189 @@
 
-//----------------5 Biggest Mass-------------------------------------
 
 
-// Canvas dimensions
-// let heightStat =document.getElementById('statistics').offsetWidth;
-// let widthStat  = document.getElementById('statistics').offsetWidth;
-// // SCENE
-// const SCENEstat = new THREE.Scene();
-//
-// // Light
-// const AMBIANT_LIGHTstat = new THREE.AmbientLight(0xffffff, 1);
-//
-// // CAMERA
-// let FOVstat = 10000;
-//
-//
-//
-// const GLOBE_RADIUSstat = 60;
-// //On mouse over, change color of geometry
-// let raycaster = new THREE.Raycaster();
-// let mouse = new THREE.Vector2();
-//
-//
-// const CAMERAstat = new THREE.PerspectiveCamera(FOVstat, heightStat / widthStat, 1, 1000);
-//
-//
-// // Renderer
-// // const RENDERER = new THREE.WebGLRenderer({
-// //     alpha: true,
-// //     antialias: true
-// // });
-//
-// const RENDERERstat = new THREE.WebGLRenderer( { alpha: true } );
-//
-//
-// RENDERERstat.setPixelRatio(window.devicePixelRatio);
-// RENDERERstat.setSize(heightStat, widthStat);
-// document.getElementById('5BiggestMass').appendChild(RENDERERstat.domElement);
-//
-// let CAMERADistanceStat = 70;
-//
-//
-//
-//
-// CAMERAstat.translateZ(CAMERADistanceStat);
-//
-//
-// createMeteorite(6.00,38,-35,0);
-// createMeteorite(5.82,15,-35,0);
-// createMeteorite(5.00,-5,-35,0);
-// createMeteorite(3.00,-25,-35,0);
-// createMeteorite(2.8,-45,-35,0);
-//
-//
-//
-//
-// function createMeteorite(size,x,y,z) {
-//
-//
-//
-//   let geometry = new THREE.DodecahedronGeometry(size, 1);
-//   geometry.vertices.forEach(function(v){
-//     v.x += (Math.random());
-//     v.y += (Math.random());
-//     v.z += (Math.random());
-//   });
-//   let material = new THREE.MeshBasicMaterial({
-//                   color: 0xaaaaaa,
-//                   wireframe: true,
-//                   wireframeLinewidth: 0.3
-//               });
-//
-//   let mesh = new THREE.Mesh(geometry,material);
-//   mesh.position.set(x, y, z);
-//
-//
-//   SCENEstat.add(mesh);
-//   //RENDERER.render(SCENE, CAMERA);
-//   renderStat();
-//   //document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-//
-// }
-//
-//
-// function renderStat() {
-//
-//   requestAnimationFrame(renderStat);
-//   RENDERERstat.render(SCENEstat, CAMERAstat);
-// }
-//
-//
-
-
-
-//----------------Mass distribution-------------------------------------
-
+//function setUpCountryStatistics(countryid,t) {
 function setUpBipartiteGraph() {
+//------------------------------------------------------------------------------
+//------------------------Mass distribution-------------------------------------
+//------------------------------------------------------------------------------
+  let t = d3.transition()
+              .duration(1000)
+              .ease(d3.easeLinear);
 
-let t = d3.transition()
-            .duration(1000)
-            .ease(d3.easeLinear);
-
-let formatCount = d3.format(".0f");
-
-
-let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
-//console.log(mass);
-
-let svg = d3.select('#massdistrib');
-
-let margin = {top:20,right:30,bottom:30,left:30};
+  let formatCount = d3.format(".0f");
 
 
-let width = +svg.attr('width') - margin.left - margin.right,
-        height = +svg.attr('height') - margin.top - margin.bottom,
-        g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  //let mass = meteoriteData.filter(d=>d.country===countryid && d.year>=t).map(d=>parseInt(Math.log(d.mass)));
+  let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
+  //console.log(mass);
+
+  let svg = d3.select('#massdistrib');
+
+  let margin = {top:20,right:30,bottom:30,left:20};
 
 
-
-let  y = d3.scaleLinear()
-        .range([0,height])
-        .domain([0,d3.max(mass)]);
-
-let bins1 = d3.histogram()
-        .domain(y.domain())
-        //.thresholds(y.ticks())
-        (mass);
-
-//console.log(bins1);
-
-
-let  x = d3.scaleLinear()
-                       .domain([0, d3.max(bins1, function(d) {
-                         return d.length;
-                       })])
-                       .range([0,width]);
+  let width = +svg.attr('width') - margin.left - margin.right,
+          height = +svg.attr('height') - margin.top - margin.bottom,
+          g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
 
-let bar1 = g.selectAll('.bar1')
-                       .data(bins1)
-                       .enter().append('g')
-                       .attr('class', 'bar1')
-                       .attr('transform', function(d) {
-                         return 'translate('+margin.left+',' + y(d.x0) + ')';
-                       });
+  let  y = d3.scaleLinear()
+          .range([0,height])
+          .domain([0,d3.max(mass)]);
+
+  let bins1 = d3.histogram()
+          .domain(y.domain())
+          //.thresholds(y.ticks())
+          (mass);
+
+  //console.log(bins1);
+
+
+  let  x = d3.scaleLinear()
+                         .domain([0, d3.max(bins1, function(d) {
+                           return d.length;
+                         })])
+                         .range([0,width]);
 
 
 
-bar1.append('rect')
-     .attr('x', 0.5)
-     .attr('height',y(bins1[0].x1) - y(bins1[0].x0) +2)
-     .transition(t)
-     .attr('width', function(d) {return x(d.length);});
-
-bar1.append("text")
-    .attr("dy", ".75em")
-    .transition(t)
-    .attr("x",function(d){return x(d.length)+15;})
-    .attr("y",(y(bins1[0].x1) - y(bins1[0].x0))/3)
-    .attr("text-anchor", "middle")
-    .text(function(d) { return formatCount(d.length);})
-    .style('fill','black');
-
-  g.append('g')
-    .attr('class', 'axis axis--y')
-    .attr('transform', 'translate('+margin.left+',0)')
-    .call(d3.axisLeft(y));
-
-  // g.append('g')
-  //     .attr('class', 'axis axis--y')
-  // //    .attr('transform', `translate(0,${height})`)
-  //     .call(d3.axisTop(x).ticks(5))
+  let bar1 = g.selectAll('.bar1')
+                         .data(bins1)
+                         .enter().append('g')
+                         .attr('class', 'bar1')
+                         .attr('transform', function(d) {
+                           return 'translate('+margin.left+',' + y(d.x0) + ')';
+                         });
 
 
 
+  bar1.append('rect')
+       .attr('x', 0.5)
+       //.attr('y',-height)
+       .attr('width',function(d) {return x(d.length);})
+       .transition(t)
+       .attr('height',(y(bins1[0].x1) - y(bins1[0].x0) +2));
 
-    g.append('text')
-    .attr('transform','rotate(-90)')
-    .attr('y', -10)
-    .attr('x', -height/2)
-    .attr('dy', '1em')
-    .style('text-anchor', 'middle')
-    .text('log(Mass) [gr]');
+  // bar1.append("text")
+  //     .attr("dy", ".75em")
+  //     .transition(t)
+  //     .attr("x",function(d){return x(d.length)+15;})
+  //     .attr("y",(y(bins1[0].x1) - y(bins1[0].x0))/3)
+  //     .attr("text-anchor", "middle")
+  //     .text(function(d) { return formatCount(d.length);})
+  //     .style('fill','black');
+
+    g.append('g')
+      .attr('class', 'axis axis--y')
+      .attr('transform', 'translate('+margin.left+',0)')
+      .call(d3.axisLeft(y));
+
+    g.append('g')
+        .attr('class', 'axis axis--x')
+        .attr('transform', 'translate('+margin.left+',0)')
+        .call(d3.axisTop(x).ticks(5))
+
+      g.append('text')
+      .attr('transform','rotate(-90)')
+      .attr('y', -10)
+      .attr('x', -height/2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text('log(Mass) [gr]');
+
+//}
+
+//Biggest mass
+// Canvas dimensions
+let heightStat =200;
+let widthStat  = 300;
+// SCENE
+const SCENEstat = new THREE.Scene();
+
+// Light
+const AMBIANT_LIGHTstat = new THREE.AmbientLight(0xffffff, 1);
+
+// CAMERA
+let FOVstat = 10000;
 
 
-    // text label for the y
+
+const GLOBE_RADIUSstat = 60;
+//On mouse over, change color of geometry
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+
+
+const CAMERAstat = new THREE.PerspectiveCamera(FOVstat, heightStat / widthStat, 1, 1000);
+
+
+// Renderer
+const RENDERER = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true
+});
+
+const RENDERERstat = new THREE.WebGLRenderer( { alpha: true } );
+
+
+RENDERERstat.setPixelRatio(window.devicePixelRatio);
+RENDERERstat.setSize(heightStat, widthStat);
+document.getElementById('biggestMeteorite').appendChild(RENDERERstat.domElement);
+
+let CAMERADistanceStat = 70;
+
+CAMERAstat.translateZ(CAMERADistanceStat);
+
+
+let biggestMass = Math.max.apply(Math,meteoriteData.map(d=>parseInt(d.mass)));
+let biggestMassSize = Math.log(biggestMass);
+//console.log(biggestMass);
+
+let biggestMassName = meteoriteData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
+//console.log(biggestMassName);
+
+let mesh = createMeteorite(biggestMassSize,-18,-30,0);
+
+function createMeteorite(size,x,y,z) {
+
+  let geometry = new THREE.DodecahedronGeometry(size, 1);
+  geometry.vertices.forEach(function(v){
+    v.x += (Math.random());
+    v.y += (Math.random());
+    v.z += (Math.random());
+  });
+  let material = new THREE.MeshBasicMaterial({
+                  color: 0xaaaaaa,
+                  wireframe: true,
+                  wireframeLinewidth: 0.3
+              });
+
+  let mesh = new THREE.Mesh(geometry,material);
+  mesh.position.set(x, y, z);
+
+  return mesh;
+}
+
+SCENEstat.add(mesh);
+//RENDERER.render(SCENE, CAMERA);
+renderStat();
+//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+//Render function
+function renderStat(){
+    requestAnimationFrame(renderStat);
+    mesh.rotation.y +=  Math.PI/360;
+    RENDERERstat.render(SCENEstat, CAMERAstat);
+}
+
+// let par = document.createElement("p");
+// let node = document.createTextNode('Name:'+ biggestMassName);
+// par.appendChild(node);
+// let element = document.getElementById("nameMeteorite");
+// element.appendChild(par);
+
+
 //------------------------------------------------------------------------------
 //---------------Meteorites classification--------------------------------------
 //------------------------------------------------------------------------------.
@@ -218,12 +216,8 @@ let dataFinal = meteoriteData.filter(d=>countryStored.find(a=>d.country===a));
 //----------------Iron Meteorites-----------------------------------------------
 
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
+ironMeteorites.forEach(e=>e.Type=typeIron);
 
-ironMeteorites.forEach(function(e){
-  if (typeof e === 'object' ){
-    e['Type'] = typeIron;
-  }
-});
 //console.log(ironMeteorites);
 
 
@@ -231,25 +225,13 @@ ironMeteorites.forEach(function(e){
 const CLASSES_TO_KEEP = ['A', 'L', 'C', 'E', 'B', 'D', 'F', 'H', 'K', 'O', 'R', 'S', 'U', 'W'];
 
 let stonyMeteorites = dataFinal.filter(e=> CLASSES_TO_KEEP.includes(e.recclass[0]) || e.recclass.includes('Martian') && !e.recclass.includes('Relict iron'));
+stonyMeteorites.forEach(e=>e.Type=typeStony);
 //console.log(stonyMeteorites);
-
-stonyMeteorites.forEach(function(e){
-  if (typeof e === 'object' ){
-    e['Type'] = typeStony;
-  }
-});
 
 //-----------------Stony-iron meteorites----------------------------------------
 let stonyIronMeteorites = dataFinal.filter(e=>e.recclass.includes('Pallasite') || e.recclass.includes('Mesosiderite'));
-
-
-stonyIronMeteorites.forEach(function(e){
-  if (typeof e === 'object' ){
-    e['Type'] = typeStonyIron;
-  }
-});
+stonyIronMeteorites.forEach(e=>e.Type=typeStonyIron);
 //console.log(stonyIronMeteorites);
-
 
 //data classified
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];

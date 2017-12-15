@@ -32,6 +32,9 @@
         <!-- viz -->
         <script src='lib/viz.v1.1.0.min.js'></script>
 
+        <!-- Tween -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js" defer></script>
+
         <!-- Local scripts -->
         <script src='constants.js' defer></script>
         <script src='main.js' defer></script>
@@ -78,11 +81,12 @@
                     </ul>
                     <div class="tab-content">
                         <div id="menu1" class="tab-pane fade">
-                            <h3>Mass distribution</h3>
-                            <svg width="250" height="350" id='massdistrib'></svg>
+                          <div id='divMassDist'><svg width="250" height="350" id='massdistrib'></svg></div>
+                          <div id='biggestMeteorite'></div>
+                          <div id='nameMeteorite'></div>
                         </div>
                         <div id="menu2" class="tab-pane fade">
-                            <svg width = '380' height = '500' id='elementFrequency'></svg>
+                            <svg width = '500' height = '500' id='elementFrequency'></svg>
 
                       <!-- <div id='classesInfo' style='visibility:collapse'>
                                   <h5>Iron meteorites are meteorites that consist overwhelmingly of an iron–nickel alloy known as meteoric iron.</h5>

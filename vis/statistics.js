@@ -101,14 +101,11 @@ let t = d3.transition()
             .duration(1000)
             .ease(d3.easeLinear);
 
-
-let mass = new Array();
-let i;
-meteoriteData.forEach(function(element,i){
-mass[i] = Math.log(element.mass);
-});
+let formatCount = d3.format(".0f");
 
 
+let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
+//console.log(mass);
 
 let svg = d3.select('#massdistrib');
 
@@ -122,14 +119,15 @@ let width = +svg.attr('width') - margin.left - margin.right,
 
 
 let  y = d3.scaleLinear()
-        .rangeRound([0,height])
+        .range([0,height])
         .domain([0,d3.max(mass)]);
 
 let bins1 = d3.histogram()
         .domain(y.domain())
-        .thresholds(y.ticks(40))
+        //.thresholds(y.ticks())
         (mass);
 
+//console.log(bins1);
 
 
 let  x = d3.scaleLinear()
@@ -145,7 +143,7 @@ let bar1 = g.selectAll('.bar1')
                        .enter().append('g')
                        .attr('class', 'bar1')
                        .attr('transform', function(d) {
-                         return 'translate(0,' + y(d.x0) + ')';
+                         return 'translate('+margin.left+',' + y(d.x0) + ')';
                        });
 
 
@@ -156,24 +154,32 @@ bar1.append('rect')
      .transition(t)
      .attr('width', function(d) {return x(d.length);});
 
+bar1.append("text")
+    .attr("dy", ".75em")
+    .transition(t)
+    .attr("x",function(d){return x(d.length)+15;})
+    .attr("y",(y(bins1[0].x1) - y(bins1[0].x0))/3)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return formatCount(d.length);})
+    .style('fill','black');
 
   g.append('g')
-    .attr('class', 'axis axis--x')
-  //  .attr('transform', `translate(0,${height})`)
+    .attr('class', 'axis axis--y')
+    .attr('transform', 'translate('+margin.left+',0)')
     .call(d3.axisLeft(y));
 
-  g.append('g')
-      .attr('class', 'axis axis--y')
-  //    .attr('transform', `translate(0,${height})`)
-      .call(d3.axisTop(x).ticks(5))
+  // g.append('g')
+  //     .attr('class', 'axis axis--y')
+  // //    .attr('transform', `translate(0,${height})`)
+  //     .call(d3.axisTop(x).ticks(5))
 
 
 
 
     g.append('text')
     .attr('transform','rotate(-90)')
-    .attr('y', 0 - margin.left -.5)
-    .attr('x',0 - (height / 2))
+    .attr('y', -10)
+    .attr('x', -height/2)
     .attr('dy', '1em')
     .style('text-anchor', 'middle')
     .text('log(Mass) [gr]');
@@ -191,13 +197,16 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-const cidStored = groupByCountry.filter(d=>parseInt(d.totalMass)>500000).filter(d=>d.country!=='_').map(d=>d.country);
+//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))<180).map(d=>parseInt(d.totalMass));
+//let others = othersCountries.reduce((pv, cv) => pv+cv, 0);
+let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))>180).map(d=>d.country);
 
+
+//countryStored.push(others);
+//console.log(countryStored);
 
 //Store only 34 country
-let dataFinal = meteoriteData.filter(d=>cidStored.find(a=>d.country===a));
-
-const countryFinal = countries.filter(d=>cidStored.find(a=>d.country===a));
+let dataFinal = meteoriteData.filter(d=>countryStored.find(a=>d.country===a));
 
   dataFinal.forEach(function(e){
     if (typeof e === 'object'){
@@ -206,34 +215,23 @@ const countryFinal = countries.filter(d=>cidStored.find(a=>d.country===a));
 
   });
 
-
 //----------------Iron Meteorites-----------------------------------------------
 
-let ironMeteorites = dataFinal.filter(function (el) {
-  let classMeteorites = el.recclass;
-  return classMeteorites.includes('Iron') ||
-         classMeteorites.includes('Relict iron');
-});
-
+let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 
 ironMeteorites.forEach(function(e){
   if (typeof e === 'object' ){
     e['Type'] = typeIron;
   }
 });
-
+//console.log(ironMeteorites);
 
 
 //----------------Stony meteorites----------------------------------------------
 const CLASSES_TO_KEEP = ['A', 'L', 'C', 'E', 'B', 'D', 'F', 'H', 'K', 'O', 'R', 'S', 'U', 'W'];
 
-let stonyMeteorites = dataFinal.filter(function (el) {
-  let classMeteorites = el.recclass;
-  return (CLASSES_TO_KEEP.includes(classMeteorites[0]) ||
-         classMeteorites.includes('Martian')) &&
-         !classMeteorites.includes('Relict iron');
-});
-
+let stonyMeteorites = dataFinal.filter(e=> CLASSES_TO_KEEP.includes(e.recclass[0]) || e.recclass.includes('Martian') && !e.recclass.includes('Relict iron'));
+//console.log(stonyMeteorites);
 
 stonyMeteorites.forEach(function(e){
   if (typeof e === 'object' ){
@@ -242,24 +240,20 @@ stonyMeteorites.forEach(function(e){
 });
 
 //-----------------Stony-iron meteorites----------------------------------------
-let stonyIronMeteorites = dataFinal.filter(function (el) {
-  let classMeteorites = el.recclass;
-  return classMeteorites.includes('Pallasite') ||
-         classMeteorites.includes('Mesosiderite');
+let stonyIronMeteorites = dataFinal.filter(e=>e.recclass.includes('Pallasite') || e.recclass.includes('Mesosiderite'));
 
-});
 
 stonyIronMeteorites.forEach(function(e){
   if (typeof e === 'object' ){
     e['Type'] = typeStonyIron;
   }
 });
-
+//console.log(stonyIronMeteorites);
 
 
 //data classified
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
-
+//console.log(dataClassified);
 
 const color ={ Iron: '#2171b5', StonyIron:'brown', Stony:'green'};
 
@@ -270,7 +264,7 @@ let bp=viz.bP()
 	.data(dataClassified)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.CountryName)
-	.value(d=>(d.mass))
+	.value(d=>parseInt(d.mass))
   .width(200)
   .height(400)
 	.min(2)
@@ -300,7 +294,7 @@ g2.selectAll('.mainBars').append('text').attr('class','label')
 
 //Add label percentage
 g2.selectAll('.mainBars').append('text').attr('class','perc')
-	.attr('x',d=>(d.part=='primary'? -35: 90))
+	.attr('x',d=>(d.part=='primary'? -35: 65))
 	.attr('y',d=>(d.part=='primary'? 15: 1))
 	.text(function(d){ return d3.format('0.1%')(+d.percent);})
 	.attr('text-anchor',d=>(+d.part=='primary'? 'end': 'start'));

@@ -96,10 +96,12 @@ function setUpBipartiteGraph() {
 
 //Biggest mass
 // Canvas dimensions
-let heightStat =200;
-let widthStat  = 300;
+let heightStat =150;
+let widthStat  = 400;
+
 // SCENE
 const SCENEstat = new THREE.Scene();
+
 
 // Light
 const AMBIANT_LIGHTstat = new THREE.AmbientLight(0xffffff, 1);
@@ -141,9 +143,13 @@ let biggestMassSize = Math.log(biggestMass);
 //console.log(biggestMass);
 
 let biggestMassName = meteoriteData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
-//console.log(biggestMassName);
+let biggestMassYear = meteoriteData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>(d.year).getFullYear())[0];
+let biggestMassCountry = meteoriteData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.country)[0];
+let biggestMassCountryName = countries.filter(d=>d.country==biggestMassCountry).map(d=>d.name)[0];
+//console.log(biggestMassCountry);
 
-let mesh = createMeteorite(biggestMassSize,-18,-30,0);
+
+let mesh = createMeteorite(biggestMassSize,0,-35,0);
 
 function createMeteorite(size,x,y,z) {
 
@@ -177,11 +183,25 @@ function renderStat(){
     RENDERERstat.render(SCENEstat, CAMERAstat);
 }
 
-// let par = document.createElement("p");
-// let node = document.createTextNode('Name:'+ biggestMassName);
-// par.appendChild(node);
-// let element = document.getElementById("nameMeteorite");
-// element.appendChild(par);
+let parName = document.createElement('p');
+let parYear = document.createElement('p');
+let parCountry = document.createElement('p');
+let parMass = document.createElement('p');
+let nameMet = document.createTextNode('Name: '+ biggestMassName);
+let yearMet = document.createTextNode('Year: '+ biggestMassYear);
+let countryMet = document.createTextNode('Country: '+ biggestMassCountryName);
+let massMet = document.createTextNode('Mass: '+biggestMass+' gr')
+
+parName.appendChild(nameMet);
+parYear.appendChild(yearMet);
+parCountry.appendChild(countryMet);
+parMass.appendChild(massMet);
+
+let element = document.getElementById("nameMeteorite");
+element.appendChild(parName);
+element.appendChild(parYear);
+element.appendChild(parCountry);
+element.appendChild(parMass);
 
 
 //------------------------------------------------------------------------------

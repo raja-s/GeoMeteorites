@@ -13,8 +13,8 @@ let mainAnimationPlaying = false;
 
 let mainAnimationTimeout = -1;
 
-const YEAR_CALLBACK_SCHEDULE = {};
-const YEAR_MINIMUM_DURATIONS = {};
+let yearCallbackSchedule = {};
+let yearMinimumDurations = {};
 
 /*
     Functions
@@ -24,14 +24,18 @@ function scheduleCallback(years, callback) {
     
     years.forEach(year => {
         
-        if (!(year in YEAR_CALLBACK_SCHEDULE)) {
-            YEAR_CALLBACK_SCHEDULE[year] = [];
+        if (!(year in yearCallbackSchedule)) {
+            yearCallbackSchedule[year] = [];
         }
         
-        YEAR_CALLBACK_SCHEDULE[year].push(callback);
+        yearCallbackSchedule[year].push(callback);
         
     });
     
+}
+
+function clearSchedule() {
+    yearCallbackSchedule = {};
 }
 
 function setMinimumDuration(years, duration) {
@@ -40,13 +44,17 @@ function setMinimumDuration(years, duration) {
         
         years.forEach(year => {
             
-            YEAR_MINIMUM_DURATIONS[year] = (year in YEAR_MINIMUM_DURATIONS) ?
-                Math.max(YEAR_MINIMUM_DURATIONS[year], duration) : duration;
+            yearMinimumDurations[year] = (year in yearMinimumDurations) ?
+                Math.max(yearMinimumDurations[year], duration) : duration;
             
         });
         
     }
     
+}
+
+function clearMinimumDurations() {
+    yearMinimumDurations = {};
 }
 
 function incrementTime() {
@@ -56,13 +64,13 @@ function incrementTime() {
     
     // Check if there are callbacks
     // scheduled for this year
-    if (time in YEAR_CALLBACK_SCHEDULE) {
+    if (time in yearCallbackSchedule) {
         
         // Run the scheduled callbacks
-        YEAR_CALLBACK_SCHEDULE[time].forEach(callback => callback(time));
+        yearCallbackSchedule[time].forEach(callback => callback(time));
         
         // Remove the callbacks
-        delete YEAR_CALLBACK_SCHEDULE[time];
+        delete yearCallbackSchedule[time];
         
     }
     
@@ -136,10 +144,10 @@ function mainAnimation() {
             
         }
         
-        if ((time in YEAR_MINIMUM_DURATIONS) && (YEAR_MINIMUM_DURATIONS[time] > totalDuration)) {
-            totalDuration = YEAR_MINIMUM_DURATIONS[time];
+        if ((time in yearMinimumDurations) && (yearMinimumDurations[time] > totalDuration)) {
+            totalDuration = yearMinimumDurations[time];
         }
-        delete YEAR_MINIMUM_DURATIONS[time];
+        delete yearMinimumDurations[time];
         
         speed = SECOND / totalDuration;
         
@@ -186,6 +194,12 @@ function startMainAnimation() {
     
     time = BRUSH_SELECTION.start;
     
+    clearSchedule();
+    
+    const dates = Array.from(messageMap.keys());
+    scheduleCallback(dates, showMessage);
+    setMinimumDuration(dates, 5000);
+    
     mainAnimation();
     
 }
@@ -195,5 +209,7 @@ function pauseMainAnimation() {
     mainAnimationPlaying = false;
     
     clearTimeout(mainAnimationTimeout);
+    
+    pauseGlobeAnimation();
     
 }

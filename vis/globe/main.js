@@ -289,7 +289,7 @@ function renderLoop() {
         const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + 0.1 + 180, 360) - 180;
         const LAT  = Math.sin(THREE.Math.degToRad(LONG)) * 30;
 
-        moveCameraTo(LONG, LAT);
+        moveCameraTo(LONG, LAT, cameraDistance);
 
     }
 
@@ -328,7 +328,7 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
         const LONG = modulo(THREE.Math.radToDeg(CAMERA.rotation.y) + DELTA_PHI * FACTOR + 180, 360) - 180;
         const LAT  = clamp(THREE.Math.radToDeg(- CAMERA.rotation.x) + DELTA_THETA * FACTOR, -90, 90);
         
-        moveCameraTo(LONG, LAT);
+        moveCameraTo(LONG, LAT, cameraDistance);
 
     }
     

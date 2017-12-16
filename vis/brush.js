@@ -6,14 +6,14 @@
 
 const BRUSH_SVG = d3.select('#timeline');
 
-const BRUSH_SVG_WIDTH = window.innerWidth;
+const BRUSH_SVG_WIDTH = window.innerWidth - 80;
 const BRUSH_SVG_HEIGHT = 150;
 
 const MARGINS = Object.freeze({
     TOP    : 20,
-    RIGHT  : 40,
+    RIGHT  : 35,
     BOTTOM : 20,
-    LEFT   : 40
+    LEFT   : 35
 });
 
 const BRUSH_WIDTH  = BRUSH_SVG_WIDTH  - MARGINS.LEFT - MARGINS.RIGHT;

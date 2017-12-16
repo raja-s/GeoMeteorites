@@ -4,8 +4,17 @@
     Constants & Variables
 */
 
+let USER_HOUR = new Date().getHours();
+let ambiantLightIntensity = 0.9;
+let textureTime = 'night';
+
+if ((USER_HOUR > 6) && (USER_HOUR < 18)) {
+    ambiantLightIntensity = 0.7;
+    textureTime = 'day';
+}
+
 // Canvas dimensions
-let globeCanvasHeight = window.innerHeight * 0.8;
+let globeCanvasHeight = window.innerHeight;
 let globeCanvasWidth  = window.innerWidth;
 
 const GLOBE_RADIUS = 60;
@@ -13,13 +22,17 @@ const GLOBE_RADIUS = 60;
 // Scene
 const SCENE = new THREE.Scene();
 
-// Light
-const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, 1);
+// Lights
+// const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
+// const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
+const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, ambiantLightIntensity);
+const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.3, 0, 2);
+POINT_LIGHT.position.set(-40, 70, 300);
 
 // Camera
 const FOV = 35;
 
-const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHeight, 1, 1000);
+const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHeight, 1, 2000);
 
 const CAMERA_BOUNDS = Object.freeze({
     MIN : GLOBE_RADIUS + 20,
@@ -36,6 +49,8 @@ const RENDERER = new THREE.WebGLRenderer({
     antialias: true
 });
 
+const TEXTURE_LOADER = new THREE.TextureLoader();
+
 let cameraDistance = 240;
 
 let mapGraticule, mapMesh;
@@ -48,6 +63,7 @@ let allowGlobeNavigation = true;
 */
 
 SCENE.add(AMBIANT_LIGHT);
+SCENE.add(POINT_LIGHT);
 
 CAMERA.rotation.order = 'YXZ';
 CAMERA.translateZ(cameraDistance);
@@ -56,13 +72,32 @@ RENDERER.setPixelRatio(window.devicePixelRatio);
 RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
 document.getElementById("mapArea").appendChild(RENDERER.domElement);
 
-let sphere = new THREE.Mesh(new THREE.SphereGeometry(GLOBE_RADIUS, 32, 32),
-    new THREE.MeshLambertMaterial({ color : 0xffffff }));
+let sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(GLOBE_RADIUS, 128, 128),
+    // new THREE.MeshLambertMaterial({ color : 0xffffff })
+    new THREE.MeshPhongMaterial({
+        // color       : 0xffffff,
+        map         : TEXTURE_LOADER.load(`res/texture-w8192-h4096-${textureTime}.jpg`),
+        bumpMap     : TEXTURE_LOADER.load('res/elevation-w8192-h4096.jpg'),
+        specularMap : TEXTURE_LOADER.load('res/specular-map-w2048-h1024.png'),
+        bumpScale   : 0.5
+    })
+);
+sphere.rotateY(- Math.PI / 2);
 addToScene(sphere);
 
 // let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
 //     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
 // SCENE.add(circle);
+
+let sky = new THREE.Mesh(
+    new THREE.SphereGeometry(CAMERA_BOUNDS.MAX * 2, 64, 64), 
+    new THREE.MeshBasicMaterial({
+        map  : TEXTURE_LOADER.load('res/tycho-skymap-w8192-h4096.jpg'), 
+        side : THREE.BackSide
+    })
+);
+addToScene(sky);
 
 
 let topology;
@@ -77,12 +112,18 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     
     topology = topology2;
     
-    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({color: 0xeeeeee}));
-    mapMesh = wireframe3d(topojson.mesh(topology2, topology2.objects.countries),
-        new THREE.LineBasicMaterial({color: 0xaaaaaa}));
+    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({
+        color     : 0x11122e
+    }));
+    mapMesh = wireframe3d(
+        topojson.mesh(topology2, topology2.objects.countries),
+        new THREE.LineBasicMaterial({
+            color     : 0x11122e
+        })
+    );
 
-    addToScene(mapMesh);
-    addToScene(mapGraticule);
+    // addToScene(mapMesh);
+    // addToScene(mapGraticule);
 
     mapGraticule.rotateX(- Math.PI / 2);
     mapMesh.rotateX(- Math.PI / 2);
@@ -91,7 +132,6 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     mapMesh.rotateZ(- Math.PI / 2);
     
     renderLoop();
-
 
 });
 

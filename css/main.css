@@ -6,15 +6,20 @@ html {
 
 body {
     margin: 0px;
+    
+    color: #ddd;
 }
 
-header#top {
-    color: white;
-    background-color: black;
+html {
+    /*--color-bg: #000614;*/
+    /*--color-bg: #01021e;*/
+    /*--color-bg: #040534;*/
+    --color-bg: #000;
 }
 
-header h1 {
-    margin: 0px;
+body {
+    margin: 0;
+    background-color: var(--color-bg);
 }
 
 #main {
@@ -34,13 +39,14 @@ header h1 {
     border-radius: 0.8vw;
     
     /*overflow: hidden;*/
-    background-color: #eee;
+    background-color: #ddd;
     
     /*transition: height 0.3s;*/
 }
 
 #search-field-container > * {
     text-align: center;
+    color: #222;
 }
 
 #search-field-container > p {
@@ -73,7 +79,7 @@ header h1 {
 }
 
 #mapArea {
-    background-color: white;
+    margin: 0;
     width:70%;
 }
 
@@ -86,6 +92,10 @@ header h1 {
     cursor: pointer;
 }
 
+#animation-control > path {
+    fill: #ddd;
+}
+
 #animation-control > :first-child {
     display: none;
 }
@@ -95,6 +105,14 @@ header h1 {
     bottom: 0;
     right: 0;
     overflow: visible;
+}
+
+/*.axis > path {
+    stroke: #ddd;
+}*/
+
+.axis text {
+    fill: #ddd;
 }
 
 #timeline .selection {
@@ -113,6 +131,14 @@ header h1 {
 #time-text {
     text-anchor: middle;
     cursor: pointer;
+}
+
+#time-text {
+    fill: #444;
+}
+
+#time-handle {
+    fill: #ddd;
 }
 
 .bars-meteorites-found {

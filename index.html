@@ -54,39 +54,33 @@
         <script src='vis/statistics.js' charset='utf-8' defer></script>
     </head>
     <body>
-
-        <header id='top'>
-            <h1>GeoMeteorites</h1>
-        </header>
-        <article>
-            <div id='search-field-container'>
-                <input id='search-field' type='text'/>
-            </div>
-            <div id="messages"></div>
-            <div id='main'>
-                <div id='mapArea'></div>
-                <div id="statistics">
-                    <ul class="nav nav-tabs">
-                        <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
-                        <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="menu1" class="tab-pane fade">
-                          <div id='nameCountry'></div>
-                          <div id='divMassDist'><svg width="250" height="350" id='massdistrib'></svg></div>
-                          <div id='biggestMeteorite'></div>
-                        </div>
-                        <div id="menu2" class="tab-pane fade">
-                            <svg width = '500' height = '500' id='elementFrequency'></svg>
-                        </div>
+        <div id='search-field-container'>
+            <input id='search-field' type='text'/>
+        </div>
+        <div id="messages"></div>
+        <div id='main'>
+            <div id='mapArea'></div>
+            <div id="statistics">
+                <ul class="nav nav-tabs">
+                    <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="menu1" class="tab-pane fade">
+                      <div id='nameCountry'></div>
+                      <div id='divMassDist'><svg width="250" height="350" id='massdistrib'></svg></div>
+                      <div id='biggestMeteorite'></div>
+                    </div>
+                    <div id="menu2" class="tab-pane fade">
+                        <svg width = '500' height = '500' id='elementFrequency'></svg>
                     </div>
                 </div>
             </div>
-            <svg id='animation-control' height='50' width='40'>
-                <path d='M0,0L30,20L0,40Z'></path>
-                <path d='M0,3H10V37H0ZM20,3H30V37H20Z'></path>
-            </svg>
-            <svg id='timeline'></svg>
-        </article>
+        </div>
+        <svg id='animation-control' height='50' width='40'>
+            <path d='M0,0L30,20L0,40Z'></path>
+            <path d='M0,3H10V37H0ZM20,3H30V37H20Z'></path>
+        </svg>
+        <svg id='timeline'></svg>
     </body>
 </html>

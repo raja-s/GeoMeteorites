@@ -69,7 +69,10 @@ function showSuggestions() {
             
         });
         
-        P.addEventListener('click', chooseCandidate);
+        P.addEventListener('click', event => {
+            chooseCandidate();
+            focusOnCountry(SEARCH_FIELD.value);
+        });
         
         if (i === 0) {
             P.dataset.candidate = '';
@@ -117,8 +120,6 @@ function clearCandidate() {
 function chooseCandidate() {
     
     const CANDIDATE = clearCandidate();
-    
-    console.log(CANDIDATE);
     
     if (CANDIDATE !== undefined) {
         
@@ -207,7 +208,6 @@ SEARCH_FIELD.addEventListener('keydown', event => {
             
             case KEYCODES.ARROW_RIGHT:
             case KEYCODES.TAB:
-                console.log(CANDIDATE);
                 chooseCandidate();
                 break;
             

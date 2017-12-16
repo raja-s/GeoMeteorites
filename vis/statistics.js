@@ -1,8 +1,35 @@
 
 
 
-//function setUpCountryStatistics(countryid,t) {
-function setUpBipartiteGraph() {
+function setUpCountryStatistics(countryid) {
+
+//Remove previous country if present
+$( "#nameCountry" ).empty();
+$( "#massdistrib" ).empty();
+$( "#biggestMeteorite").empty();
+
+
+
+//Filter data by country selected
+let dataFilteredByCountry = meteoriteData.filter(d=>d.country===countryid);
+
+//Get the country name from countries
+let countrySelected = dataFilteredByCountry.map(d=>d.country)[0];
+let CountryName = countries.filter(d=>d.country==countrySelected).map(d=>d.name)[0];
+//console.log(CountryName);
+
+
+
+
+//Add name of the country on the top
+let countryHeader = document.createElement('h2');
+countryHeader.style.textAlign='center';
+let countryTextTitle = document.createTextNode(CountryName);
+
+countryHeader.appendChild(countryTextTitle);
+document.getElementById('nameCountry').appendChild(countryHeader);
+
+
 //------------------------------------------------------------------------------
 //------------------------Mass distribution-------------------------------------
 //------------------------------------------------------------------------------
@@ -13,8 +40,9 @@ function setUpBipartiteGraph() {
   let formatCount = d3.format(".0f");
 
 
-  //let mass = meteoriteData.filter(d=>d.country===countryid && d.year>=t).map(d=>parseInt(Math.log(d.mass)));
-  let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
+  let mass = dataFilteredByCountry.filter(d=>d.country===countryid).map(d=>parseInt(Math.log(d.mass)));
+
+  //let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
   //console.log(mass);
 
   let svg = d3.select('#massdistrib');
@@ -34,7 +62,7 @@ function setUpBipartiteGraph() {
 
   let bins1 = d3.histogram()
           .domain(y.domain())
-          //.thresholds(y.ticks())
+          //.thresholds(y.ticks(10))
           (mass);
 
   //console.log(bins1);
@@ -59,7 +87,7 @@ function setUpBipartiteGraph() {
 
 
   bar1.append('rect')
-       .attr('x', 0.5)
+       //.attr('x', 0.5)
        //.attr('y',-height)
        .attr('width',function(d) {return x(d.length);})
        .transition(t)
@@ -81,25 +109,27 @@ function setUpBipartiteGraph() {
 
     g.append('g')
         .attr('class', 'axis axis--x')
-        .attr('transform', 'translate('+margin.left+',0)')
+        .attr('transform', 'translate('+margin.top+',0)')
         .call(d3.axisTop(x).ticks(5))
 
       g.append('text')
       .attr('transform','rotate(-90)')
       .attr('y', -10)
       .attr('x', -height/2)
-      .attr('dy', '1em')
+      .attr('dy', '.5em')
       .style('text-anchor', 'middle')
-      .text('log(Mass) [gr]');
+      .text('log(Mass)');
 
 //}
 
 //Biggest mass
 // Canvas dimensions
-let heightStat =200;
-let widthStat  = 300;
+let heightStat =150;
+let widthStat  = 400;
+
 // SCENE
 const SCENEstat = new THREE.Scene();
+
 
 // Light
 const AMBIANT_LIGHTstat = new THREE.AmbientLight(0xffffff, 1);
@@ -136,15 +166,20 @@ let CAMERADistanceStat = 70;
 CAMERAstat.translateZ(CAMERADistanceStat);
 
 
-let biggestMass = Math.max.apply(Math,meteoriteData.map(d=>parseInt(d.mass)));
+let biggestMass = Math.max.apply(Math,dataFilteredByCountry.map(d=>parseInt(d.mass)));
 let biggestMassSize = Math.log(biggestMass);
 //console.log(biggestMass);
 
-let biggestMassName = meteoriteData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
-//console.log(biggestMassName);
+let biggestMassName = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
+let biggestMassYear = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>(d.year).getFullYear())[0];
 
-let mesh = createMeteorite(biggestMassSize,-18,-30,0);
+//console.log(biggestMassCountry);
 
+//Create the biggest meteorite (call createMeteorite() function)
+let mesh = createMeteorite(biggestMassSize,0,-35,0);
+
+
+//Function that creates a dodecahedron geometry with random vertices
 function createMeteorite(size,x,y,z) {
 
   let geometry = new THREE.DodecahedronGeometry(size, 1);
@@ -177,12 +212,48 @@ function renderStat(){
     RENDERERstat.render(SCENEstat, CAMERAstat);
 }
 
-// let par = document.createElement("p");
-// let node = document.createTextNode('Name:'+ biggestMassName);
-// par.appendChild(node);
-// let element = document.getElementById("nameMeteorite");
-// element.appendChild(par);
+//Add text next to the biggest mass
 
+let parName = document.createElement('p');
+let parYear = document.createElement('p');
+let parCountry = document.createElement('p');
+let parMass = document.createElement('p');
+let nameMet = document.createTextNode('Name: '+ biggestMassName);
+let yearMet = document.createTextNode('Year: '+ biggestMassYear);
+let massMet = document.createTextNode('Mass: '+biggestMass+' gr')
+
+let title = document.createElement('h4');
+let titleText = document.createTextNode('The biggest meteorite');
+
+let titleDiv = document.createElement('div');
+titleDiv.id = 'textBiggest';
+
+title.appendChild(titleText);
+titleDiv.appendChild(title);
+
+parName.appendChild(nameMet);
+parYear.appendChild(yearMet);
+parMass.appendChild(massMet);
+
+let biggesttext = document.createElement('div');
+
+biggesttext.id = 'nameMeteorite';
+biggesttext.appendChild(parName);
+biggesttext.appendChild(parYear);
+biggesttext.appendChild(parMass);
+
+
+document.getElementById('biggestMeteorite').appendChild(biggesttext);
+document.getElementById('biggestMeteorite').appendChild(titleDiv);
+
+
+
+
+
+}
+
+
+function setUpBipartiteGraph() {
 
 //------------------------------------------------------------------------------
 //---------------Meteorites classification--------------------------------------

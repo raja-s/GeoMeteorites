@@ -165,6 +165,29 @@ path.bins1 {
     position:relative;
 }
 
+#nameMeteorite {
+	position: absolute;
+	top:150px;
+  right: 150px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+#textBiggest {
+	position: absolute;
+	top:-30px;
+  right: 140px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+
+
+
    .bar1 rect {
      fill: var(--color-meteorites);
    }

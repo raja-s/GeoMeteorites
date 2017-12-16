@@ -2,19 +2,27 @@
 html {
     /* TODO: Change these later? */
     --color-meteorites: #ffad5b;
+    
+    --color-frequency-bars: var(--color-meteorites);
+    --color-mean-mass-bars: #1884bc;
 }
 
 body {
     margin: 0px;
+    
+    color: #ddd;
 }
 
-header#top {
-    color: white;
-    background-color: black;
+html {
+    /*--color-bg: #000614;*/
+    /*--color-bg: #01021e;*/
+    /*--color-bg: #040534;*/
+    --color-bg: #000;
 }
 
-header h1 {
-    margin: 0px;
+body {
+    margin: 0;
+    background-color: var(--color-bg);
 }
 
 #main {
@@ -34,13 +42,14 @@ header h1 {
     border-radius: 0.8vw;
     
     /*overflow: hidden;*/
-    background-color: #eee;
+    background-color: #ddd;
     
     /*transition: height 0.3s;*/
 }
 
 #search-field-container > * {
     text-align: center;
+    color: #222;
 }
 
 #search-field-container > p {
@@ -73,8 +82,8 @@ header h1 {
 }
 
 #mapArea {
-    background-color: white;
-    width:70%;
+    margin: 0;
+    width: 70%;
 }
 
 #animation-control {
@@ -86,15 +95,27 @@ header h1 {
     cursor: pointer;
 }
 
+#animation-control > path {
+    fill: #ddd;
+}
+
 #animation-control > :first-child {
     display: none;
 }
 
 #timeline {
     position: fixed;
-    bottom: 0;
+    bottom: 10px;
     right: 0;
     overflow: visible;
+}
+
+/*.axes > path {
+    stroke: #ddd;
+}*/
+
+.axes text {
+    fill: #ddd;
 }
 
 #timeline .selection {
@@ -102,25 +123,40 @@ header h1 {
     opacity: 0.4;
 }
 
-#time-handle {
-    fill: #fff;
-    stroke-width: 2;
-    stroke: #000;
+#time-indicator {
     cursor: pointer;
+    
+    text-anchor: middle;
+}
+
+#time-indicator > text {
+    fill: #444;
+}
+
+#time-handle {
+    fill: #ddd;
+    stroke-width: 0;
     z-index: 2;
 }
 
-#time-text {
-    text-anchor: middle;
+.timeline-bars {
     cursor: pointer;
+    
+    opacity: 0.5;
+    
+    transition: opacity 0.3s;
 }
 
-.bars-meteorites-found {
-    fill: var(--color-meteorites);
+.timeline-bars[data-present] {
+    opacity: 1;
 }
 
-.bars-meteorites-fell {
-    fill: var(--color-meteorites);
+.timeline-frequency-bars {
+    fill: var(--color-frequency-bars);
+}
+
+.timeline-mean-mass-bars {
+    fill: var(--color-mean-mass-bars);
 }
 
 #messages {
@@ -130,45 +166,45 @@ header h1 {
 }
 
 #statistics {
-    width:30%;
-    float:left;
-    left:5px;
-    margin:0px;
-    padding:0px;
-    position:fixed;
-    top:35px;
-    height:80%;
+    width: 30%;
+    float: left;
+    left: 5px;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 35px;
+    height: 80%;
 
 
 }
 
 #MassDistribution {
-    height:350px;
-    position:fixed;
-    top:200px;
-    left:5px;
-    float:right;
+    height: 350px;
+    position: fixed;
+    top: 200px;
+    left: 5px;
+    float: right;
 }
 
 path.bins1 {
-     stroke: var(--color-meteorites);
-     stroke-width: 4px;
-     fill: none;
-   }
+    stroke: var(--color-meteorites);
+    stroke-width: 4px;
+    fill: none;
+}
 
 #divMassDist{
-    position:relative;
-   }
+    position: relative;
+}
 
 
 #biggestMeteorite {
-    position:relative;
+    position: relative;
 }
 
 #nameMeteorite {
 	position: absolute;
 	top:150px;
-  right: 150px;
+	right: 150px;
 	width: 100%;
 	text-align: center;
 	z-index: 100;
@@ -184,9 +220,6 @@ path.bins1 {
 	z-index: 100;
 	display:block;
 }
-
-
-
 
    .bar1 rect {
      fill: var(--color-meteorites);

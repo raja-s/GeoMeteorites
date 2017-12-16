@@ -62,6 +62,9 @@ function incrementTime() {
     // Increment time
     time++;
     
+    // Update the timeline time indicator
+    updateTimeIndicator();
+    
     // Check if there are callbacks
     // scheduled for this year
     if (time in yearCallbackSchedule) {
@@ -79,12 +82,6 @@ function incrementTime() {
 function mainAnimation() {
     
     function dropMeteorites() {
-        
-        if (time >= BRUSH_SELECTION.end) {
-            return;
-        }
-        
-        updateTimeIndicator();
         
         const FILTERED_DATA = meteoriteData.filter(entry => entry.year.getFullYear() === time);
         const COUNT = FILTERED_DATA.length;
@@ -165,6 +162,10 @@ function mainAnimation() {
                 // Drop the meteorites for this iteration
                 dropMeteorites();
                 
+                if (time >= timelineEnd()) {
+                    return;
+                }
+                
                 // Do another iteration in `SECOND / speed` milliseconds
                 iteration(SECOND / speed);
                 
@@ -192,7 +193,7 @@ function resumeMainAnimation() {
 
 function startMainAnimation() {
     
-    time = BRUSH_SELECTION.start;
+    time = timelineStart();
     
     clearSchedule();
     

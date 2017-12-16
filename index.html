@@ -6,20 +6,20 @@
 
         <!-- Stylesheets -->
 
-        <!-- Bootstrap CSS -->
+        <!-- Bootstrap -->
         <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>
-
-        <!-- Local CSS -->
+        
+        <!-- Local -->
         <link rel='stylesheet' href='css/main.css' />
-
+        
         <!-- Scripts -->
-
+        
         <!-- jQuery -->
         <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
-
-        <!-- Bootstrap typeahead plugin -->
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js' defer></script>
+        
+        <!-- Bootstrap -->
         <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        
         <!-- D3 -->
         <script src='https://d3js.org/d3.v4.min.js' defer></script>
 
@@ -39,54 +39,52 @@
         <script src='constants.js' defer></script>
         <script src='main.js' defer></script>
         <script src='utils.js' defer></script>
-
+        
         <script src='vis/message.js' defer></script>
-
+        
         <script src='ui/animation-control.js' defer></script>
         <script src='ui/search-field.js' defer></script>
-
+        
         <script src='vis/globe/animation.js' defer></script>
         <script src='vis/globe/camera.js' defer></script>
         <script src='vis/globe/main.js' defer></script>
         <script src='vis/globe/meteorites.js' defer></script>
-
-        <script src='vis/brush.js' defer></script>
+        
+        <script src='vis/timeline/main.js' defer></script>
+        <script src='vis/timeline/frequency.js' defer></script>
+        <script src='vis/timeline/mean-mass.js' defer></script>
+        <script src='vis/timeline/time-indicator.js' defer></script>
+        
         <script src='vis/statistics.js' charset='utf-8' defer></script>
     </head>
     <body>
-
-        <header id='top'>
-            <h1>GeoMeteorites</h1>
-        </header>
-        <article>
-            <div id='search-field-container'>
-                <input id='search-field' type='text'/>
-            </div>
-            <div id="messages"></div>
-            <div id='main'>
-                <div id='mapArea'></div>
-                <div id="statistics">
-                    <ul class="nav nav-tabs">
-                        <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
-                        <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="menu1" class="tab-pane fade">
-                          <div id='nameCountry'></div>
-                          <div id='divMassDist'><svg width="250" height="350" id='massdistrib'></svg></div>
-                          <div id='biggestMeteorite'></div>
-                        </div>
-                        <div id="menu2" class="tab-pane fade">
-                            <svg width = '500' height = '500' id='elementFrequency'></svg>
-                        </div>
+        <div id='search-field-container'>
+            <input id='search-field' type='text'/>
+        </div>
+        <div id="messages"></div>
+        <div id='main'>
+            <div id='mapArea'></div>
+            <div id="statistics">
+                <ul class="nav nav-tabs">
+                    <li><a data-toggle="tab" href="#menu1">Mass distribution</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Meteorites classes</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="menu1" class="tab-pane fade">
+                      <div id='nameCountry'></div>
+                      <div id='divMassDist'><svg width="250" height="350" id='massdistrib'></svg></div>
+                      <div id='biggestMeteorite'></div>
+                    </div>
+                    <div id="menu2" class="tab-pane fade">
+                        <svg width = '500' height = '500' id='elementFrequency'></svg>
                     </div>
                 </div>
             </div>
-            <svg id='animation-control' height='50' width='40'>
-                <path d='M0,0L30,20L0,40Z'></path>
-                <path d='M0,3H10V37H0ZM20,3H30V37H20Z'></path>
-            </svg>
-            <svg id='timeline'></svg>
-        </article>
+        </div>
+        <svg id='animation-control' height='50' width='40'>
+            <path d='M0,0L30,20L0,40Z'></path>
+            <path d='M0,3H10V37H0ZM20,3H30V37H20Z'></path>
+        </svg>
+        <svg id='timeline'></svg>
     </body>
 </html>

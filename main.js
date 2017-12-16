@@ -45,7 +45,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?countries')
     .then(response => response.text())
     .then(data => {
         countries = d3.csvParse(data);
-        setUpTypeAheadField();
+        setSearchDatabase(countries.map(data => data.name));
     }));
 
 

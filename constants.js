@@ -34,3 +34,20 @@ const CUBIC_BEZIER_EASE_VALUES = Object.freeze([
 // Time
 const SECOND = 1000;
 
+// Keyboard codes
+const KEYCODES = Object.freeze({
+    
+    // Tab key
+    TAB         : 9,
+    
+    // Enter key
+    ENTER       : 13,
+    
+    // Arrow keys
+    ARROW_LEFT  : 37,
+    ARROW_UP    : 38,
+    ARROW_RIGHT : 39,
+    ARROW_DOWN  : 40
+    
+});
+

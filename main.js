@@ -24,7 +24,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS)
         });
     }));
 
-// Get the data grouped by year and set up the brush
+// Get the data grouped by year and set up the timeline
 PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
     .then(response => response.text())
     .then(data => {
@@ -36,7 +36,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
             };
         });
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
-        setUpBrush(DATA_GROUPED_BY_YEAR);
+        setUpTimeline(DATA_GROUPED_BY_YEAR);
     }));
 
 // Get the list of countries and their IDs and

@@ -1,3 +1,5 @@
+'use strict';
+
 const messageMap = new Map([
     [1807,`1807 12 14, Weston, CT, U.S.A,meteor visible half a minute, loud sounds heard, many stones found scattered over 6-10 miles, weighing as much as 200 lbs. total (largest meteorite weighed 35 lbs)`],
     [1825,`1825 01 16, Oriang, Malwate, India, man killed, woman injured in meteorite fall [considered "possible" by LaPaz (1958)]`],

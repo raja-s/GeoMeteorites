@@ -1,5 +1,4 @@
-
-
+'use strict';
 
 function setUpCountryStatistics(countryid) {
 

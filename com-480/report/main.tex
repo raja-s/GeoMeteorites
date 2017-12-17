@@ -2,7 +2,7 @@
 
 \usepackage{hyperref}
 \usepackage{graphicx}	% For figure environment
-
+\usepackage{natbib}
 
 \begin{document}
 \title{Process Book}
@@ -78,43 +78,49 @@ To do.
 \section{Evolution of visualization}
 \label{sec:evolution_of_visualization}
 
-The first step to figure out which visualization could be appropriate to visualize the spatial distribution of the meteorites' impacts. A globe or a map with the georeferenced impacts as static points came to our mind, but the UX would have been limited. That's why we decided to animate the trajectory of the meteorite falls, in order to give a realistic dimension to the data. In order to enforce the realistic dimension we prioritized the 3D visualization, hence a globe has been chosen to visualize the geographical space. 
+The first step was to figure out which visualization could be appropriate to visualize the spatial distribution of the meteorites' impacts. A globe or a map with the georeferenced impacts as static points came to our mind, but the UX would have been limited. That's why we decided to animate the trajectory of the meteorite falls, in order to give a realistic dimension to the data. In order to enforce the realistic dimension we prioritized the 3D visualization, hence a globe has been chosen to visualize the geographical space. To give a more global point of view of the spatial distribution of this phenomena, the transition from the globe to a 2D map has been also taken into account. 
 
-Having the coordinates of the impacts, it was crucial to get the country where the meteorites fell. This process has been performed with... %openstreet map \\
-
-Getting access to the country implies then a new category of classification, leading to a local and easier exploration of the data. The local dimension gave us new ideas for the data representation: 
+Having the coordinates of the impacts, it was crucial to get the country where the meteorites fell. Getting access to the country implies then a new category of classification, leading to a local and easier exploration of the data. The local dimension gave us new ideas for the data representation: 
 
 \begin{itemize}
-\item visualization of the country related statistics
-\item a search-bar where the user can enter the country wished
-\item the interaction user-globe that allows to click over a country and see the meteorites falling for the country selected 
+\item Visualization of the country related statistics
+\item A search-bar where the user can enter the country wished
+\item The interaction user-globe that allows to click over a country and see the meteorites falling for the country selected 
+\item Histogram of the type of meteorite by country
 \end{itemize}
 
+A time-line was by far the easiest way to visualize the temporal dimension. In order to add an interaction to it, we decided to allow the selection of an interval of time to the user. The animation of the meteorites falls will be then performed in the interval of time selected and activated/deactivated with a start/pause button. 
 
-The temporal dimension, 
-
-
-
-First of all, we chose to create the globe with the
-
-
-
-
-
-
-
-
-
-
+Here below our first sketch of the visualization:
 \iffalse
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=\columnwidth]{local_wdenoised_1d}
+  \includegraphics[width=\columnwidth]{sketch1}
   \vspace{-3mm}
-  \caption{Signal compression and denoising using the Daubechies wavelet basis.}
+  \caption{First sketch of the visualization}
   \label{fig:denoise-wavelet}
 \end{figure}
 \fi
+
+
+\subsection{Globe}
+Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with $d3.js$ \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the $d3.geo$ library that allows an easy way to work with geographic information and different projections.
+We then created the globe, but a sticking point came up: how to visualize the meteorites' animation with $d3$? 
+
+ 
+%This process has been %performed with... %openstreet map \\
+
+ 
+
+
+
+
+
+
+
+
+
+
 
 Use examples and illustrations to clarify ideas and results. Figure~\ref{fig:denoise-wavelet}, we can see the two different situations where Fourier and wavelet basis perform well.
 
@@ -128,11 +134,19 @@ To do.
 
 \begin{description}
 \item[Rehan Mulakhel] \ \\
-  Web page centralizing links to the demo, code and process book. General design of the demo page. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates.
+  Web page centralizing links to the demo, code and process book. General design of the demo page. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
   To do.
 \item[Raja Soufi] \ \\
   To do.
 \end{description}
+
+
+
+
+\bibliography{geometeorites}
+\bibliographystyle{plain}
+
+
 
 \end{document}

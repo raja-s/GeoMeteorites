@@ -141,7 +141,7 @@ document.getElementById('nameCountry').appendChild(countryHeader);
     g.append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', 'translate('+margin.top+',0)')
-        .call(d3.axisTop(x).ticks(5))
+        .call(d3.axisTop(x).ticks(5));
 
       g.append('text')
       .attr('transform','rotate(-90)')
@@ -293,29 +293,37 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))<180).map(d=>parseInt(d.totalMass));
+
+
+
+//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))<2).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
 //let others = othersCountries.reduce((pv, cv) => pv+cv, 0);
-let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))>180).map(d=>d.country);
+//let massStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>1).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
 
+let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>2).map(d=>d.country);
+//let sumMass = massStored.reduce((pv, cv) => pv+cv, 0);
 
-//countryStored.push(others);
+//console.log(sumMass);
+//console.log(othersCountries);
+//console.log(others);
 //console.log(countryStored);
 
-//Store only 34 country
-let dataFinal = meteoriteData.filter(d=>countryStored.find(a=>d.country===a));
+//let condition = meteoriteData.map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))>2;
+//console.log(condition);
 
-  dataFinal.forEach(function(e){
-    if (typeof e === 'object'){
-      e['CountryName'] = countries.filter(d=>d.country===e.country).map(d=>d.name)[0];
-    }
+// let condition = groupByCountry.map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area)))>2);
+// console.log(condition);
 
-  });
-
+let dataFinal = meteoriteData;
+dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>4) && e.country!=='_' ?
+                                                          countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
+// dataFinal.forEach(d=>d.Density=parseInt(d.mass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))));
+//console.log(dataFinal);
+//console.log(dataFinal);
 //----------------Iron Meteorites-----------------------------------------------
 
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 ironMeteorites.forEach(e=>e.Type=typeIron);
-
 //console.log(ironMeteorites);
 
 
@@ -352,10 +360,10 @@ let bp=viz.bP()
 	.data(dataClassified)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.CountryName)
-	.value(d=>parseInt(d.mass))
+	.value(d=>d.mass)
   .width(BP_DIMENSIONS.WIDTH)
   .height(BP_DIMENSIONS.HEIGHT)
-	.min(2)
+	.min(0)
 	.pad(3)
 	.barSize(BP_DIMENSIONS.BAR)
 	.orient('vertical')
@@ -400,6 +408,8 @@ GROUP.selectAll('.mainBars')
 GROUP.selectAll('.mainBars')
 	.on('mousemove',mousemove)
 	.on('mouseout',mouseout);
+
+//console.log(bp);
 
 let bpActivated = false;
 

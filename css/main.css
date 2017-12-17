@@ -2,14 +2,14 @@
 html {
     /* TODO: Change these later? */
     --color-meteorites: #ffad5b;
-    
+
     --color-frequency-bars: var(--color-meteorites);
     --color-mean-mass-bars: #1884bc;
 }
 
 body {
     margin: 0px;
-    
+
     color: #ddd;
 }
 
@@ -32,18 +32,18 @@ body {
 
 #search-field-container {
     --search-field-height: 4vw;
-    
+
     position: fixed;
     right: 0;
     /*height: var(--search-field-height);*/
     width: 25vw;
-    
+
     margin: 1vw;
     border-radius: 0.8vw;
-    
+
     /*overflow: hidden;*/
     background-color: #ddd;
-    
+
     /*transition: height 0.3s;*/
 }
 
@@ -55,9 +55,9 @@ body {
 #search-field-container > p {
     cursor: pointer;
     opacity: 0.4;
-    
+
     font-size: 1.2vw;
-    
+
     transition: opacity 0.3s;
 }
 
@@ -68,14 +68,14 @@ body {
 #search-field {
     height: var(--search-field-height);
     width: 25vw;
-    
+
     box-sizing: border-box;
     border: 0;
-    
+
     padding: 1vw;
-    
+
     font-size: 1.5vw;
-    
+
     resize: none;
     outline: none;
     background: none;
@@ -91,7 +91,7 @@ body {
     bottom: 35px;
     left: 35px;
     padding: 5px;
-    
+
     cursor: pointer;
 }
 
@@ -125,7 +125,7 @@ body {
 
 #time-indicator {
     cursor: pointer;
-    
+
     text-anchor: middle;
 }
 
@@ -141,9 +141,9 @@ body {
 
 .timeline-bars {
     cursor: pointer;
-    
+
     opacity: 0.5;
-    
+
     transition: opacity 0.3s;
 }
 
@@ -269,11 +269,11 @@ path.bins1 {
 
 
    text.perc{
-   	font-size:7px;
+   	font-size:10px;
    }
 
    text.label{
-     font-size: 7px;
+     font-size: 10px;
 
        }
 

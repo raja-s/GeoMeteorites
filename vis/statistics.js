@@ -109,7 +109,7 @@ document.getElementById('nameCountry').appendChild(countryHeader);
     g.append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', 'translate('+margin.top+',0)')
-        .call(d3.axisTop(x).ticks(5))
+        .call(d3.axisTop(x).ticks(5));
 
       g.append('text')
       .attr('transform','rotate(-90)')
@@ -265,29 +265,37 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))<180).map(d=>parseInt(d.totalMass));
+
+
+
+//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))<2).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
 //let others = othersCountries.reduce((pv, cv) => pv+cv, 0);
-let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)/100)))>180).map(d=>d.country);
+//let massStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>1).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
 
+let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>2).map(d=>d.country);
+//let sumMass = massStored.reduce((pv, cv) => pv+cv, 0);
 
-//countryStored.push(others);
+//console.log(sumMass);
+//console.log(othersCountries);
+//console.log(others);
 //console.log(countryStored);
 
-//Store only 34 country
-let dataFinal = meteoriteData.filter(d=>countryStored.find(a=>d.country===a));
+//let condition = meteoriteData.map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))>2;
+//console.log(condition);
 
-  dataFinal.forEach(function(e){
-    if (typeof e === 'object'){
-      e['CountryName'] = countries.filter(d=>d.country===e.country).map(d=>d.name)[0];
-    }
+// let condition = groupByCountry.map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area)))>2);
+// console.log(condition);
 
-  });
-
+let dataFinal = meteoriteData;
+dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>4) && e.country!=='_' ?
+                                                          countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
+// dataFinal.forEach(d=>d.Density=parseInt(d.mass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))));
+//console.log(dataFinal);
+//console.log(dataFinal);
 //----------------Iron Meteorites-----------------------------------------------
 
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 ironMeteorites.forEach(e=>e.Type=typeIron);
-
 //console.log(ironMeteorites);
 
 
@@ -307,19 +315,21 @@ stonyIronMeteorites.forEach(e=>e.Type=typeStonyIron);
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
 //console.log(dataClassified);
 
+
+
 const color ={ Iron: '#2171b5', StonyIron:'brown', Stony:'green'};
 
 
 let svg2=d3.select('#elementFrequency');
-let g2 = svg2.append('g').attr('transform','translate(40,15)');
+let g2 = svg2.append('g').attr('transform','translate(100,15)');
 let bp=viz.bP()
 	.data(dataClassified)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.CountryName)
-	.value(d=>parseInt(d.mass))
+	.value(d=>d.mass)
   .width(200)
   .height(400)
-	.min(2)
+	.min(0)
 	.pad(3)
 	.barSize(6)
 	.orient('vertical')
@@ -332,9 +342,8 @@ g2.call(bp);
 
 
 
-g2.append('text').attr('x',-5).attr('y',-2).style('text-anchor','end').text('Type');
-g2.append('text').attr('x', 205).attr('y',-2).style('text-anchor','start').text('Country');
-
+g2.append('text').attr('x',-5).attr('y',-2).style('text-anchor','end').text('Type').style('fill','white');
+g2.append('text').attr('x', 205).attr('y',-2).style('text-anchor','start').text('Country').style('fill','white');
 
 
 //Add label countries flag
@@ -342,6 +351,7 @@ g2.selectAll('.mainBars').append('text').attr('class','label')
   		.attr('x',d=>(d.part=='primary'? -35: 5))
   		.attr('y',d=>+1)
   		.text(d=>d.key)
+      .style('fill','white')
   		.attr('text-anchor',d=>(+d.part=='primary' ? 'end': 'start'));
 
 //Add label percentage
@@ -349,12 +359,14 @@ g2.selectAll('.mainBars').append('text').attr('class','perc')
 	.attr('x',d=>(d.part=='primary'? -35: 65))
 	.attr('y',d=>(d.part=='primary'? 15: 1))
 	.text(function(d){ return d3.format('0.1%')(+d.percent);})
+  .style('fill','white')
 	.attr('text-anchor',d=>(+d.part=='primary'? 'end': 'start'));
-
 
 g2.selectAll('.mainBars')
 	.on('mousemove',mousemove)
 	.on('mouseout',mouseout);
+
+//console.log(bp);
 
 let bpActivated = false;
 

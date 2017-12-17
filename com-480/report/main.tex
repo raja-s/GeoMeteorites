@@ -52,7 +52,9 @@ The data come from the NASA’s Open Data Portal and have been downloaded from K
   The parentheses-enclose, comma-separated tuple that combines \texttt{reclat} and \texttt{reclong}.
 \end{description}
 
-Rows containing \texttt{NaN} values or presenting a year’s value smaller than $860$ and bigger than $2016$ (suggestion of the Kaggle’s description of the data) will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered.
+Rows containing \texttt{NaN} values or presenting a year’s value smaller than $860$ and bigger than $2016$ (suggestion of the Kaggle’s description of the data) will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered. 
+
+% TODO: topojson & three
 
 After the cleaning, we end up with a final number of $31,705$ over $45,716$ entries.
 
@@ -75,8 +77,36 @@ To do.
 
 \section{Evolution of visualization}
 \label{sec:evolution_of_visualization}
-From th
 
+The first step to figure out which visualization could be appropriate to visualize the spatial distribution of the meteorites' impacts. A globe or a map with the georeferenced impacts as static points came to our mind, but the UX would have been limited. That's why we decided to animate the trajectory of the meteorite falls, in order to give a realistic dimension to the data. In order to enforce the realistic dimension we prioritized the 3D visualization, hence a globe has been chosen to visualize the geographical space. 
+
+Having the coordinates of the impacts, it was crucial to get the country where the meteorites fell. This process has been performed with... %openstreet map \\
+
+Getting access to the country implies then a new category of classification, leading to a local and easier exploration of the data. The local dimension gave us new ideas for the data representation: 
+
+\begin{itemize}
+\item visualization of the country related statistics
+\item a search-bar where the user can enter the country wished
+\item the interaction user-globe that allows to click over a country and see the meteorites falling for the country selected 
+\end{itemize}
+
+
+The temporal dimension, 
+
+
+
+First of all, we chose to create the globe with the
+
+
+
+
+
+
+
+
+
+
+\iffalse
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\columnwidth]{local_wdenoised_1d}
@@ -84,6 +114,7 @@ From th
   \caption{Signal compression and denoising using the Daubechies wavelet basis.}
   \label{fig:denoise-wavelet}
 \end{figure}
+\fi
 
 Use examples and illustrations to clarify ideas and results. Figure~\ref{fig:denoise-wavelet}, we can see the two different situations where Fourier and wavelet basis perform well.
 

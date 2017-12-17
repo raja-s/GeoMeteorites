@@ -6,7 +6,6 @@
 
 const MEAN_MASS_GRAPH =
     TIMELINE.append('g')
-              .attr('class', 'context')
               .attr('transform', `translate(${TIMELINE_MARGINS.LEFT}, ${TIMELINE_MARGINS.TOP +
                     TIMELINE_CHART_DIMENSIONS.HEIGHT + TIMELINE_MARGINS.MIDDLE})`);
 
@@ -17,7 +16,7 @@ const MEAN_MASS_GRAPH =
 let yMeanMass = d3.scaleLog()
                      .range([0, TIMELINE_CHART_DIMENSIONS.HEIGHT]);
 
-let yAxisMeanMass = d3.axisLeft(yMeanMass)
+let yAxisMeanMass = d3.axisRight(yMeanMass)
                          .ticks(4, ',d');
 
 /*
@@ -46,6 +45,7 @@ function setUpmeanMassTimeline(data, barWidth) {
     
     MEAN_MASS_GRAPH.append('g')
                      .attr('class', 'axes')
+                     .attr('transform', `translate(${TIMELINE_CHART_DIMENSIONS.WIDTH}, 0)`)
                      .call(yAxisMeanMass);
     
 }

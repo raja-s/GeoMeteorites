@@ -1,0 +1,58 @@
+
+#timeline {
+    position: fixed;
+    bottom: 0;
+    right: 15vw;
+    overflow: visible;
+}
+
+#timeline .axes > path,
+#timeline .axes line {
+    display: none;
+}
+
+#timeline .axes text {
+    font-size: 0.7vw;
+    
+    fill: #ccc;
+}
+
+#timeline .x-axes .tick:first-of-type {
+    display: none;
+}
+
+#time-indicator {
+    cursor: pointer;
+    
+    text-anchor: middle;
+}
+
+#time-indicator > text {
+    fill: #ccc;
+}
+
+#time-handle {
+    fill: var(--color-ui-bg);
+    stroke-width: 0;
+    z-index: 2;
+}
+
+.timeline-bars {
+    cursor: pointer;
+    
+    opacity: 0.7;
+    
+    transition: opacity 0.3s;
+}
+
+.timeline-bars[data-present] {
+    opacity: 1;
+}
+
+.timeline-frequency-bars {
+    fill: var(--color-frequency-bars);
+}
+
+.timeline-mean-mass-bars {
+    fill: var(--color-mean-mass-bars);
+}

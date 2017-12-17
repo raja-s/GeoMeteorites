@@ -1,0 +1,77 @@
+
+/*
+    Search Field
+*/
+
+#search-field-container {
+    --search-field-height: 4vw;
+    
+    position: fixed;
+    left: 2.5vw;
+    /*height: var(--search-field-height);*/
+    width: 25vw;
+    
+    margin: 2vw;
+    border-radius: 0.8vw;
+    
+    /*overflow: hidden;*/
+    background-color: var(--color-ui-bg);
+    box-shadow: 0 0 2vw 0.1vw #1a1a1a;
+    
+    /*transition: height 0.3s;*/
+}
+
+#search-field-container > * {
+    text-align: center;
+    color: #ccc;
+}
+
+#search-field-container > p {
+    cursor: pointer;
+    opacity: 0.4;
+    
+    font-size: 1.2vw;
+    
+    transition: opacity 0.3s;
+}
+
+#search-field-container > p[data-candidate] {
+    opacity: 1;
+}
+
+#search-field {
+    height: var(--search-field-height);
+    width: 25vw;
+    
+    box-sizing: border-box;
+    border: 0;
+    
+    padding: 1vw;
+    
+    font-size: 1.5vw;
+    
+    resize: none;
+    outline: none;
+    background: none;
+}
+
+/*
+    Animation Controls
+*/
+
+#animation-control {
+    position: fixed;
+    bottom: 35px;
+    left: 35px;
+    padding: 5px;
+    
+    cursor: pointer;
+}
+
+#animation-control > path {
+    fill: #ddd;
+}
+
+#animation-control > :first-child {
+    display: none;
+}

@@ -1,5 +1,37 @@
 'use strict';
 
+/*
+    Constants
+*/
+
+const LEFT_PANE_DIMENSIONS = Object.freeze({
+    HEIGHT : window.innerHeight * 0.6,
+    WIDTH  : window.innerWidth  * 0.3
+});
+
+const BP_MARGINS = Object.freeze({
+    
+    TOP    : 20,
+    BOTTOM : 20,
+    
+    LEFT   : LEFT_PANE_DIMENSIONS.WIDTH * 0.12,
+    RIGHT  : LEFT_PANE_DIMENSIONS.WIDTH * 0.3
+    
+});
+
+const BP_DIMENSIONS = Object.freeze({
+    
+    HEIGHT : LEFT_PANE_DIMENSIONS.HEIGHT - BP_MARGINS.TOP  - BP_MARGINS.BOTTOM,
+    WIDTH  : LEFT_PANE_DIMENSIONS.WIDTH  - BP_MARGINS.LEFT - BP_MARGINS.RIGHT,
+    
+    BAR    : 6
+    
+});
+
+/*
+    Functions
+*/
+
 function setUpCountryStatistics(countryid) {
 
 //Remove previous country if present
@@ -245,10 +277,6 @@ biggesttext.appendChild(parMass);
 document.getElementById('biggestMeteorite').appendChild(biggesttext);
 document.getElementById('biggestMeteorite').appendChild(titleDiv);
 
-
-
-
-
 }
 
 
@@ -307,52 +335,69 @@ stonyIronMeteorites.forEach(e=>e.Type=typeStonyIron);
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
 //console.log(dataClassified);
 
-const color ={ Iron: '#2171b5', StonyIron:'brown', Stony:'green'};
+const COLOR = Object.freeze({
+    Iron      : '#2171b5',
+    StonyIron : 'brown',
+    Stony     : 'green'
+});
 
+const CLASS_STATS = d3.select('#class-stats')
+                        .attr('height', LEFT_PANE_DIMENSIONS.HEIGHT)
+                        .attr('width' , LEFT_PANE_DIMENSIONS.WIDTH);
 
-let svg2=d3.select('#elementFrequency');
-let g2 = svg2.append('g').attr('transform','translate(40,15)');
+const GROUP = CLASS_STATS.append('g')
+                           .attr('transform', `translate(${BP_MARGINS.LEFT}, ${BP_MARGINS.TOP})`);
+
 let bp=viz.bP()
 	.data(dataClassified)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.CountryName)
 	.value(d=>parseInt(d.mass))
-  .width(200)
-  .height(400)
+  .width(BP_DIMENSIONS.WIDTH)
+  .height(BP_DIMENSIONS.HEIGHT)
 	.min(2)
 	.pad(3)
-	.barSize(6)
+	.barSize(BP_DIMENSIONS.BAR)
 	.orient('vertical')
-  .edgeOpacity(.3)
-	.fill(d=>color[d.primary]);
+  .edgeOpacity(0.3)
+	.fill(d=>COLOR[d.primary]);
 
-g2.call(bp);
+GROUP.call(bp);
 
 //
 
+GROUP.append('text')
+       .attr('x', - BP_DIMENSIONS.BAR)
+       .attr('y', -2)
+       .attr('text-anchor','end')
+       .text('Type');
 
-
-g2.append('text').attr('x',-5).attr('y',-2).style('text-anchor','end').text('Type');
-g2.append('text').attr('x', 205).attr('y',-2).style('text-anchor','start').text('Country');
-
-
+GROUP.append('text')
+       .attr('x', BP_DIMENSIONS.WIDTH + BP_DIMENSIONS.BAR)
+       .attr('y', -2)
+       .attr('text-anchor','start')
+       .text('Country');
 
 //Add label countries flag
-g2.selectAll('.mainBars').append('text').attr('class','label')
-  		.attr('x',d=>(d.part=='primary'? -35: 5))
-  		.attr('y',d=>+1)
-  		.text(d=>d.key)
-  		.attr('text-anchor',d=>(+d.part=='primary' ? 'end': 'start'));
+GROUP.selectAll('.mainBars')
+        .append('text')
+        .attr('class', 'label')
+  		.attr('x', d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : BP_DIMENSIONS.BAR))
+  		.attr('y', 1)
+  		.text(d => d.key)
+  		.attr('text-anchor',d=>(d.part=='primary' ? 'end': 'start'));
 
 //Add label percentage
-g2.selectAll('.mainBars').append('text').attr('class','perc')
-	.attr('x',d=>(d.part=='primary'? -35: 65))
-	.attr('y',d=>(d.part=='primary'? 15: 1))
-	.text(function(d){ return d3.format('0.1%')(+d.percent);})
-	.attr('text-anchor',d=>(+d.part=='primary'? 'end': 'start'));
+GROUP.selectAll('.mainBars')
+    .append('text')
+    .attr('class', 'perc')
+	.attr('x',d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : 115))
+	.attr('y',d=>(d.part=='primary' ? 15 : 1))
+	.text(d => d3.format('0.1%')(+d.percent))
+	.attr('text-anchor', 'end');
 
 
-g2.selectAll('.mainBars')
+GROUP.selectAll('.mainBars')
 	.on('mousemove',mousemove)
 	.on('mouseout',mouseout);
 
@@ -363,7 +408,7 @@ function mousemove(d){
     if ((SQRT <= 4) && !bpActivated) {
         bpActivated = true;
 	    bp.mouseover(d);
-    	g2.selectAll('.mainBars')
+    	GROUP.selectAll('.mainBars')
     	.select('.perc')
     	.text(function(d){ return d3.format('0.1%')(+d.percent)});
     }
@@ -372,7 +417,7 @@ function mousemove(d){
 function mouseout(d){
     bpActivated = false;
 	bp.mouseout(d);
-	g2.selectAll('.mainBars')
+	GROUP.selectAll('.mainBars')
 		.select('.perc')
 	.text(function(d){ return d3.format('0.1%')(+d.percent)});
 }

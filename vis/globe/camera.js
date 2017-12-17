@@ -11,9 +11,26 @@ const CAMERA_MOVE_DURATION = 1500;
 */
 
 // TODO: Rename this function
-function updateCameraZ() {
+function zoomCamera() {
+    
     let { x , y , z } = sphericalToCartesian(cameraDistance, CAMERA.rotation.y, - CAMERA.rotation.x);
+    
     CAMERA.position.set(x, y, z);
+    
+    offsetCameraOnXAxis();
+    
+}
+
+function offsetCameraOnXAxis() {
+
+    let { x , y , z } = sphericalToCartesian(
+        - (cameraDistance - CAMERA_BOUNDS.MIN) / 5,
+        CAMERA.rotation.y + Math.PI / 2,
+        0
+    );
+    
+    CAMERA.position.add(new THREE.Vector3(x, y, z));
+
 }
 
 // TODO: Improve performance of this function
@@ -31,6 +48,8 @@ function moveCameraTo(long, lat, r, duration = 0) {
         let { x , y , z } = sphericalToCartesian(r, PHI, THETA);
         
         CAMERA.position.set(x, y, z);
+        
+        offsetCameraOnXAxis();
         
         return new Promise((resolve, reject) => resolve());
     }
@@ -52,6 +71,7 @@ function moveCameraTo(long, lat, r, duration = 0) {
     });
     
     function deltaT(i) {
+        
         CAMERA.rotation.y = PHIS[i];
         CAMERA.rotation.x = THETAS[i];
         cameraDistance = RS[i];
@@ -59,6 +79,9 @@ function moveCameraTo(long, lat, r, duration = 0) {
         let { x , y , z } = sphericalToCartesian(RS[i], PHIS[i], - THETAS[i]);
         
         CAMERA.position.set(x, y, z);
+        
+        offsetCameraOnXAxis();
+        
     }
     
     for (let i = 0 ; i < CUBIC_BEZIER_EASE_VALUES.length ; i++) {
@@ -73,14 +96,20 @@ function focusOnCountry(countryName) {
     
     const COUNTRY = countries.find(country => country.name === countryName);
     
-    const R = CAMERA_BOUNDS.MIN + Math.floor(Math.max(
-        parseFloat(COUNTRY.maxLong) - parseFloat(COUNTRY.minLong),
-        parseFloat(COUNTRY.maxLat)  - parseFloat(COUNTRY.minLat)
-    ));
-    
     if (COUNTRY !== undefined) {
-        moveCameraTo(parseFloat(COUNTRY.centLong), parseFloat(COUNTRY.centLat),
-            R, CAMERA_MOVE_DURATION);
+            
+        const R = CAMERA_BOUNDS.MIN + Math.floor(Math.max(
+            parseFloat(COUNTRY.maxLong) - parseFloat(COUNTRY.minLong),
+            parseFloat(COUNTRY.maxLat)  - parseFloat(COUNTRY.minLat)
+        ));
+        
+        moveCameraTo(
+            parseFloat(COUNTRY.centLong),
+            parseFloat(COUNTRY.centLat),
+            R,
+            CAMERA_MOVE_DURATION
+        );
+        
     }
     
 }

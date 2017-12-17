@@ -1,0 +1,127 @@
+
+#left-pane {
+    position: fixed;
+    top: 8.5vw;
+    height: 60vh;
+    width: 30vw;
+    
+    margin: 2vw;
+    /*border-radius: 0.8vw;*/
+    
+    /*background-color: var(--color-ui-bg);*/
+}
+
+.left-pane-containers {
+    position: absolute;
+    
+    transition: opacity 0.3s;
+}
+
+#class-stats text {
+    fill: #ccc;
+}
+
+#class-stats .perc {
+    font-size: 7px;
+}
+
+#class-stats .label {
+    font-size: 7px;
+}
+
+#MassDistribution {
+    height: 350px;
+    position: fixed;
+    top: 200px;
+    left: 5px;
+    float: right;
+}
+
+path.bins1 {
+    stroke: var(--color-meteorites);
+    stroke-width: 4px;
+    fill: none;
+}
+
+#divMassDist{
+    position: relative;
+}
+
+
+#biggestMeteorite {
+    position: relative;
+}
+
+#nameMeteorite {
+	position: absolute;
+	top:150px;
+	right: 150px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+#textBiggest {
+	position: absolute;
+	top:-30px;
+	right: 140px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+   .bar1 rect {
+     fill: var(--color-meteorites);
+   }
+
+   path.bins1 {
+     stroke: var(--color-meteorites);
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar1:hover rect {
+     fill: black;
+   }
+
+   .bar1 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }
+
+   .bar2 rect {
+     fill:var(--color-meteorites);
+   }
+
+   path.bins2 {
+     stroke: var(--color-meteorites);
+     stroke-width: 4px;
+     fill: none;
+   }
+
+   .bar2:hover rect {
+     fill:black;
+   }
+
+   .bar2 text {
+     fill: #fff;
+     font: 10px sans-serif;
+   }
+
+   .subBars{
+   	shape-rendering:crispEdges;
+   }
+   .edges{
+   	stroke:none;
+   	fill-opacity:0.3;
+   }
+
+ .mainBars rect{
+     shape-rendering: auto;
+     fill-opacity: 0;
+     stroke-width: 0.5px;
+     stroke:grey;
+     stroke-opacity: 0;
+   }

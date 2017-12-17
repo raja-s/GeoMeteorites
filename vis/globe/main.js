@@ -70,7 +70,7 @@ CAMERA.translateZ(cameraDistance);
 
 RENDERER.setPixelRatio(window.devicePixelRatio);
 RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
-document.getElementById("mapArea").appendChild(RENDERER.domElement);
+document.getElementById('globe-container').appendChild(RENDERER.domElement);
 
 let sphere = new THREE.Mesh(
     new THREE.SphereGeometry(GLOBE_RADIUS, 128, 128),
@@ -275,9 +275,9 @@ function getGlobeMouseIntersection() {
 }
 
 function render() {
-    
+
     RENDERER.render(SCENE, CAMERA);
-    
+
 }
 
 function renderLoop() {
@@ -297,7 +297,7 @@ function renderLoop() {
 
 }
 
-document.getElementById('mapArea').children[0].onmousewheel = event => {
+RENDERER.domElement.onmousewheel = event => {
 
     const SIGNED_SQRT = Math.sign(event.wheelDelta) * Math.sqrt(Math.abs(event.wheelDelta));
 
@@ -308,13 +308,13 @@ document.getElementById('mapArea').children[0].onmousewheel = event => {
     } else if (cameraDistance > CAMERA_BOUNDS.MAX) {
         cameraDistance = CAMERA_BOUNDS.MAX;
     }
-    updateCameraZ(cameraDistance);
+    zoomCamera();
 
     render();
 
 };
 
-document.getElementById('mapArea').children[0].onmousemove = event => {
+RENDERER.domElement.onmousemove = event => {
 
     if ((event.buttons === 1) && allowGlobeNavigation) {
 
@@ -339,7 +339,7 @@ document.getElementById('mapArea').children[0].onmousemove = event => {
     
 };
 
-document.getElementById('mapArea').children[0].onclick = event => {
+RENDERER.domElement.onclick = event => {
     
     console.log(getGlobeMouseIntersection());
     
@@ -347,7 +347,7 @@ document.getElementById('mapArea').children[0].onclick = event => {
 
 window.addEventListener('resize', event => {
 
-    globeCanvasHeight = window.innerHeight * 0.8;
+    globeCanvasHeight = window.innerHeight;
     globeCanvasWidth  = window.innerWidth;
 
     RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);

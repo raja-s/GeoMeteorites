@@ -7,8 +7,8 @@
 const TIMELINE = d3.select('#timeline');
 
 const TIMELINE_DIMENSIONS = Object.freeze({
-    HEIGHT : window.innerHeight * 0.2,
-    WIDTH  : window.innerWidth  * 0.9
+    HEIGHT : window.innerHeight * 0.15,
+    WIDTH  : window.innerWidth  * 0.7
 });
 
 const TIMELINE_MARGINS = Object.freeze({
@@ -19,8 +19,8 @@ const TIMELINE_MARGINS = Object.freeze({
     BOTTOM : 0,
     
     // Horizontal margins
-    RIGHT  : 35,
-    LEFT   : 35
+    RIGHT  : 60,
+    LEFT   : 60
     
 });
 
@@ -92,7 +92,7 @@ function setUpTimeline(data) {
     setUpmeanMassTimeline(data, BAR_WIDTH);
     
     TIMELINE.append('g')
-              .attr('class', 'axes')
+              .attr('class', 'axes x-axes')
               .attr('transform', `translate(${TIMELINE_MARGINS.LEFT},
                     ${TIMELINE_MARGINS.TOP + TIMELINE_CHART_DIMENSIONS.HEIGHT})`)
               .call(xAxisTimeline);

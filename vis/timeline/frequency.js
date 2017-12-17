@@ -6,7 +6,6 @@
 
 const FREQUENCY_GRAPH =
     TIMELINE.append('g')
-              .attr('class', 'context')
               .attr('transform', `translate(${TIMELINE_MARGINS.LEFT}, ${TIMELINE_MARGINS.TOP})`);
 
 /*
@@ -16,7 +15,7 @@ const FREQUENCY_GRAPH =
 let yFrequency = d3.scaleLog()
                       .range([TIMELINE_CHART_DIMENSIONS.HEIGHT, 0]);
 
-let yAxisFrequency = d3.axisLeft(yFrequency)
+let yAxisFrequency = d3.axisRight(yFrequency)
                           .ticks(4, ',d');
 
 /*
@@ -47,6 +46,7 @@ function setUpFrequencyTimeline(data, barWidth) {
     
     FREQUENCY_GRAPH.append('g')
                      .attr('class', 'axes')
+                     .attr('transform', `translate(${TIMELINE_CHART_DIMENSIONS.WIDTH}, 0)`)
                      .call(yAxisFrequency);
     
 }

@@ -20,7 +20,6 @@ const EXPLOSION_GEOMETRY = new THREE.SphereGeometry(0, 16, 16);
 
 function dropMeteorite(long, lat, mass) {
     
-    // TODO: Check long and lat
     const PHI   = THREE.Math.degToRad(long);
     const THETA = THREE.Math.degToRad(lat);
     
@@ -30,8 +29,8 @@ function dropMeteorite(long, lat, mass) {
     const START_THETA = THETA  + (Math.random() - 0.5) * MAX_RANDOM_RADIUS;
     const START_R     = GLOBE_RADIUS + 200;
     
-    const STEP_PHI   = (PHI    - START_PHI)   * STEP_TIME / FALL_DURATION;
-    const STEP_THETA = (THETA  - START_THETA) * STEP_TIME / FALL_DURATION;
+    const STEP_PHI   = (PHI          - START_PHI)   * STEP_TIME / FALL_DURATION;
+    const STEP_THETA = (THETA        - START_THETA) * STEP_TIME / FALL_DURATION;
     const STEP_R     = (GLOBE_RADIUS - START_R)     * STEP_TIME / FALL_DURATION;
     
     // let meteoriteLight = new THREE.PointLight(0xffad5b, 3, 150, 2);

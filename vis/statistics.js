@@ -71,10 +71,13 @@ document.getElementById('nameCountry').appendChild(countryHeader);
   let formatCount = d3.format(".0f");
 
 
+  //let mass = dataFilteredByCountry.map(d=>parseInt(d.mass));
   let mass = dataFilteredByCountry.filter(d=>d.country===countryid).map(d=>parseInt(Math.log(d.mass)));
-
-  //let mass = meteoriteData.map(d=>parseInt(Math.log(d.mass)));
-  //console.log(mass);
+  let massLog = dataFilteredByCountry.filter(d=>d.country===countryid).map(d=>Math.log(parseInt(d.mass)));
+  console.log(massLog);
+  //Calculate the average mass
+  let average  = (array) => array.reduce((a, b) => a + b,0) / array.length;
+  let averageMass = average(mass);
 
   let svg = d3.select('#massdistrib');
 
@@ -93,8 +96,8 @@ document.getElementById('nameCountry').appendChild(countryHeader);
 
   let bins1 = d3.histogram()
           .domain(y.domain())
-          //.thresholds(y.ticks(10))
-          (mass);
+          .thresholds(y.ticks(10))
+          (massLog);
 
   //console.log(bins1);
 
@@ -204,6 +207,11 @@ let biggestMassSize = Math.log(biggestMass);
 let biggestMassName = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
 let biggestMassYear = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>(d.year).getFullYear())[0];
 
+
+
+
+//console.log(averageMass);
+
 //console.log(biggestMassCountry);
 
 //Create the biggest meteorite (call createMeteorite() function)
@@ -244,14 +252,15 @@ function renderStat(){
 }
 
 //Add text next to the biggest mass
-
 let parName = document.createElement('p');
 let parYear = document.createElement('p');
 let parCountry = document.createElement('p');
 let parMass = document.createElement('p');
+let parAverageMass = document.createElement('p');
 let nameMet = document.createTextNode('Name: '+ biggestMassName);
 let yearMet = document.createTextNode('Year: '+ biggestMassYear);
 let massMet = document.createTextNode('Mass: '+biggestMass+' gr')
+let averageMassMet = document.createTextNode('Average Mass: '+averageMass+' gr');
 
 let title = document.createElement('h4');
 let titleText = document.createTextNode('The biggest meteorite');
@@ -265,17 +274,21 @@ titleDiv.appendChild(title);
 parName.appendChild(nameMet);
 parYear.appendChild(yearMet);
 parMass.appendChild(massMet);
+parAverageMass.appendChild(averageMassMet);
 
 let biggesttext = document.createElement('div');
+//let otherStat = document.createElement('div');
+//otherStat.style.display='inline-block';
 
 biggesttext.id = 'nameMeteorite';
 biggesttext.appendChild(parName);
 biggesttext.appendChild(parYear);
 biggesttext.appendChild(parMass);
-
+//otherStat.appendChild(parAverageMass);
 
 document.getElementById('biggestMeteorite').appendChild(biggesttext);
 document.getElementById('biggestMeteorite').appendChild(titleDiv);
+//document.getElementById('biggestMeteorite').appendChild(otherStat);
 
 }
 
@@ -327,7 +340,7 @@ stonyIronMeteorites.forEach(e=>e.Type=typeStonyIron);
 
 //data classified
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
-console.log(dataClassified);
+//console.log(dataClassified);
 
 const COLOR = Object.freeze({
     Iron      : '#2171b5',
@@ -383,11 +396,11 @@ GROUP.selectAll('.mainBars')
 
 //Add label percentage
 GROUP.selectAll('.mainBars')
-    .append('text')
-    .attr('class', 'perc')
-	.attr('x',d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : 115))
-	.attr('y',d=>(d.part=='primary' ? 15 : 1))
-	.text(d => d3.format('0.1%')(+d.percent))
+     .append('text')
+     .attr('class', 'perc')
+	   .attr('x',d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : 115))
+	   .attr('y',d=>(d.part=='primary' ? 15 : 1))
+	   .text(d => d3.format('0.1%')(+d.percent))
 	.attr('text-anchor', 'end');
 
 

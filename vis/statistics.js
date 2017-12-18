@@ -10,22 +10,22 @@ const LEFT_PANE_DIMENSIONS = Object.freeze({
 });
 
 const BP_MARGINS = Object.freeze({
-    
+
     TOP    : 20,
     BOTTOM : 20,
-    
+
     LEFT   : LEFT_PANE_DIMENSIONS.WIDTH * 0.12,
     RIGHT  : LEFT_PANE_DIMENSIONS.WIDTH * 0.3
-    
+
 });
 
 const BP_DIMENSIONS = Object.freeze({
-    
+
     HEIGHT : LEFT_PANE_DIMENSIONS.HEIGHT - BP_MARGINS.TOP  - BP_MARGINS.BOTTOM,
     WIDTH  : LEFT_PANE_DIMENSIONS.WIDTH  - BP_MARGINS.LEFT - BP_MARGINS.RIGHT,
-    
+
     BAR    : 6
-    
+
 });
 
 /*
@@ -293,23 +293,9 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-
-
-
-//let othersCountries = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))<2).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
-//let others = othersCountries.reduce((pv, cv) => pv+cv, 0);
-//let massStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>1).map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))));
-
 let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>2).map(d=>d.country);
-//let sumMass = massStored.reduce((pv, cv) => pv+cv, 0);
-
-//console.log(sumMass);
-//console.log(othersCountries);
-//console.log(others);
 //console.log(countryStored);
 
-//let condition = meteoriteData.map(d=>(parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area)))>2;
-//console.log(condition);
 
 // let condition = groupByCountry.map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area)))>2);
 // console.log(condition);
@@ -317,11 +303,11 @@ let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.tota
 let dataFinal = meteoriteData;
 dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>4) && e.country!=='_' ?
                                                           countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
-// dataFinal.forEach(d=>d.Density=parseInt(d.mass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))));
+//dataFinal.forEach(e=>e.Density=(parseInt(e.mass))/(countries.filter(d=>d.country==e.country).map(d=>parseInt(d.area))));
 //console.log(dataFinal);
 //console.log(dataFinal);
-//----------------Iron Meteorites-----------------------------------------------
 
+//----------------Iron Meteorites-----------------------------------------------
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 ironMeteorites.forEach(e=>e.Type=typeIron);
 //console.log(ironMeteorites);
@@ -341,7 +327,7 @@ stonyIronMeteorites.forEach(e=>e.Type=typeStonyIron);
 
 //data classified
 let dataClassified = [...stonyMeteorites,...stonyIronMeteorites,...ironMeteorites];
-//console.log(dataClassified);
+console.log(dataClassified);
 
 const COLOR = Object.freeze({
     Iron      : '#2171b5',

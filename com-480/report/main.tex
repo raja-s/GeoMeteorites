@@ -4,6 +4,8 @@
 \usepackage{graphicx}	% For figure environment
 \usepackage{natbib}
 \usepackage{float}
+\usepackage{hyperref}
+\usepackage{url}
 
 \begin{document}
 \title{Process Book}
@@ -23,7 +25,7 @@ A critical part of scientific discovery is the communication of research finding
 
 Over human history, thousands and thousands of meteorites fell to the Earth ground; chunk of rock and metal disagreggating in the atmosphere, hitting the ground and causing sometimes vast disasters. 
 
-The goal of this project is to visualize this fascinating phenomenon occurred over the last centuries by means of georeferenced location of the impacts recorded by the $Meteoritical$ $society$\footnote{Meteoritical society: http://www.meteoriticalsociety.org/}. In this visualization, our principal aim is to give a general overview of the spatio-temporal evolution of this natural phenomenon, emphasizing on the user experience and the exploration of the data. This visualization targets a general public who has not strong knowledge in the field. 
+The goal of this project is to visualize this fascinating phenomenon occurred over the last centuries by means of georeferenced location of the impacts recorded by the \textit{Meteoritical society}\footnote{Meteoritical society: \href{http://www.meteoriticalsociety.org/}{http://www.meteoriticalsociety.org/}}. In this visualization, our principal aim is to give a general overview of the spatio-temporal evolution of this natural phenomenon, emphasizing on the user experience and the exploration of the data. This visualization targets a general public who has not strong knowledge in the field. 
 
 
 \section{Data}
@@ -62,7 +64,7 @@ After the cleaning, we end up with a final number of $31,705$ over $45,716$ entr
 \section{Tools}
 \label{sec:tools}
 
-The visualization is displayed in a browser for usability reasons: users do not need to download anything. This forces the application to be split into a front-end and back-end.
+The visualization is displayed in a browser for usability reasons: users do not need to download anything. This forces the application to be split into a front-end and a back-end.
 
 \subsection{Front-end}
 
@@ -106,16 +108,19 @@ Here below our first sketch of the visualization:
 
 
 \subsection{Globe}
-Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with $d3.js$ \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the $d3.geo$ library that allows an easy way to work with geographic information and different projections.
-We then created the globe, but a sticking point came up: how to handle the meteorites' animation with $d3$? 
-We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the $three.js$ library \cite{BibEntry2017Nov} is the most suitable one (explain why). 
-We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import $geoJSON$ files in a three.js scene. The $three$ library doesn't read automatically objects with geometry as $d3$ does. First of all, the $geoJSON$ file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a $three$ $geometry$ and a line has to be drawn between all these couples of vertices.
+Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with $d3.js$ \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the \texttt{d3.geo} library that allows an easy way to work with geographic information and different projections.
 
-%Speak about the graticule
+We then created the globe, but a sticking point came up: how to handle the meteorites' animation with \texttt{d3}?
+
+We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one (explain why).
+
+We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import \texttt{geoJSON} files in a \texttt{three.js} scene. The \texttt{three} library doesn't read automatically objects with geometry as \texttt{d3} does. First of all, the \texttt{geoJSON} file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a \texttt{three geometry} and a line has to be drawn between all these couples of vertices.
+
+%Speak about the graticule TODO
 he graticule was drawn...\\
 
 A white sphere has been added as well in order to do not see through the globe.
-We finally ended up with the following globe: 
+We finally ended up with the following globe:
 \begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{globe.jpg}
@@ -125,26 +130,27 @@ We finally ended up with the following globe:
 \end{figure}
 
 In order to add an interaction to the globe, the user can zoom-in, zoom-out, and drag the globe. 
-The 2D map has also been taken into account, but being our first aim to make this visualization as realistic as possible, we finally decided to keep only the globe. 
+The 2D map has also been taken into account, but being our first aim to make this visualization as realistic as possible, we finally decided to keep only the globe.
 
 \subsection{Meteorites' country}
-%This process has been performed with... openstreet map \\
 
+The original data set provided by Kaggle did not contain any information on countries name. The only way to map a country to a landing was through the geo coordinates. Since the \texttt{csv} file contains many thousands rows, it was impossible to do it manually. This lead us to write a script in python in order to fetch countries based on the tuple (latitude, longitude).
+
+Google Maps, which is likely to be the most famous web app for location, has its services limited to users to avoid DDoS\footnote{Distributed Denial of Service} attack. According to their documentation, the number is limited to a ``a few thousands'' requests by day per person. This could have taken more than one week to get our new data! Clearly, we had to find a solution. That's why we dropped the idea of Google Maps and turned towards Open Street Map, an open source alternative.
+
+Open Street Map also has a system to prevent DDoS attack. But it does not have a limited number of requests per day. Actually their api sends the error $429$ which stands for ``too many requests'', requiring the script to block for several minutes. Eventually the script was run on a server for more than thirty hours.
 
 %Second process
 
 \subsection{Time-line}
 
+The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, parts of the code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line. 
 
+The data contains date from 860 to 2016. The plot shows that most meteorites hit the Earth recently. This is unlikely to be the reality. We can interpret it like humans have almost no information on the subject until the 19\textsuperscript{th} century. This information leads us to filter from ?? to 2016.
 
-
+When the application started to work with the globe and the meteorites hitting it. It became obvious selecting the time range was not user friendly. Instead, a flag with the `current' year (of the animation) is moving like a cursor which can be dragged and dropped. This way, only one button to start and stop is needed.
 
 \subsection{Meteorites animation}
-
-
-
-
-
 
 
 \subsection{Search bar}

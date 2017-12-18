@@ -109,12 +109,12 @@ Here below our first sketch of the visualization:
 Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with $d3.js$ \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the $d3.geo$ library that allows an easy way to work with geographic information and different projections.
 We then created the globe, but a sticking point came up: how to handle the meteorites' animation with $d3$? 
 We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the $three.js$ library \cite{BibEntry2017Nov} is the most suitable one (explain why). 
-We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import $geoJSON$ files in a three.js scene. The $three$ library doesn't read automatically objects with geometry as $d3$ does. First of all, the $geoJSON$ file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a $three$ $geometry$ and a line has to be drawn between all these couples of vertices. 
+We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import $geoJSON$ files in a three.js scene. The $three$ library doesn't read automatically objects with geometry as $d3$ does. First of all, the $geoJSON$ file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a $three$ $geometry$ and a line has to be drawn between all these couples of vertices.
 
 %Speak about the graticule
-the graticule was drawn...\\
+he graticule was drawn...\\
 
-
+A white sphere has been added as well in order to do not see through the globe.
 We finally ended up with the following globe: 
 \begin{figure}[H]
   \centering
@@ -124,13 +124,30 @@ We finally ended up with the following globe:
   \label{fig:globe}
 \end{figure}
 
+In order to add an interaction to the globe, the user can zoom-in, zoom-out, and drag the globe. 
+The 2D map has also been taken into account, but being our first aim to make this visualization as realistic as possible, we finally decided to keep only the globe. 
 
 \subsection{Meteorites' country}
-%This process has been %performed with... %openstreet map \\
+%This process has been performed with... openstreet map \\
+
+
+%Second process
+
+\subsection{Time-line}
+
+
+
+
 
 \subsection{Meteorites animation}
 
-\subsection{Time-line}
+
+
+
+
+
+
+\subsection{Search bar}
 
 
 \subsection{Meteorites classification}

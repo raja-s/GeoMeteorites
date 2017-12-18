@@ -306,24 +306,25 @@ const typeStony = 'Stony';
 
 d3.csv(GD_SERVER_ADDRESS+'?groupByCountry',function(groupByCountry){
 
-let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>2).map(d=>d.country);
+//let countryStored = groupByCountry.filter(d=>d.country!=='_' && (parseInt(d.totalMass)/(countries.filter(e=>e.country==d.country).map(e=>parseInt(e.area))))>2).map(d=>d.country);
 //console.log(countryStored);
+let dataFinal=meteoriteData.filter(d=>d.country!=='_');
+//let condition = groupByCountry.map(f=>parseFloat(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))));
+//console.log(condition);
+
+//Country name or others
+dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseFloat(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>1) && e.country!=='_' ?
+                                                    countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
+//Density [gr/km2]
+dataFinal.forEach(e=>e.Density=parseFloat(e.mass)/(countries.filter(d=>d.country==e.country).map(d=>parseInt(d.area))));
 
 
-// let condition = groupByCountry.map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area)))>2);
-// console.log(condition);
 
-let dataFinal = meteoriteData;
-dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseInt(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>4) && e.country!=='_' ?
-                                                          countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
-//dataFinal.forEach(e=>e.Density=(parseInt(e.mass))/(countries.filter(d=>d.country==e.country).map(d=>parseInt(d.area))));
-//console.log(dataFinal);
-//console.log(dataFinal);
 
 //----------------Iron Meteorites-----------------------------------------------
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 ironMeteorites.forEach(e=>e.Type=typeIron);
-//console.log(ironMeteorites);
+console.log(ironMeteorites);
 
 
 //----------------Stony meteorites----------------------------------------------
@@ -359,7 +360,7 @@ let bp=viz.bP()
 	.data(dataClassified)
 	.keyPrimary(d=>d.Type)
 	.keySecondary(d=>d.CountryName)
-	.value(d=>d.mass)
+	.value(d=>d.Density)
   .width(BP_DIMENSIONS.WIDTH)
   .height(BP_DIMENSIONS.HEIGHT)
 	.min(0)

@@ -219,29 +219,11 @@ function addToScene(object) {
 }
 
 function removeFromScene(object) {
-    // TODO: Check if need to do more work here
     SCENE.remove(object);
 }
 
-function switchVizToMercator() {
-    pauseGlobeAnimation();
-    allowGlobeNavigation = false;
-    
-    moveCameraTo(0, 0, 1500).then(() => {
-        removeFromScene(sphere);
-        
-        mapGraticule.rotation.set(0, 0, 0);
-        mapMesh.rotation.set(0, 0, 0);
-        
-        globe2map(mapGraticule, graticule10());
-        globe2map(mapMesh, topojson.mesh(topology, topology.objects.countries));
-        
-    });
-}
-
-function switchVizTo3d() {
-    resumeMainAnimation();
-    allowGlobeNavigation = true;
+function removeBatchFromScene(objects) {
+    SCENE.remove(...objects);
 }
 
 function pauseGlobeAnimation() {
@@ -292,6 +274,8 @@ function renderLoop() {
         moveCameraTo(LONG, LAT, cameraDistance);
 
     }
+    
+    updateMeteorites();
 
     render();
 

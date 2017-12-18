@@ -110,29 +110,29 @@ function mainAnimation() {
             
             totalDuration = LAUNCH_DURATION + FALL_DURATION;
             
-            let index = 0;
+            /*let index = 0;
             for (let i = 0 ; i < GROUP_COUNT ; i++) {
                 setTimeout(() => {
                     
                     FILTERED_DATA.slice(index, index + WHOLE_GROUP_SIZE).forEach((meteorite, i) =>
-                        dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass));
+                        launchMeteorite(meteorite.long, meteorite.lat, meteorite.mass));
                     
                     index += WHOLE_GROUP_SIZE;
                     
                 }, DELTA_TIME * i);
-            }
+            }*/
             
-            /*let dur = 0;
+            let duration = 0;
             FILTERED_DATA.forEach((meteorite, i) => {
                 
                 setTimeout(() => {
-                    dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass);
-                }, dur);
+                    launchMeteorite(meteorite.long, meteorite.lat, meteorite.mass);
+                }, duration);
                 
-                dur += 50;
-                dur %= LAUNCH_DURATION;
+                duration += 50;
+                duration %= LAUNCH_DURATION;
                 
-            });*/
+            });
             
             /*FILTERED_DATA.forEach((meteorite, i) => {
                 setTimeout(() => dropMeteorite(meteorite.long, meteorite.lat, meteorite.mass),

@@ -1,7 +1,7 @@
 \documentclass[10pt,conference,compsocconf]{IEEEtran}
 
 \usepackage{hyperref}
-\usepackage{graphicx}	% For figure environment
+\usepackage{rotating,graphicx}	% For figure environment
 \usepackage{natbib}
 \usepackage{float}
 \usepackage{hyperref}
@@ -101,15 +101,15 @@ Having the coordinates of the impacts, it was crucial to get the country where t
 A time-line was by far the easiest way to visualize the temporal dimension. In order to add an interaction to it, we decided to allow the selection of an interval of time to the user. The animation of the meteorites falls will be then performed in the interval of time selected and activated/deactivated with a start/pause button. 
 
 Here below our first sketch of the visualization:
-\iffalse
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\columnwidth]{sketch1}
+  \includegraphics[width=\columnwidth]{images/sketch1.jpg}
   \vspace{-3mm}
   \caption{First sketch of the visualization}
-  \label{fig:denoise-wavelet}
+  \label{fig:sketch1}
 \end{figure}
-\fi
+
 
 
 \subsection{Globe}
@@ -205,7 +205,18 @@ What about the animation speed? Our first feeling was to create something consta
 Eventually we only kept the country input.
 
 \subsection{Meteorites classification}
+At the beginning, the meteorite classification was not taken into account because we did not have any knowledge in the domain, and targeting a general public, it would have been an irrelevant information to present. Going deeper in the domain, we discovered that the type of meteorites depends on the chemical elements of which they are composed by. The attribute \texttt{recclass} presents more than 300 unique classes of meteorites that belong to a defined hierachy well presented in Weisberg et al.\cite{weisberg_systematics_2006}.
+Going up in the nodes of the hierarchy, we ended up with three main classes that describe the material of the meteorites: $stony$, $stony-iron$ and $iron$. 
+We firstly checked on the name of the unique classes and classify them by looking at the first letter of \texttt{reclass}. The classification was that easy because the $stony-iron$ meteorites have only two sub-classes ($Pallasite$ and $Mesosiderite$), and the $iron$ meteorites are always classified as $Iron$+$code$. The $stony$ class contains much more sub-classes. Giving that  $iron$ and the $stony-iron$ meteorites contain a limited number of sub-classes, we just checked if the remaining meteorites classes were actually $stony$ (and it was the case!) and assigned to them this class. This simple classification could then draws more attention of the user and make him more familiar with this domain. Indeed, we did not want to go much deeper in the details of the classes because it could have been useless for the public targeted.
 
+Concerning the visualization, the first idea that  came to our mind  was to make a simple bar-chart for every country selected (Figure \ref{fig:sketch1}). 
+We soon abandoned this idea because
+
+
+
+
+
+ 
 
 \subsection{Country statistics}
 
@@ -237,7 +248,7 @@ To do.
 \item[Rehan Mulakhel] \ \\
   Web page centralizing links to the demo, code and process book. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
-  To do.
+  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected. 
 \item[Raja Soufi] \ \\
   Globe visualization (partly) as well as falling meteorites and world camera animations/movements.
   Improvements to various elements such as timeline and search field, as well as linking the various parts together.

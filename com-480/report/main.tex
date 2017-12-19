@@ -205,12 +205,21 @@ What about the animation speed? Our first feeling was to create something consta
 Eventually we only kept the country input.
 
 \subsection{Meteorites classification}
-At the beginning, the meteorite classification was not taken into account because we did not have any knowledge in the domain, and targeting a general public, it would have been an irrelevant information to present. Going deeper in the domain, we discovered that the type of meteorites depends on the chemical elements of which they are composed by. The attribute \texttt{recclass} presents more than 300 unique classes of meteorites that belong to a defined hierachy well presented in Weisberg et al.\cite{weisberg_systematics_2006}.
+At the beginning, the meteorite classification was not taken into account because we did not have any knowledge in the domain, and targeting a general public, it would have been an irrelevant information to present. Going deeper in the domain, we discovered that the type of meteorites depends on the chemical elements of which they are composed by. The attribute \texttt{recclass} presents more than 300 unique classes of meteorites that belong to a defined hierachy well presented in Weisberg et al.  \cite{weisberg_systematics_2006}.
 Going up in the nodes of the hierarchy, we ended up with three main classes that describe the material of the meteorites: $stony$, $stony-iron$ and $iron$. 
 We firstly checked on the name of the unique classes and classify them by looking at the first letter of \texttt{reclass}. The classification was that easy because the $stony-iron$ meteorites have only two sub-classes ($Pallasite$ and $Mesosiderite$), and the $iron$ meteorites are always classified as $Iron$+$code$. The $stony$ class contains much more sub-classes. Giving that  $iron$ and the $stony-iron$ meteorites contain a limited number of sub-classes, we just checked if the remaining meteorites classes were actually $stony$ (and it was the case!) and assigned to them this class. This simple classification could then draws more attention of the user and make him more familiar with this domain. Indeed, we did not want to go much deeper in the details of the classes because it could have been useless for the public targeted.
 
 Concerning the visualization, the first idea that  came to our mind  was to make a simple bar-chart for every country selected (Figure \ref{fig:sketch1}). 
-We soon abandoned this idea because
+We soon abandoned this idea because we could have had only a local point of view. In order to do a comparison with the other countries and have a more global point of view, we thought to visualize flows between the type of meteorites and the different countries (Figure \ref{fig:bipartitesketch}). 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/bipartite}
+  \vspace{-3mm}
+  \caption{First sketch of the flows between types of meteorites and countries}
+  \label{fig:bipartitesketch}
+\end{figure}
+
 
 
 

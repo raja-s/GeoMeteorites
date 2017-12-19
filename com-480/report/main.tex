@@ -52,7 +52,7 @@ The data come from the NASA’s Open Data Portal and have been downloaded from K
   The parentheses-enclose, comma-separated tuple that combines \texttt{reclat} and \texttt{reclong}.
 \end{description}
 
-Rows containing \texttt{NaN} values or presenting a year’s value smaller than $860$ and bigger than $2016$ (suggestion of the Kaggle’s description of the data) will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered. 
+Rows containing \texttt{NaN} values or presenting a year’s value smaller than $1800$ and bigger than $2013$ will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered. 
 
 % TODO: topojson & three
 
@@ -65,15 +65,16 @@ The visualization is displayed in a browser for usability reasons: users do not 
 
 \subsection{Front-end}
 
-The dynamic suggestion appearing when typing a country is done with Bootstrap which is stored in a CDN.
+The main visualization of the globe and falling meteorites is done with \href{https://threejs.org/}{Three.js}.
+The rest of the visualizations (timeline, class statistics, etc.) were done with \href{https://d3js.org/}{D3} and \href{http://vizjs.org/}{viz.js}.
 
-Jquery is used to easily switch tabs in the statistics window.
-
-% TODO: topojson & three
+jQuery and Bootstrap were also used.
 
 \subsection{Back-end}
 
-To do.
+Most files necessary for displaying the web page are served using GitHub pages (the libraries being fetched from various CDNs except for viz.js).
+
+All the data related to meteorites and countries is saved on Google Drive and served using a simple Google Apps Script web app, which also provides a few endpoints to get filtered or grouped data (see \href{https://github.com/RajaSoufi/GeoMeteorites/tree/master/gds-doc#google-drive-server-documentation}{here}).
 
 \section{Evolution of visualization}
 \label{sec:evolution_of_visualization}
@@ -138,7 +139,8 @@ To do.
 \item[Noemi Romano] \ \\
   To do.
 \item[Raja Soufi] \ \\
-  To do.
+  Globe visualization (partly) as well as falling meteorites and world camera animations/movements.
+  Improvements to various elements such as timeline and search field, as well as linking the various parts together.
 \end{description}
 
 

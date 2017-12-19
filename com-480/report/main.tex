@@ -7,6 +7,14 @@
 \usepackage{hyperref}
 \usepackage{url}
 
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
 \begin{document}
 \title{Process Book}
 
@@ -16,10 +24,6 @@
 }
 
 \maketitle
-
-\begin{abstract}
-A critical part of scientific discovery is the communication of research findings to peers or the general public. Mastery of the process of scientific communication improves the visibility and impact of research. While this guide is a necessary tool for learning how to write in a manner suitable for publication at a scientific venue, it is by no means sufficient, on its own, to make its reader an accomplished writer. This guide should be a starting point for further development of writing skills.
-\end{abstract}
 
 \section{Introduction}
 
@@ -124,9 +128,9 @@ A white sphere has been added as well in order to do not see through the globe.
 We finally ended up with the following globe:
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\columnwidth]{globe.jpg}
+  \includegraphics[width=\columnwidth]{images/globe.jpg}
   \vspace{-3mm}
-  \caption{Globe with $three.js$}
+  \caption{Globe with \texttt{three.js}}
   \label{fig:globe}
 \end{figure}
 
@@ -141,21 +145,64 @@ Google Maps, which is likely to be the most famous web app for location, has its
 
 Open Street Map also has a system to prevent DDoS attack. But it does not have a limited number of requests per day. Actually their api sends the error $429$ which stands for ``too many requests'', requiring the script to block for several minutes. Eventually the script was run on a server for more than thirty hours.
 
-%Second process
-
 \subsection{Time-line}
 
-The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, parts of the code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line. 
+The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, parts of the code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line.
 
-The data contains date from 860 to 2016. The plot shows that most meteorites hit the Earth recently. This is unlikely to be the reality. We can interpret it like humans have almost no information on the subject until the 19\textsuperscript{th} century. This information leads us to filter from ?? to 2016.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/timeline_brush.png}
+  \vspace{-3mm}
+  \caption{Time line with a brushing system. Here with fake data.}
+  \label{fig:timeline_brush}
+\end{figure}
 
 When the application started to work with the globe and the meteorites hitting it. It became obvious selecting the time range was not user friendly. Instead, a flag with the `current' year (of the animation) is moving like a cursor which can be dragged and dropped. This way, only one button to start and stop is needed.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/timeline_original.jpg}
+  \vspace{-3mm}
+  \caption{Time line with a flag for the year being in the animation.}
+  \label{fig:timeline_all_dates}
+\end{figure}
+
+The data contains date from $860$ to $2016$. The plot in figure \ref{fig:timeline_all_dates} shows that most meteorites hit the Earth recently. This is unlikely to be the reality. We can interpret it like humans have almost no information on the subject until the 19\textsuperscript{th} century. This information leads us to filter from $1801$ to $2016$.
+
+To add more information, we decided to add the (cumulative) sum beside the frequency of meteorites by year.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/timeline_final_without_label.png}
+  \vspace{-3mm}
+  \caption{Time line with plots of frequencies and mass total for each year.}
+  \label{fig:timeline_final_without_label}
+\end{figure}
+
+The last step was to add labels for vertical axes because the two plots are not intuitive on their own unlike the time axes.
 
 \subsection{Meteorites animation}
 
 
 \subsection{Search bar}
 
+Users may want to choose and change some parameters like the speed or the dimension of the map (2d vs 3d). The initial version is shown in figure \ref{fig:box_tool}. The opacity was set to $0.5$ in order to let the map (which was not ready at that time) be visible. When the mouse was hover the box, the transparency property was removed as long as the mouse was not outside of it.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/animation_box_tool.png}
+  \vspace{-3mm}
+  \caption{The transparent box of parameters of the animation.}
+  \label{fig:box_tool}
+\end{figure}
+
+The animation of the meteorites falling from the space can be done without much effort in a 3d world. Unfortunately, the 2d version does not allow it. That's why this option was removed.
+
+Since the visualization is intended to a general public, the range of the mass is useless. This option was also removed.
+
+What about the animation speed? Our first feeling was to create something constant over the time. The sparse number of landing per year makes it impossible. Let's assume that we set a constant $\lambda$ for the speed. Since the frequencies of the number of meteorites increases, at some point the number of meteorites in the visualization will reach a threshold which will make the script crashing. If we decrease the value of $\lambda$, then animation would be to slow when the frequency is low. Therefore, the only way to do it is to make $\lambda$ changing depending on the frequency. Thus, the cursor for the \texttt{speed} value was removed too.
+
+Eventually we only kept the country input.
 
 \subsection{Meteorites classification}
 
@@ -163,8 +210,11 @@ When the application started to work with the globe and the meteorites hitting i
 \subsection{Country statistics}
 
 
-\subsection{Story telling}
-Speak about the messages. 
+\subsection{Messages}
+
+The International Comet Quarterly publishes a list of all incidents reported related to meteorites \cite{international_comet_quarterly}. We took this data and adapted to make them appear next to the globe. The text does not appear all at once, but word by word. The reason behind is that it is easier to see it when a new message is displayed.
+
+% screen shot here
 
 \subsection{Final touches}
 Night-day texture
@@ -185,7 +235,7 @@ To do.
 
 \begin{description}
 \item[Rehan Mulakhel] \ \\
-  Web page centralizing links to the demo, code and process book. General design of the demo page. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
+  Web page centralizing links to the demo, code and process book. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
   To do.
 \item[Raja Soufi] \ \\

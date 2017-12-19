@@ -11,12 +11,6 @@
     display: none;
 }
 
-#timeline .axes text {
-    font-size: 0.7vw;
-    
-    fill: #ccc;
-}
-
 #timeline .x-axes .tick:first-of-type {
     display: none;
 }

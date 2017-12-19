@@ -33,3 +33,9 @@ body {
     left: 75%;
     top: 50%;
 }
+
+.axes text {
+    font-size: 0.7vw;
+    
+    fill: #ccc;
+}

@@ -33,3 +33,14 @@ function sphericalToGeographical(phi, theta) {
         lat  : theta * 180 / Math.PI
     };
 }
+
+/**
+ * Removes all the children of an HTML element.
+ */
+function removeChildren(element) {
+    // Keep removing the first child of the
+    // element until there are no more children
+    while (element.hasChildNodes()) {   
+        element.removeChild(element.firstChild);
+    }
+}

@@ -92,9 +92,9 @@ function moveCameraTo(long, lat, r, duration = 0) {
     
 }
 
-function focusOnCountry(countryName) {
+function focusOnCountry(countryCode) {
     
-    const COUNTRY = countries.find(country => country.name === countryName);
+    const COUNTRY = countries.find(country => country.country === countryCode);
     
     if (COUNTRY !== undefined) {
             

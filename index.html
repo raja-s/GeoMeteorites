@@ -70,9 +70,11 @@
         <div id='messages'></div>
 
         <div id='left-pane'>
-            <div id='country-stats-container' class='left-pane-containers'>
-                <div id='nameCountry'></div>
-                <div id='divMassDist'><svg width='250' height='350' id='massdistrib'></svg></div>
+            <div id='country-stats-container' class='left-pane-containers' data-hidden>
+                <p id='country-name'></p>
+                <!--<div id='divMassDist'>-->
+                    <svg id='mass-dist-chart'></svg><!--width='250' height='350'-->
+                <!--</div>-->
                 <div id='biggestMeteorite'></div>
             </div>
             <div id='class-stats-container' class='left-pane-containers'>

@@ -6,15 +6,32 @@
     width: 30vw;
     
     margin: 2vw;
-    /*border-radius: 0.8vw;*/
+    border-radius: 0.8vw;
     
-    /*background-color: var(--color-ui-bg);*/
+    background-color: var(--color-ui-bg);
 }
 
 .left-pane-containers {
     position: absolute;
+    height: 100%;
+    width: 100%;
     
     transition: opacity 0.3s;
+}
+
+.left-pane-containers[data-hidden] {
+    opacity: 0;
+    z-index: -1;
+}
+
+#country-stats-container path {
+    stroke: var(--color-mean-mass-bars);
+}
+
+#country-stats-container .axes > path,
+#country-stats-container .axes line {
+    stroke: #ccc;
+    opacity: 0.3;
 }
 
 #class-stats text {
@@ -27,6 +44,14 @@
 
 #class-stats .label {
     font-size: 7px;
+}
+
+#country-name {
+    width: 100%;
+    margin-top: 1.5vh;
+    
+    text-align: center;
+    font-size: 1.5vw;
 }
 
 #MassDistribution {

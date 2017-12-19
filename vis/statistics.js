@@ -9,6 +9,23 @@ const LEFT_PANE_DIMENSIONS = Object.freeze({
     WIDTH  : window.innerWidth  * 0.3
 });
 
+const MASS_DIST_MARGINS = Object.freeze({
+    
+    TOP    : 20,
+    BOTTOM : 20,
+    
+    LEFT   : 30,
+    RIGHT  : 25
+    
+});
+
+const MASS_DIST_DIMENSIONS = Object.freeze({
+    
+    HEIGHT : (LEFT_PANE_DIMENSIONS.HEIGHT / 2) - MASS_DIST_MARGINS.TOP  - MASS_DIST_MARGINS.BOTTOM,
+    WIDTH  : LEFT_PANE_DIMENSIONS.WIDTH        - MASS_DIST_MARGINS.LEFT - MASS_DIST_MARGINS.RIGHT
+    
+});
+
 const BP_MARGINS = Object.freeze({
 
     TOP    : 20,
@@ -28,137 +45,110 @@ const BP_DIMENSIONS = Object.freeze({
 
 });
 
+const COUNTRY_STATS_CONTAINER = document.getElementById('country-stats-container');
+const CLASS_STATS_CONTAINER = document.getElementById('class-stats-container');
+
 /*
     Functions
 */
 
-function setUpCountryStatistics(countryid) {
-
-//Remove previous country if present
-$( "#nameCountry" ).empty();
-$( "#massdistrib" ).empty();
-$( "#biggestMeteorite").empty();
-
-
-
-//Filter data by country selected
-let dataFilteredByCountry = meteoriteData.filter(d=>d.country===countryid);
-
-//Get the country name from countries
-let countrySelected = dataFilteredByCountry.map(d=>d.country)[0];
-let CountryName = countries.filter(d=>d.country==countrySelected).map(d=>d.name)[0];
-//console.log(CountryName);
-
-
-
-
-//Add name of the country on the top
-let countryHeader = document.createElement('h2');
-countryHeader.style.textAlign='center';
-let countryTextTitle = document.createTextNode(CountryName);
-
-countryHeader.appendChild(countryTextTitle);
-document.getElementById('nameCountry').appendChild(countryHeader);
-
-
 //------------------------------------------------------------------------------
 //------------------------Mass distribution-------------------------------------
 //------------------------------------------------------------------------------
-  let t = d3.transition()
-              .duration(1000)
-              .ease(d3.easeLinear);
 
-  let formatCount = d3.format(".0f");
+function setUpCountryStatistics(countryCode) {
 
+    //Remove previous country if present
+    removeChildren(document.getElementById('country-name'));
+    removeChildren(document.getElementById('mass-dist-chart'));
+    removeChildren(document.getElementById('biggestMeteorite'));
 
-  //let mass = dataFilteredByCountry.map(d=>parseInt(d.mass));
-  let mass = dataFilteredByCountry.filter(d=>d.country===countryid).map(d=>parseInt(Math.log(d.mass)));
-  let massLog = dataFilteredByCountry.filter(d=>d.country===countryid).map(d=>Math.log(parseInt(d.mass)));
-  console.log(massLog);
-  //Calculate the average mass
-  let average  = (array) => array.reduce((a, b) => a + b,0) / array.length;
-  let averageMass = average(mass);
+    //Filter data by country selected
+    let countryData = meteoriteData.filter(d=>d.country===countryCode);
 
-  let svg = d3.select('#massdistrib');
-
-  let margin = {top:20,right:30,bottom:30,left:20};
+    //Get the country name from countries
+    document.getElementById('country-name').innerHTML =
+        countries.find(d=>d.country === countryCode).name;
 
 
-  let width = +svg.attr('width') - margin.left - margin.right,
-          height = +svg.attr('height') - margin.top - margin.bottom,
-          g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    let t = d3.transition()
+                .duration(1000)
+                    .ease(d3.easeLinear);
 
+    let formatCount = d3.format(".0f");
 
+    // let masses  = countryData.map(d => Math.log(parseFloat(d.mass)));
+    let massLogs = countryData.map(d => Math.floor(Math.log(parseFloat(d.mass) + 1)));
 
-  let  y = d3.scaleLinear()
-          .range([0,height])
-          .domain([0,d3.max(mass)]);
+    // Calculate the average mass
+    let averageMass = massLogs.reduce((a, b) => a + b, 0) / massLogs.length;
 
-  let bins1 = d3.histogram()
-          .domain(y.domain())
-          .thresholds(y.ticks(10))
-          (massLog);
+    let massDistData = [];
+    
+    massLogs.forEach(massLog => {
+        
+        const ENTRY = massDistData.find(entry => entry.massLog === massLog);
+        
+        if (ENTRY === undefined) {
+            massDistData.push({
+                massLog   : massLog,
+                frequency : 1
+            });
+        } else {
+            ENTRY.frequency++;
+        }
+        
+    });
+    
+    massDistData.sort((d1, d2) =>
+        (d1.massLog < d2.massLog) ? -1 : (d1.massLog > d2.massLog) ? 1 : 0);
 
-  //console.log(bins1);
+    let x = d3.scaleLinear()
+                   .domain(d3.extent(massLogs))
+                    .range([0, MASS_DIST_DIMENSIONS.WIDTH]);
 
+    let  y = d3.scaleLinear()
+                    .domain([0, d3.max(massDistData, d => d.frequency)])
+                     .range([MASS_DIST_DIMENSIONS.HEIGHT, 0]);
 
-  let  x = d3.scaleLinear()
-                         .domain([0, d3.max(bins1, function(d) {
-                           return d.length;
-                         })])
-                         .range([0,width]);
+    const CHART_SVG = d3.select('#mass-dist-chart')
+                          .attr('height', LEFT_PANE_DIMENSIONS.HEIGHT / 2)
+                          .attr('width' , LEFT_PANE_DIMENSIONS.WIDTH);
 
+    const CHART =
+        CHART_SVG.append('g')
+                   .attr('height', MASS_DIST_DIMENSIONS.HEIGHT)
+                   .attr('width' , MASS_DIST_DIMENSIONS.WIDTH)
+                   .attr('transform', `translate(${MASS_DIST_MARGINS.LEFT}, ${MASS_DIST_MARGINS.TOP})`);
 
+    const LINE = d3.line()
+                  .curve(d3.curveCatmullRom)
+                      .x(d => x(d.massLog))
+                      .y(d => y(d.frequency));
 
-  let bar1 = g.selectAll('.bar1')
-                         .data(bins1)
-                         .enter().append('g')
-                         .attr('class', 'bar1')
-                         .attr('transform', function(d) {
-                           return 'translate('+margin.left+',' + y(d.x0) + ')';
-                         });
+    console.log(massDistData);
 
+    CHART.append('path')
+          .datum(massDistData)
+           .attr('fill', 'none')
+        //   .attr('stroke', 'steelblue')
+           .attr('stroke-linejoin', 'round')
+           .attr('stroke-linecap', 'round')
+           .attr('stroke-width', 2)
+           .attr('d', LINE);
 
+    CHART.append('g')
+        .attr('class', 'axes x-axes')
+        .attr('transform', `translate(0, ${MASS_DIST_DIMENSIONS.HEIGHT})`)
+        .call(d3.axisBottom(x).ticks(8));
 
-  bar1.append('rect')
-       //.attr('x', 0.5)
-       //.attr('y',-height)
-       .attr('width',function(d) {return x(d.length);})
-       .transition(t)
-       .attr('height',(y(bins1[0].x1) - y(bins1[0].x0) +2));
-
-  // bar1.append("text")
-  //     .attr("dy", ".75em")
-  //     .transition(t)
-  //     .attr("x",function(d){return x(d.length)+15;})
-  //     .attr("y",(y(bins1[0].x1) - y(bins1[0].x0))/3)
-  //     .attr("text-anchor", "middle")
-  //     .text(function(d) { return formatCount(d.length);})
-  //     .style('fill','black');
-
-    g.append('g')
-      .attr('class', 'axis axis--y')
-      .attr('transform', 'translate('+margin.left+',0)')
-      .call(d3.axisLeft(y));
-
-    g.append('g')
-        .attr('class', 'axis axis--x')
-        .attr('transform', 'translate('+margin.top+',0)')
-        .call(d3.axisTop(x).ticks(5));
-
-      g.append('text')
-      .attr('transform','rotate(-90)')
-      .attr('y', -10)
-      .attr('x', -height/2)
-      .attr('dy', '.5em')
-      .style('text-anchor', 'middle')
-      .text('log(Mass)');
-
-//}
+    CHART.append('g')
+           .attr('class', 'axes y-axes')
+           .call(d3.axisLeft(y).ticks(5, 'd'));
 
 //Biggest mass
 // Canvas dimensions
-let heightStat =150;
+let heightStat = 150;
 let widthStat  = 400;
 
 // SCENE
@@ -200,12 +190,12 @@ let CAMERADistanceStat = 70;
 CAMERAstat.translateZ(CAMERADistanceStat);
 
 
-let biggestMass = Math.max.apply(Math,dataFilteredByCountry.map(d=>parseInt(d.mass)));
+let biggestMass = Math.max.apply(Math,countryData.map(d=>parseInt(d.mass)));
 let biggestMassSize = Math.log(biggestMass);
 //console.log(biggestMass);
 
-let biggestMassName = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
-let biggestMassYear = dataFilteredByCountry.filter(d=>parseInt(d.mass)==biggestMass).map(d=>(d.year).getFullYear())[0];
+let biggestMassName = countryData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>d.name)[0];
+let biggestMassYear = countryData.filter(d=>parseInt(d.mass)==biggestMass).map(d=>(d.year).getFullYear())[0];
 
 
 
@@ -259,8 +249,8 @@ let parMass = document.createElement('p');
 let parAverageMass = document.createElement('p');
 let nameMet = document.createTextNode('Name: '+ biggestMassName);
 let yearMet = document.createTextNode('Year: '+ biggestMassYear);
-let massMet = document.createTextNode('Mass: '+biggestMass+' gr')
-let averageMassMet = document.createTextNode('Average Mass: '+averageMass+' gr');
+let massMet = document.createTextNode('Mass: '+biggestMass+'g')
+let averageMassMet = document.createTextNode('Average Mass: '+averageMass+'g');
 
 let title = document.createElement('h4');
 let titleText = document.createTextNode('The biggest meteorite');
@@ -324,7 +314,6 @@ dataFinal.forEach(e=>e.Density=parseFloat(e.mass)/(countries.filter(d=>d.country
 //----------------Iron Meteorites-----------------------------------------------
 let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
 ironMeteorites.forEach(e=>e.Type=typeIron);
-console.log(ironMeteorites);
 
 
 //----------------Stony meteorites----------------------------------------------
@@ -434,4 +423,24 @@ function mouseout(d){
 
 });
 
+}
+
+function showClassStatistics() {
+    
+    COUNTRY_STATS_CONTAINER.dataset.hidden = '';
+    setTimeout(() => {
+        delete CLASS_STATS_CONTAINER.dataset.hidden;
+    }, 300);
+    
+}
+
+function showCountryStatistics(countryCode) {
+    
+    COUNTRY_STATS_CONTAINER.dataset.hidden = '';
+    CLASS_STATS_CONTAINER.dataset.hidden = '';
+    setTimeout(() => {
+        setUpCountryStatistics(countryCode);
+        delete COUNTRY_STATS_CONTAINER.dataset.hidden;
+    }, 300);
+    
 }

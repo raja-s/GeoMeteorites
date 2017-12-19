@@ -71,7 +71,6 @@ function showSuggestions() {
         
         P.addEventListener('click', event => {
             chooseCandidate();
-            focusOnCountry(SEARCH_FIELD.value);
         });
         
         if (i === 0) {
@@ -92,6 +91,17 @@ function clearSuggestions() {
         
         SEARCH_FIELD_CONTAINER.removeChild(CHILDREN[CHILDREN.length - 1]);
         
+    }
+    
+}
+
+function searchCountry() {
+    
+    const COUNTRY = countries.find(country => country.name === SEARCH_FIELD.value);
+    
+    if (COUNTRY !== undefined) {
+        showCountryStatistics(COUNTRY.country);
+        focusOnCountry(COUNTRY.country);
     }
     
 }
@@ -128,6 +138,8 @@ function chooseCandidate() {
         clearSuggestions();
         
     }
+    
+    searchCountry();
     
 }
 
@@ -193,7 +205,6 @@ SEARCH_FIELD.addEventListener('keypress', event => {
     
     if (event.keyCode === KEYCODES.ENTER) {
         chooseCandidate();
-        focusOnCountry(SEARCH_FIELD.value);
     }
     
 });

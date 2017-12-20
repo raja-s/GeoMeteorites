@@ -48,11 +48,9 @@ function removeChildren(element) {
 function limitedIntegerTicks(max, limit) {
     
     const RATIO = max / (limit - 1);
-    
     const TICK_STEP = (Math.floor(RATIO) === RATIO) ? RATIO + 1 : Math.ceil(RATIO);
     
     const MAX = TICK_STEP * limit;
-    
     const TICKS = [];
     
     for (let tick = 0 ; tick < MAX ; tick += TICK_STEP) {
@@ -63,5 +61,43 @@ function limitedIntegerTicks(max, limit) {
     }
     
     return TICKS;
+    
+}
+
+function groupByYear(data) {
+    
+    const GROUPED_DATA = [];
+    
+    const YEAR_INDICES = {};
+    
+    data.forEach(entry => {
+        
+        if (entry.year in YEAR_INDICES) {
+            
+            const GROUPED_ENTRY = GROUPED_DATA[YEAR_INDICES[entry.year]];
+            
+            GROUPED_ENTRY.number++;
+            GROUPED_ENTRY.totalMass += entry.mass;
+            
+        } else {
+            
+            YEAR_INDICES[entry.year] = GROUPED_DATA.push({
+                year      : entry.year,
+                number    : 1,
+                totalMass : entry.mass
+            }) - 1;
+            
+        }
+        
+    });
+    
+    return GROUPED_DATA.sort((entry1, entry2) => {
+        
+        const YEAR1 = entry1.year.getFullYear();
+        const YEAR2 = entry2.year.getFullYear();
+        
+        return (YEAR1 < YEAR2) ? -1 : (YEAR1 > YEAR2) ? 1 : 0;
+        
+    });
     
 }

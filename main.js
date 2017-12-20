@@ -40,6 +40,7 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?groupByYear')
         });
         time = DATA_GROUPED_BY_YEAR[0].year.getFullYear();
         setUpTimeline(DATA_GROUPED_BY_YEAR);
+        console.log(DATA_GROUPED_BY_YEAR);
     }));
 
 // Get the list of countries and their IDs and

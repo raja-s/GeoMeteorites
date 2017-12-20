@@ -95,17 +95,6 @@ function clearSuggestions() {
     
 }
 
-function searchCountry() {
-    
-    const COUNTRY = countries.find(country => country.name === SEARCH_FIELD.value);
-    
-    if (COUNTRY !== undefined) {
-        showCountryStatistics(COUNTRY.country);
-        focusOnCountry(COUNTRY.country);
-    }
-    
-}
-
 function getCandidate() {
     
     for (let suggestion of Array.from(SEARCH_FIELD_CONTAINER.children).slice(1)) {
@@ -139,7 +128,17 @@ function chooseCandidate() {
         
     }
     
-    searchCountry();
+    const COUNTRY = countries.find(country => country.name === SEARCH_FIELD.value);
+    
+    if (COUNTRY !== undefined) {
+        
+        showCountryStatistics(COUNTRY.country);
+        
+        updateTimeline(groupByYear(meteoriteData.filter(d => d.country === COUNTRY.country)));
+        
+        focusOnCountry(COUNTRY.country);
+        
+    }
     
 }
 

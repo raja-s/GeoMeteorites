@@ -1,7 +1,7 @@
 
 #timeline {
     position: fixed;
-    bottom: 0;
+    bottom: 0.5vh;
     right: 15vw;
     overflow: visible;
 }

@@ -45,6 +45,8 @@ let xTimeline = d3.scaleTime()
 
 let xAxisTimeline = d3.axisBottom(xTimeline);
 
+let timelineBarWidth = 0;
+
 /*
     D3 code
 */
@@ -56,17 +58,20 @@ TIMELINE.attr('width' , TIMELINE_DIMENSIONS.WIDTH);
     Functions
 */
 
-function setUpTimeline(data) {
+function setUpDataForTimeline(data) {
+    
+    const RESULT_DATA = data.slice();
     
     // Fill up empty holes in the data
-    let previous = data[0].year.getFullYear();
-    for (let i = 1 ; i < data.length ; i++) {
-        const CURRENT = data[i].year.getFullYear();
+    let previous = RESULT_DATA[0].year.getFullYear();
+    for (let i = 1 ; i < RESULT_DATA.length ; i++) {
+        const CURRENT = RESULT_DATA[i].year.getFullYear();
         const DIFF = CURRENT - previous;
         if (DIFF > 1) {
             for (let k = 1 ; k < DIFF ; k++) {
-                data.splice(i + k - 1, 0, {
-                    year      : d3.timeParse('%Y')(previous + k),
+                RESULT_DATA.splice(i + k - 1, 0, {
+                    // year      : d3.timeParse('%Y')(previous + k),
+                    year      : new Date(previous + k, 0),
                     number    : 0,
                     totalMass : 0
                 });
@@ -76,6 +81,30 @@ function setUpTimeline(data) {
         previous = CURRENT;
     }
     
+    for (let year = RESULT_DATA[0].year.getFullYear() - 1 ; year >= timelineStart() ; year--) {
+        RESULT_DATA.unshift({
+            year      : new Date(year, 0),
+            number    : 0,
+            totalMass : 0
+        });
+    }
+    
+    for (let year = RESULT_DATA[RESULT_DATA.length - 1].year.getFullYear() + 1;
+        year <= timelineEnd() ; year++)
+    {
+        RESULT_DATA.push({
+            year      : new Date(year, 0),
+            number    : 0,
+            totalMass : 0
+        });
+    }
+    
+    return RESULT_DATA;
+    
+}
+
+function setUpTimeline(data) {
+    
     const DOMAIN_YEARS = d3.extent(data, d => d.year).map(year => year.getFullYear());
     
     DOMAIN_YEARS[0]--;
@@ -83,13 +112,15 @@ function setUpTimeline(data) {
     
     xTimeline.domain([ new Date(DOMAIN_YEARS[0], 0) , new Date(DOMAIN_YEARS[1], 0) ]);
     
-    // let xExtent      = xTimeline.domain().map(bound => bound.getFullYear());
-    // let xBandwidth   = TIMELINE_CHART_DIMENSIONS.WIDTH / (DOMAIN_YEARS[1] - DOMAIN_YEARS[0]);
-    const BAR_WIDTH = (TIMELINE_CHART_DIMENSIONS.WIDTH / (DOMAIN_YEARS[1] - DOMAIN_YEARS[0])) - 1;
-    // const HALF_BAR_WIDTH = BAR_WIDTH / 2;
+    timelineBarWidth = (TIMELINE_CHART_DIMENSIONS.WIDTH / (DOMAIN_YEARS[1] - DOMAIN_YEARS[0])) - 1;
     
-    setUpFrequencyTimeline(data, BAR_WIDTH);
-    setUpmeanMassTimeline(data, BAR_WIDTH);
+    data = setUpDataForTimeline(data);
+    
+    setUpFrequencyTimeline(data);
+    setUpMeanMassTimeline(data);
+    
+    updateFrequencyTimeline(data);
+    updateMeanMassTimeline(data);
     
     TIMELINE.append('g')
               .attr('class', 'axes x-axes')
@@ -98,6 +129,15 @@ function setUpTimeline(data) {
               .call(xAxisTimeline);
     
     appendTimeIndicator();
+    
+}
+
+function updateTimeline(data) {
+    
+    data = setUpDataForTimeline(data);
+    
+    updateFrequencyTimeline(data);
+    updateMeanMassTimeline(data);
     
 }
 

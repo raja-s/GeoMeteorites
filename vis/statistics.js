@@ -363,19 +363,21 @@ GROUP.append('text')
 GROUP.selectAll('.mainBars')
         .append('text')
         .attr('class', 'label')
-  		.attr('x', d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : BP_DIMENSIONS.BAR))
-  		.attr('y', 1)
+  		.attr('x', d => (d.part === 'primary') ? - BP_DIMENSIONS.BAR : BP_DIMENSIONS.BAR)
+  		.attr('y', d => (d.part === 'primary') ? -2 : 0)
   		.text(d => d.key)
-  		.attr('text-anchor',d=>(d.part=='primary' ? 'end': 'start'));
+  		.attr('text-anchor', d => (d.part === 'primary') ? 'end': 'start')
+  		.attr('alignment-baseline', d => (d.part === 'primary') ? 'baseline' : 'middle');
 
 //Add label percentage
 GROUP.selectAll('.mainBars')
      .append('text')
      .attr('class', 'perc')
-	   .attr('x',d=>(d.part=='primary' ? - BP_DIMENSIONS.BAR : 115))
-	   .attr('y',d=>(d.part=='primary' ? 15 : 1))
+	   .attr('x',d => (d.part === 'primary') ? - BP_DIMENSIONS.BAR : 115)
+	   .attr('y',d => (d.part === 'primary') ? 2 : 0)
 	   .text(d => d3.format('0.1%')(+d.percent))
-	.attr('text-anchor', 'end');
+	.attr('text-anchor', 'end')
+	.attr('alignment-baseline', d => (d.part === 'primary') ? 'hanging' : 'middle');
 
 
 GROUP.selectAll('.mainBars')

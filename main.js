@@ -20,6 +20,9 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS)
     .then(data => {
         meteoriteData = d3.csvParse(data, d => {
             d.year = d3.timeParse('%Y')(d.year);
+            d.long = parseFloat(d.long);
+            d.lat  = parseFloat(d.lat);
+            d.mass = parseFloat(d.mass);
             return d;
         });
     }));

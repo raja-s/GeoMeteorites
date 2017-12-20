@@ -44,3 +44,24 @@ function removeChildren(element) {
         element.removeChild(element.firstChild);
     }
 }
+
+function limitedIntegerTicks(max, limit) {
+    
+    const RATIO = max / (limit - 1);
+    
+    const TICK_STEP = (Math.floor(RATIO) === RATIO) ? RATIO + 1 : Math.ceil(RATIO);
+    
+    const MAX = TICK_STEP * limit;
+    
+    const TICKS = [];
+    
+    for (let tick = 0 ; tick < MAX ; tick += TICK_STEP) {
+        TICKS.push(tick);
+        if (tick > max) {
+            break;
+        }
+    }
+    
+    return TICKS;
+    
+}

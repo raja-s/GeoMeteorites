@@ -1,11 +1,12 @@
 
 #left-pane {
     position: fixed;
-    top: 8.5vw;
+    top: 19vh;
+    left: 2vw;
     height: 60vh;
     width: 30vw;
     
-    margin: 2vw;
+    /*margin: 2vw;*/
     border-radius: 0.8vw;
     
     background-color: var(--color-ui-bg);
@@ -24,6 +25,18 @@
     z-index: -1;
 }
 
+/*
+    Country statistics
+*/
+
+#country-stats-country-name {
+    width: 100%;
+    margin-top: 1.5vh;
+    
+    text-align: center;
+    font-size: 1.5vw;
+}
+
 #country-stats-container path {
     stroke: var(--color-mean-mass-bars);
 }
@@ -34,44 +47,26 @@
     opacity: 0.3;
 }
 
-#class-stats text {
-    fill: #ccc;
-}
-
-#class-stats .perc {
-    font-size: 7px;
-}
-
-#class-stats .label {
-    font-size: 7px;
-}
-
-#country-name {
-    width: 100%;
-    margin-top: 1.5vh;
+#heaviest-meteorite-title {
+    margin: 1.5vw 0 1vw 2vw;
     
-    text-align: center;
     font-size: 1.5vw;
 }
 
-#MassDistribution {
-    height: 350px;
-    position: fixed;
-    top: 200px;
-    left: 5px;
-    float: right;
+.heaviest-meteorite-info {
+    margin-left: 2vw;
 }
 
-path.bins1 {
-    stroke: var(--color-meteorites);
-    stroke-width: 4px;
-    fill: none;
+#country-stats-container > canvas {
+    position: absolute;
+    bottom: 3vh;
+    right: 3vw;
 }
 
+/*
 #divMassDist{
     position: relative;
 }
-
 
 #biggestMeteorite {
     position: relative;
@@ -95,6 +90,37 @@ path.bins1 {
 	text-align: center;
 	z-index: 100;
 	display:block;
+}
+*/
+
+/*
+    Class statistics
+*/
+
+#class-stats text {
+    fill: #ccc;
+}
+
+#class-stats .perc {
+    font-size: 7px;
+}
+
+#class-stats .label {
+    font-size: 7px;
+}
+
+#MassDistribution {
+    height: 350px;
+    position: fixed;
+    top: 200px;
+    left: 5px;
+    float: right;
+}
+
+path.bins1 {
+    stroke: var(--color-meteorites);
+    stroke-width: 4px;
+    fill: none;
 }
 
    .bar1 rect {

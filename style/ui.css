@@ -7,11 +7,12 @@
     --search-field-height: 4vw;
     
     position: fixed;
-    left: 2.5vw;
+    top: 5vh;
+    left: 4.5vw;
     /*height: var(--search-field-height);*/
     width: 25vw;
     
-    margin: 2vw;
+    /*margin: 2vw;*/
     border-radius: 0.8vw;
     
     /*overflow: hidden;*/

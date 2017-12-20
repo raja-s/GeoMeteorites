@@ -99,12 +99,11 @@ Having the coordinates of the impacts, it was crucial to get the country where t
 \end{itemize}
 
 A time-line was by far the easiest way to visualize the temporal dimension. In order to add an interaction to it, we decided to allow the selection of an interval of time to the user. The animation of the meteorites falls will be then performed in the interval of time selected and activated/deactivated with a start/pause button. 
+Our first sketch of the visualization is illustrated in Figure \ref{fig:sketch1}.
 
-Here below our first sketch of the visualization:
-
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
-  \includegraphics[width=\columnwidth]{images/sketch1.jpg}
+  \includegraphics[angle=-90,width=\columnwidth]{images/sketch1.jpg}
   \vspace{-3mm}
   \caption{First sketch of the visualization}
   \label{fig:sketch1}
@@ -126,7 +125,7 @@ he graticule was drawn...\\
 
 A white sphere has been added as well in order to do not see through the globe.
 We finally ended up with the following globe:
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \includegraphics[width=\columnwidth]{images/globe.jpg}
   \vspace{-3mm}
@@ -220,14 +219,52 @@ We soon abandoned this idea because we could have had only a local point of view
   \label{fig:bipartitesketch}
 \end{figure}
 
+Firstly we thought to just draw the lines of direct connections between the two different nodes with a constant thickness. We then thought that a thickness depending on the mass would have been more informative. The Sankey diagram came to our mind to vizualize the flows and a nice example proposed by Bremer \cite{BibEntry2017Dec} was our inspiration. Indeed, the latter example propose a bipartite Sankey diagram in the form of a Chord diagram. We discovered a simply way to build a bipartite graph with the \texttt{viz.js} library \cite{bipartite_viz}. This library takes as input parameters the primary key (meteorites' classes), the secondary key (countries) and a value that links the two keys (mass). We first considered all the countries, but we decided to filter out only the countries having a total \texttt{mass} of meteorites bigger than 500 kg and store the other countries as $Others$.
 
 
+The result of our first bipartite graph was as follow (Figure \ref{fig:bipartite_mass}): 
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/bipartite_mass}
+  \vspace{-3mm}
+  \caption{First bipartite graph with thickness of flow depending on the mass}
+  \label{fig:bipartite_mass}
+\end{figure}
 
-
+The percentages that you can see on the right of the countries correspond to the sum of all meteorites that fell on that country divided by the mass of all meteorites. If you mouse over a class of meteorite or a country, it will filter out the class selected or the country selected as you can see in figure \ref{fig:bipartite_mouse}. The percentages update dynamically as well.
  
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/example_mouse_bipartite}
+  \vspace{-3mm}
+  \caption{Bipartite graph - on mouse over $stony-iron$ class}
+  \label{fig:bipartite_mouse}
+\end{figure}
+
+We then noticed that the size of the country biased our first results. In order to do not give a higher weight to the biggest countries, we divided every \texttt{mass} by the area of the country where it fell, giving then the \texttt{density} of meteorites by country in $gr/km^{2}$. This time we filtered out the countries having a \texttt{density} bigger than $1$ $gr/km^{2}$ and store the remaining in $Others$.
+
+We ended up with the following graph (Figure \ref{fig:bipartite_density}): 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/bipartite_density}
+  \vspace{-3mm}
+  \caption{Final bipartite graph with thickness of flow depending on the density}
+  \label{fig:bipartite_density}
+\end{figure}
+
+Countries as Australia, United States and China clearly diminished on importance and Russia was even incorporated to $Others$.
 
 \subsection{Country statistics}
+
+
+
+
+
+
+
+
 
 
 \subsection{Messages}

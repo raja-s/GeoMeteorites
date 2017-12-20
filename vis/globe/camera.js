@@ -104,8 +104,8 @@ function focusOnCountry(countryCode) {
         ));
         
         moveCameraTo(
-            parseFloat(COUNTRY.centLong),
-            parseFloat(COUNTRY.centLat),
+            parseFloat(COUNTRY.long),
+            parseFloat(COUNTRY.lat),
             R,
             CAMERA_MOVE_DURATION
         );

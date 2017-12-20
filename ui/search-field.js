@@ -132,11 +132,11 @@ function chooseCandidate() {
     
     if (COUNTRY !== undefined) {
         
-        showCountryStatistics(COUNTRY.country);
+        focusOnCountry(COUNTRY.country);
         
         updateTimeline(groupByYear(meteoriteData.filter(d => d.country === COUNTRY.country)));
         
-        focusOnCountry(COUNTRY.country);
+        showCountryStatistics(COUNTRY.country);
         
     }
     

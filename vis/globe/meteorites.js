@@ -98,7 +98,34 @@ function launchMeteorite(long, lat, mass) {
     
 }
 
+function explodeMeteorite(i) {
+    
+    const ENTRY = METEORITES.splice(i, 1)[0];
+    
+    const EXPLOSION = new THREE.Mesh(EXPLOSION_GEOMETRY, MATERIAL.clone());
+    addToScene(EXPLOSION);
+    
+    EXPLOSION.position.copy(ENTRY.meteorite.position);
+    
+    const TTL = parseInt(60 * EXPLOSION_DURATION / SECOND);
+    
+    EXPLOSIONS.push({
+        explosion   : EXPLOSION,
+        meteorite   : ENTRY.meteorite,
+        ttl         : TTL,
+        stepSize    : Math.log(ENTRY.mass) / TTL,
+        stepOpacity : 1 / TTL
+    });
+    
+}
 
+function explodeMeteoritesInMidAir() {
+    
+    for (let i = 0 ; i < METEORITES.length ; i++) {
+        explodeMeteorite(i);
+    }
+    
+}
 
 function updateMeteorites() {
     
@@ -110,22 +137,7 @@ function updateMeteorites() {
         
         if (ENTRY.ttl === 0) {
             
-            METEORITES.splice(i, 1)[0];
-            
-            const EXPLOSION = new THREE.Mesh(EXPLOSION_GEOMETRY, MATERIAL.clone());
-            addToScene(EXPLOSION);
-            
-            EXPLOSION.position.copy(ENTRY.meteorite.position);
-            
-            const TTL = parseInt(60 * EXPLOSION_DURATION / SECOND);
-            
-            EXPLOSIONS.push({
-                explosion   : EXPLOSION,
-                meteorite   : ENTRY.meteorite,
-                ttl         : TTL,
-                stepSize    : Math.log(ENTRY.mass) / TTL,
-                stepOpacity : 1 / TTL
-            });
+            explodeMeteorite(i);
             
             // removeFromScene(ENTRY.light);
             

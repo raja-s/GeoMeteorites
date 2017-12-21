@@ -1,12 +1,14 @@
 
 #left-pane {
+    --left-pane-height: 60vh;
+    --left-pane-width: 30vw;
+    
     position: fixed;
     top: 19vh;
     left: 2vw;
-    height: 60vh;
-    width: 30vw;
+    height: var(--left-pane-height);
+    width: var(--left-pane-width);
     
-    /*margin: 2vw;*/
     border-radius: 0.8vw;
     
     background-color: var(--color-ui-bg);
@@ -73,6 +75,20 @@
     position: absolute;
     bottom: 3vh;
     right: 3vw;
+}
+
+#country-stats-no-data-text {
+    margin: 0;
+    
+    text-align: center;
+    line-height: var(--left-pane-height);
+    font-size: 1.5vw;
+    
+    opacity: 0.5;
+}
+
+#country-stats-no-data-text[data-hidden] {
+    opacity: 0;
 }
 
 /*

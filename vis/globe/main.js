@@ -270,7 +270,13 @@ function renderLoop() {
 
     }
     
-    updateMeteorites();
+    if (mainAnimationPlaying) {
+        updateMeteorites();
+    }
+    
+    if (METEORITES.length === 0) {
+        nextYear();
+    }
     
     adjustCameraZoom();
 

@@ -45,15 +45,16 @@ const BP_DIMENSIONS = Object.freeze({
 
 });
 
-const COUNTRY_STATS_CONTAINER   = document.getElementById('country-stats-container');
-const CLASS_STATS_CONTAINER     = document.getElementById('class-stats-container');
+const COUNTRY_STATS_CONTAINER    = document.getElementById('country-stats-container');
+const CLASS_STATS_CONTAINER      = document.getElementById('class-stats-container');
 
-const COUNTRY_STATS_BACK_BUTTON = document.getElementById('country-stats-back-button');
-const COUNTRY_STATS_COUNTRY     = document.getElementById('country-stats-country-name');
-const COUNTRY_STATS_CHART       = document.getElementById('mass-dist-chart');
-const HEAVIEST_METEORITE_NAME   = document.getElementById('heaviest-meteorite-name');
-const HEAVIEST_METEORITE_YEAR   = document.getElementById('heaviest-meteorite-year');
-const HEAVIEST_METEORITE_MASS   = document.getElementById('heaviest-meteorite-mass');
+const COUNTRY_STATS_NO_DATA_TEXT = document.getElementById('country-stats-no-data-text');
+const COUNTRY_STATS_BACK_BUTTON  = document.getElementById('country-stats-back-button');
+const COUNTRY_STATS_COUNTRY      = document.getElementById('country-stats-country-name');
+const COUNTRY_STATS_CHART        = document.getElementById('mass-dist-chart');
+const HEAVIEST_METEORITE_NAME    = document.getElementById('heaviest-meteorite-name');
+const HEAVIEST_METEORITE_YEAR    = document.getElementById('heaviest-meteorite-year');
+const HEAVIEST_METEORITE_MASS    = document.getElementById('heaviest-meteorite-mass');
 
 const HEAVIEST_METEORITE_VIS_HEIGHT = LEFT_PANE_DIMENSIONS.WIDTH * 0.3;
 const HEAVIEST_METEORITE_VIS_WIDTH  = HEAVIEST_METEORITE_VIS_HEIGHT;
@@ -236,8 +237,6 @@ function setUpCountryStatistics(countryCode) {
                       .x(d => xCountryMassDist(d.massLog))
                       .y(d => yCountryMassDist(d.frequency));
 
-    console.log(massDistData);
-
     MASS_DIST_PATH.datum(massDistData)
              .transition(MASS_DIST_TRANSITION)
                    .attr('d', LINE);
@@ -251,8 +250,6 @@ function setUpCountryStatistics(countryCode) {
 
     const HEAVIEST_METEORITE = countryData.reduce((d1, d2) =>
         (d1.mass > d2.mass) ? d1 : d2, { mass : -1 });
-
-    console.log(HEAVIEST_METEORITE);
 
     HEAVIEST_METEORITE_NAME.innerHTML = `Name: ${HEAVIEST_METEORITE.name}`;
     HEAVIEST_METEORITE_YEAR.innerHTML = `Year: ${HEAVIEST_METEORITE.year.getFullYear()}`;
@@ -416,6 +413,7 @@ function mouseout(d){
 
 function showClassStatistics() {
     
+    COUNTRY_STATS_NO_DATA_TEXT.dataset.hidden = '';
     COUNTRY_STATS_CONTAINER.dataset.hidden = '';
     setTimeout(() => {
         delete CLASS_STATS_CONTAINER.dataset.hidden;
@@ -425,11 +423,26 @@ function showClassStatistics() {
 
 function showCountryStatistics(countryCode) {
     
+    const COUNTRY_WITH_DATA = meteoriteData.some(entry => entry.country === countryCode);
+    
     CLASS_STATS_CONTAINER.dataset.hidden = '';
-    setTimeout(() => {
-        setUpCountryStatistics(countryCode);
-        delete COUNTRY_STATS_CONTAINER.dataset.hidden;
-    }, ('hidden' in CLASS_STATS_CONTAINER.dataset) ? 0 : 300);
+    
+    if (COUNTRY_WITH_DATA) {
+        
+        COUNTRY_STATS_NO_DATA_TEXT.dataset.hidden = '';
+        setTimeout(() => {
+            setUpCountryStatistics(countryCode);
+            delete COUNTRY_STATS_CONTAINER.dataset.hidden;
+        }, ('hidden' in CLASS_STATS_CONTAINER.dataset) ? 0 : 300);
+        
+    } else {
+        
+        COUNTRY_STATS_CONTAINER.dataset.hidden = '';
+        setTimeout(() => {
+            delete COUNTRY_STATS_NO_DATA_TEXT.dataset.hidden;
+        }, 300);
+        
+    }
     
 }
 
@@ -439,13 +452,7 @@ function showCountryStatistics(countryCode) {
 
 COUNTRY_STATS_BACK_BUTTON.addEventListener('click', event => {
     
-    targetCameraDistance = CAMERA_BOUNDS.STD;
-    
-    updateTimeline(groupByYear(meteoriteData));
-    
-    resumeGlobeAnimation();
-    
-    showClassStatistics();
+    backToGlobalView();
     
 });
 

@@ -6,9 +6,6 @@
 
 let time;
 
-// Animation speed in years/second
-let speed = 1;
-
 let mainAnimationPlaying = false;
 
 let mainAnimationTimeout = -1;
@@ -79,7 +76,8 @@ function incrementTime() {
     
 }
 
-function mainAnimation() {
+// function mainAnimation() {
+function nextYear() {
     
     function dropMeteorites() {
         
@@ -141,59 +139,33 @@ function mainAnimation() {
             
         }
         
-        if ((time in yearMinimumDurations) && (yearMinimumDurations[time] > totalDuration)) {
-            totalDuration = yearMinimumDurations[time];
-        }
-        delete yearMinimumDurations[time];
-        
-        speed = SECOND / totalDuration;
-        
     }
     
-    function iteration(nextIteration) {
+    if (mainAnimationPlaying) {
         
-        if (mainAnimationPlaying) {
-            
-            mainAnimationTimeout = setTimeout(() => {
-                
-                // Increment the time
-                incrementTime();
-                
-                // Drop the meteorites for this iteration
-                dropMeteorites();
-                
-                if (time >= timelineEnd()) {
-                    return;
-                }
-                
-                // Do another iteration in `SECOND / speed` milliseconds
-                iteration(SECOND / speed);
-                
-            }, nextIteration);
-            
-        }
+        incrementTime();
+        
+        dropMeteorites();
         
     }
-    
-    resumeGlobeAnimation();
-    
-    mainAnimationPlaying = true;
-    
-    iteration(0);
     
 }
 
 function resumeMainAnimation() {
     
     if (!mainAnimationPlaying) {
-        mainAnimation();
+        
+        mainAnimationPlaying = true;
+        
+        resumeGlobeAnimation();
+        
     }
     
 }
 
 function startMainAnimation() {
     
-    time = timelineStart();
+    time = timelineStart() - 1;
     
     clearSchedule();
     
@@ -201,7 +173,7 @@ function startMainAnimation() {
     scheduleCallback(dates, showMessage);
     setMinimumDuration(dates, 5000);
     
-    mainAnimation();
+    mainAnimationPlaying = true;
     
 }
 
@@ -212,5 +184,17 @@ function pauseMainAnimation() {
     clearTimeout(mainAnimationTimeout);
     
     pauseGlobeAnimation();
+    
+}
+
+function backToGlobalView() {
+    
+    targetCameraDistance = CAMERA_BOUNDS.STD;
+    
+    updateTimeline(groupByYear(meteoriteData));
+    
+    resumeGlobeAnimation();
+    
+    showClassStatistics();
     
 }

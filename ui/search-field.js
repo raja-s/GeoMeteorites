@@ -20,7 +20,7 @@ let currentSuggestions = [];
     Functions
 */
 
-function setSearchDatabase(entries) {
+function setUpSearchDatabase(entries) {
     
     searchDatabase = entries;
     
@@ -128,15 +128,16 @@ function chooseCandidate() {
         
     }
     
-    const COUNTRY = countries.find(country => country.name === SEARCH_FIELD.value);
+    const COUNTRY = countries.find(country =>
+        country.name.toLowerCase() === SEARCH_FIELD.value.toLowerCase());
     
     if (COUNTRY !== undefined) {
         
         focusOnCountry(COUNTRY.country);
         
-        updateTimeline(groupByYear(meteoriteData.filter(d => d.country === COUNTRY.country)));
-        
         showCountryStatistics(COUNTRY.country);
+        
+        updateTimeline(groupByYear(meteoriteData.filter(d => d.country === COUNTRY.country)));
         
     }
     
@@ -196,8 +197,16 @@ function randomPlaceholderLoop() {
 */
 
 SEARCH_FIELD.addEventListener('input', event => {
+    
     suggest();
     showSuggestions();
+    
+    if (SEARCH_FIELD.value === '') {
+        
+        backToGlobalView();
+        
+    }
+    
 });
 
 SEARCH_FIELD.addEventListener('keypress', event => {

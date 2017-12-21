@@ -49,12 +49,17 @@ PROMISES.push(fetch(GD_SERVER_ADDRESS + '?countries')
     .then(response => response.text())
     .then(data => {
         countries = d3.csvParse(data);
-        setSearchDatabase(countries.map(data => data.name));
     }));
 
 
 Promise.all(PROMISES).then(() => {
+    
+    setUpSearchDatabase(countries.filter(country => meteoriteData.some(entry =>
+            country.country === entry.country)).map(data => data.name));
+    
     setUpBipartiteGraph();
+    
     startMainAnimation();
+    
 });
 

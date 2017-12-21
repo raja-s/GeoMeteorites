@@ -23,8 +23,6 @@ const GLOBE_RADIUS = 60;
 const SCENE = new THREE.Scene();
 
 // Lights
-// const AMBIANT_LIGHT = new THREE.AmbientLight(0x01021e, 1);
-// const POINT_LIGHT   = new THREE.PointLight(0x01021e, 1, 1000, 2);
 const AMBIANT_LIGHT = new THREE.AmbientLight(0xffffff, ambiantLightIntensity);
 const POINT_LIGHT   = new THREE.PointLight(0xffffff, 0.3, 0, 2);
 POINT_LIGHT.position.set(-40, 70, 300);
@@ -52,6 +50,7 @@ const RENDERER = new THREE.WebGLRenderer({
 const TEXTURE_LOADER = new THREE.TextureLoader();
 
 let cameraDistance = 240;
+let targetCameraDistance = cameraDistance;
 
 let mapGraticule, mapMesh;
 
@@ -72,32 +71,26 @@ RENDERER.setPixelRatio(window.devicePixelRatio);
 RENDERER.setSize(globeCanvasWidth, globeCanvasHeight);
 document.getElementById('globe-container').appendChild(RENDERER.domElement);
 
-let sphere = new THREE.Mesh(
+const GLOBE = new THREE.Mesh(
     new THREE.SphereGeometry(GLOBE_RADIUS, 128, 128),
-    // new THREE.MeshLambertMaterial({ color : 0xffffff })
     new THREE.MeshPhongMaterial({
-        // color       : 0xffffff,
         map         : TEXTURE_LOADER.load(`res/texture-w8192-h4096-${textureTime}.jpg`),
         bumpMap     : TEXTURE_LOADER.load('res/elevation-w8192-h4096.jpg'),
         specularMap : TEXTURE_LOADER.load('res/specular-map-w2048-h1024.png'),
         bumpScale   : 0.5
     })
 );
-sphere.rotateY(- Math.PI / 2);
-addToScene(sphere);
+GLOBE.rotateY(- Math.PI / 2);
+addToScene(GLOBE);
 
-// let circle = new THREE.Mesh(new THREE.CircleGeometry(GLOBE_RADIUS, 32),
-//     new THREE.MeshBasicMaterial({ color : 0x00ff00 }));
-// SCENE.add(circle);
-
-let sky = new THREE.Mesh(
+const SKY = new THREE.Mesh(
     new THREE.SphereGeometry(CAMERA_BOUNDS.MAX * 2, 64, 64), 
     new THREE.MeshBasicMaterial({
         map  : TEXTURE_LOADER.load('res/tycho-skymap-w8192-h4096.jpg'), 
         side : THREE.BackSide
     })
 );
-addToScene(sky);
+addToScene(SKY);
 
 
 let topology;
@@ -112,9 +105,10 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     
     topology = topology2;
     
-    mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({
+    /*mapGraticule = wireframe3d(graticule10(), new THREE.LineBasicMaterial({
         color     : 0x11122e
-    }));
+    }));*/
+    
     mapMesh = wireframe3d(
         topojson.mesh(topology2, topology2.objects.countries),
         new THREE.LineBasicMaterial({
@@ -125,19 +119,19 @@ d3.json("https://unpkg.com/world-atlas@1/world/50m.json", function(error, topolo
     // addToScene(mapMesh);
     // addToScene(mapGraticule);
 
-    mapGraticule.rotateX(- Math.PI / 2);
+    // mapGraticule.rotateX(- Math.PI / 2);
     mapMesh.rotateX(- Math.PI / 2);
 
-    mapGraticule.rotateZ(- Math.PI / 2);
+    // mapGraticule.rotateZ(- Math.PI / 2);
     mapMesh.rotateZ(- Math.PI / 2);
     
     renderLoop();
 
 });
 
-function coord2d(point) {
+/*function coord2d(point) {
     return new THREE.Vector3(point[0], point[1], 0);
-}
+}*/
 
 function coord3d(point) {
     let lambda = point[0] * Math.PI / 180;
@@ -150,7 +144,7 @@ function coord3d(point) {
     );
 }
 
-function globe2map(lineSegments, multilinestring2d) {
+/*function globe2map(lineSegments, multilinestring2d) {
     
     let geometry2d = new THREE.Geometry();
     
@@ -179,7 +173,7 @@ function globe2map(lineSegments, multilinestring2d) {
         
     }
     
-}
+}*/
 
 function wireframe3d(multilinestring, material) {
     let geometry = new THREE.Geometry();
@@ -188,7 +182,7 @@ function wireframe3d(multilinestring, material) {
     return new THREE.LineSegments(geometry, material);
 }
 
-function graticule10() {
+/*function graticule10() {
     let eps = 1e-6,
         x1 = 180, x0 = -x1, y1 = 80, y0 = -y1, dx = 10, dy = 10,
         X1 = 180, X0 = -X1, Y1 = 90, Y0 = -Y1, DX = 90, DY = 360,
@@ -212,7 +206,7 @@ function graticule10() {
             .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(x => Math.abs(x % DX) > eps).map(x))
             .concat(d3.range(Math.ceil(y0 / dy) * dy, y1 + eps, dy).filter(y => Math.abs(y % DY) > eps).map(y))
     };
-}
+}*/
 
 function addToScene(object) {
     SCENE.add(object);
@@ -238,7 +232,7 @@ function getGlobeMouseIntersection() {
     
     RAYCASTER.setFromCamera(MOUSE_RELATIVE_POSITION, CAMERA);
     
-    let intersects = RAYCASTER.intersectObject(sphere);
+    let intersects = RAYCASTER.intersectObject(GLOBE);
     
     if (intersects.length === 0) {
         
@@ -276,6 +270,8 @@ function renderLoop() {
     }
     
     updateMeteorites();
+    
+    adjustCameraZoom();
 
     render();
 
@@ -285,16 +281,14 @@ RENDERER.domElement.onmousewheel = event => {
 
     const SIGNED_SQRT = Math.sign(event.wheelDelta) * Math.sqrt(Math.abs(event.wheelDelta));
 
-    cameraDistance -= SIGNED_SQRT;
+    targetCameraDistance -= SIGNED_SQRT;
 
-    if (cameraDistance < CAMERA_BOUNDS.MIN) {
-        cameraDistance = CAMERA_BOUNDS.MIN;
-    } else if (cameraDistance > CAMERA_BOUNDS.MAX) {
-        cameraDistance = CAMERA_BOUNDS.MAX;
+    if (targetCameraDistance < CAMERA_BOUNDS.MIN) {
+        targetCameraDistance = CAMERA_BOUNDS.MIN;
+    } else if (targetCameraDistance > CAMERA_BOUNDS.MAX) {
+        targetCameraDistance = CAMERA_BOUNDS.MAX;
     }
-    zoomCamera();
-
-    render();
+    // zoomCamera();
 
 };
 

@@ -10,8 +10,11 @@ const CAMERA_MOVE_DURATION = 1500;
     Code
 */
 
-// TODO: Rename this function
-function zoomCamera() {
+function adjustCameraZoom() {
+    
+    const DIFF = targetCameraDistance - cameraDistance;
+    
+    cameraDistance = (DIFF < 0.001) ? targetCameraDistance : cameraDistance + DIFF * 0.25;
     
     let { x , y , z } = sphericalToCartesian(cameraDistance, CAMERA.rotation.y, - CAMERA.rotation.x);
     
@@ -41,9 +44,9 @@ function moveCameraTo(long, lat, r, duration = 0) {
     const THETA = lat  * Math.PI / 180;
     
     if (duration === 0) {
-        CAMERA.rotation.y = PHI;
+        CAMERA.rotation.y =   PHI;
         CAMERA.rotation.x = - THETA;
-        cameraDistance = r;
+        cameraDistance    =   r;
         
         let { x , y , z } = sphericalToCartesian(r, PHI, THETA);
         
@@ -75,6 +78,7 @@ function moveCameraTo(long, lat, r, duration = 0) {
         CAMERA.rotation.y = PHIS[i];
         CAMERA.rotation.x = THETAS[i];
         cameraDistance = RS[i];
+        targetCameraDistance = RS[i];
         
         let { x , y , z } = sphericalToCartesian(RS[i], PHIS[i], - THETAS[i]);
         

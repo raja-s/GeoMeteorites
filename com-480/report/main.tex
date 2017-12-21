@@ -306,6 +306,46 @@ We finally opted to only draw the heaviest meteorite by country giving that most
 
 Our initial idea was even to click on the meteorite and see the meteorite falling, but this idea was abandoned as well for a lack of time. 
 
+Concerning the mass distribution, the first problem encountered was that the masses had very different values, resulting in a very skewed distribution. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values. 
+
+
+As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one},\ref{fig:density_two}).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.5\columnwidth]{images/good_density_plot}
+  \vspace{-3mm}
+  \caption{Density plot with many entries with \texttt{d3.js}}
+  \label{fig:density_good}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.5\columnwidth]{images/one_point_density_plot}
+  \vspace{-3mm}
+  \caption{Density plot with one entry with \texttt{d3.js}}
+  \label{fig:density_one}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.5\columnwidth]{images/two_point_density_plot}
+  \vspace{-3mm}
+  \caption{Density plot with two entries with \texttt{d3.js}}
+  \label{fig:density_two}
+\end{figure}
+
+We then opted for a simple histogram of values. 
+
+
+Figure histogram
+
+
+
+The final statistics panel results as follow: 
+
+
+
 
 \subsection{Messages}
 

@@ -441,6 +441,8 @@ COUNTRY_STATS_BACK_BUTTON.addEventListener('click', event => {
     
     targetCameraDistance = CAMERA_BOUNDS.STD;
     
+    updateTimeline(groupByYear(meteoriteData));
+    
     resumeGlobeAnimation();
     
     showClassStatistics();

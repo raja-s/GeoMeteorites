@@ -45,17 +45,20 @@ const BP_DIMENSIONS = Object.freeze({
 
 });
 
-const COUNTRY_STATS_CONTAINER = document.getElementById('country-stats-container');
-const CLASS_STATS_CONTAINER   = document.getElementById('class-stats-container');
+const COUNTRY_STATS_CONTAINER   = document.getElementById('country-stats-container');
+const CLASS_STATS_CONTAINER     = document.getElementById('class-stats-container');
 
-const COUNTRY_STATS_COUNTRY   = document.getElementById('country-stats-country-name');
-const COUNTRY_STATS_CHART     = document.getElementById('mass-dist-chart');
-const HEAVIEST_METEORITE_NAME = document.getElementById('heaviest-meteorite-name');
-const HEAVIEST_METEORITE_YEAR = document.getElementById('heaviest-meteorite-year');
-const HEAVIEST_METEORITE_MASS = document.getElementById('heaviest-meteorite-mass');
+const COUNTRY_STATS_BACK_BUTTON = document.getElementById('country-stats-back-button');
+const COUNTRY_STATS_COUNTRY     = document.getElementById('country-stats-country-name');
+const COUNTRY_STATS_CHART       = document.getElementById('mass-dist-chart');
+const HEAVIEST_METEORITE_NAME   = document.getElementById('heaviest-meteorite-name');
+const HEAVIEST_METEORITE_YEAR   = document.getElementById('heaviest-meteorite-year');
+const HEAVIEST_METEORITE_MASS   = document.getElementById('heaviest-meteorite-mass');
 
 const HEAVIEST_METEORITE_VIS_HEIGHT = LEFT_PANE_DIMENSIONS.WIDTH * 0.3;
 const HEAVIEST_METEORITE_VIS_WIDTH  = HEAVIEST_METEORITE_VIS_HEIGHT;
+
+const BACK_BUTTON_SIZE = LEFT_PANE_DIMENSIONS.WIDTH * 0.1;
 
 const HEAVIEST_METEORITE_MESH_MIN_SCALE = 0.0001;
 
@@ -429,3 +432,24 @@ function showCountryStatistics(countryCode) {
     }, ('hidden' in CLASS_STATS_CONTAINER.dataset) ? 0 : 300);
     
 }
+
+/*
+    Event Listeners
+*/
+
+COUNTRY_STATS_BACK_BUTTON.addEventListener('click', event => {
+    
+    targetCameraDistance = CAMERA_BOUNDS.STD;
+    
+    resumeGlobeAnimation();
+    
+    showClassStatistics();
+    
+});
+
+/*
+    Execution
+*/
+
+COUNTRY_STATS_BACK_BUTTON.setAttribute('width' , BACK_BUTTON_SIZE);
+COUNTRY_STATS_BACK_BUTTON.setAttribute('height', BACK_BUTTON_SIZE);

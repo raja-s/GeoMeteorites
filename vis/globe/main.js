@@ -34,6 +34,7 @@ const CAMERA = new THREE.PerspectiveCamera(FOV, globeCanvasWidth / globeCanvasHe
 
 const CAMERA_BOUNDS = Object.freeze({
     MIN : GLOBE_RADIUS + 20,
+    STD : 280,
     MAX : 500
 });
 
@@ -49,7 +50,7 @@ const RENDERER = new THREE.WebGLRenderer({
 
 const TEXTURE_LOADER = new THREE.TextureLoader();
 
-let cameraDistance = 240;
+let cameraDistance = CAMERA_BOUNDS.STD;
 let targetCameraDistance = cameraDistance;
 
 let mapGraticule, mapMesh;

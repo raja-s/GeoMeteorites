@@ -29,6 +29,18 @@
     Country statistics
 */
 
+#country-stats-back-button {
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    
+    cursor: pointer;
+}
+
+#country-stats-back-button > path {
+    fill: #ccc;
+}
+
 #country-stats-country-name {
     width: 100%;
     margin-top: 1.5vh;
@@ -37,7 +49,7 @@
     font-size: 1.5vw;
 }
 
-#country-stats-container path {
+#mass-dist-chart path {
     stroke: var(--color-mean-mass-bars);
 }
 

@@ -14,6 +14,9 @@ let playPauseState = true;
     Functions
 */
 
+ANIMATION_CONTROL.setAttribute('width' , window.innerWidth * 0.04);
+ANIMATION_CONTROL.setAttribute('height', window.innerWidth * 0.04);
+
 ANIMATION_CONTROL.addEventListener('click', event => {
     
     if (playPauseState) {

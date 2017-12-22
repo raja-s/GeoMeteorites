@@ -235,8 +235,6 @@ function setUpCountryStatistics(countryCode) {
     massDistData.sort((d1, d2) =>
         (d1.massLog < d2.massLog) ? -1 : (d1.massLog > d2.massLog) ? 1 : 0);
 
-    console.log(massDistData);
-
     const MAX_FREQUENCY = d3.max(massDistData, d => d.frequency);
     const Y_DOMAIN = [];
     for (let i = 0 ; i <= MAX_FREQUENCY + 1 ; i++) {
@@ -407,27 +405,24 @@ GROUP.selectAll('.mainBars')
 	.on('mousemove',mousemove)
 	.on('mouseout',mouseout);
 
-//console.log(bp);
-
-let bpActivated = false;
-
-function mousemove(d){
-    const SQRT = d3.event.movementX ** 2 + d3.event.movementY ** 2;
-    if ((SQRT <= 4) && !bpActivated) {
-        bpActivated = true;
-	    bp.mouseover(d);
-    	GROUP.selectAll('.mainBars')
-    	.select('.perc')
-    	.text(function(d){ return d3.format('0.1%')(+d.percent)});
-    }
+function mousemove(d) {
+    
+    bp.mouseover(d);
+	
+	GROUP.selectAll('.mainBars')
+            .select('.perc')
+              .text(function(d){ return d3.format('0.1%')(+d.percent)});
+    
 }
 
-function mouseout(d){
-    bpActivated = false;
-	bp.mouseout(d);
+function mouseout(d) {
+    
+    bp.mouseout(d);
+	
 	GROUP.selectAll('.mainBars')
-		.select('.perc')
-	.text(function(d){ return d3.format('0.1%')(+d.percent)});
+            .select('.perc')
+              .text(function(d){ return d3.format('0.1%')(+d.percent)});
+    
 }
 
 });

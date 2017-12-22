@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>GeoMeteorites</title>
+        <meta charset='UTF-8'/>
+
+        <!-- Stylesheets -->
+
+        <!-- Bootstrap -->
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>
+
+        <!-- Local stylesheets -->
+        <link rel='stylesheet' href='style/left-pane.css' />
+        <link rel='stylesheet' href='style/main.css' />
+        <link rel='stylesheet' href='style/timeline.css' />
+        <link rel='stylesheet' href='style/ui.css' />
+
+        <!-- Scripts -->
+
+        <!-- jQuery -->
+        <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
+
+        <!-- Bootstrap -->
+        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+
+        <!-- D3 -->
+        <script src='https://d3js.org/d3.v4.min.js' defer></script>
+
+        <!-- TopoJSON -->
+        <script src='https://d3js.org/topojson.v1.min.js' defer></script>
+
+        <!-- THREE -->
+        <script src='https://threejs.org/build/three.min.js' defer></script>
+
+        <!-- viz -->
+        <script src='lib/viz.v1.1.0.min.js'></script>
+
+        <!-- Tween -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js' defer></script>
+
+        <!-- Local scripts -->
+        <script src='constants.js' defer></script>
+        <script src='main.js' defer></script>
+        <script src='utils.js' defer></script>
+
+        <script src='vis/message.js' defer></script>
+
+        <script src='ui/animation-controls.js' defer></script>
+        <script src='ui/search-field.js' defer></script>
+
+        <script src='vis/globe/animation.js' defer></script>
+        <script src='vis/globe/camera.js' defer></script>
+        <script src='vis/globe/main.js' defer></script>
+        <script src='vis/globe/meteorites.js' defer></script>
+
+        <script src='vis/timeline/main.js' defer></script>
+        <script src='vis/timeline/frequency.js' defer></script>
+        <script src='vis/timeline/mean-mass.js' defer></script>
+        <script src='vis/timeline/time-indicator.js' defer></script>
+
+        <script src='vis/statistics.js' charset='utf-8' defer></script>
+
+    </head>
+
+    <body>
+
+        <div id='globe-container'></div>
+
+        <div id='messages'></div>
+
+        <div id='left-pane'>
+            <p id='country-stats-no-data-text' class='left-pane-containers' data-hidden>
+                No data for this country.
+            </p>
+            <div id='country-stats-container' class='left-pane-containers' data-hidden>
+                <svg id='country-stats-back-button'>
+                    <path d='M0,20L16,4L20,8L11,17H36V23H11L20,32L16,36Z'></path>
+                </svg>
+                <p id='country-stats-country-name'></p>
+                <svg id='mass-dist-chart'></svg>
+                <p id='heaviest-meteorite-title'>Heaviest Meteorite</p>
+                <p id='heaviest-meteorite-name' class='heaviest-meteorite-info'></p>
+                <p id='heaviest-meteorite-year' class='heaviest-meteorite-info'></p>
+                <p id='heaviest-meteorite-mass' class='heaviest-meteorite-info'></p>
+            </div>
+            <div id='class-stats-container' class='left-pane-containers'>
+                <!-- <div id='meteoritesClasses'> -->
+                          <!-- <h3 style="display:inline">Iron meteorites</h3><h5 style="display:inline"> are meteorites that consist overwhelmingly of an iron–nickel alloy known as meteoric iron. They were one of the earliest sources of usable iron available to humans. The biggest iron meteorite known, also named Hoba, weighs more than 60 tons and is the heaviest meteorite found by far.</h5>
+                          <h3 style="display:inline">Stony meteorites</h3><h5 style="display:inline"> are the most abundant type of meteorite consisting largely of rock-forming (silicate) minerals and they once formed part of the outer crust of a planet or asteroid.</h5>
+                          <h3 style="display:inline">Stony-Iron meteorites</h3> are meteorites that consist of nearly equal parts of meteoric iron and stone. They are the least abundant of the three main types,  accounting for less than 2% of all known meteorites.<h5 style="display:inline"></h5>
+                        </div> -->
+                <svg id='class-stats'></svg>
+            </div>
+        </div>
+
+        <div id='search-field-container'>
+            <input id='search-field' type='text'/>
+        </div>
+
+        <svg id='play-pause-control' class='animation-controls'>
+            <path d='M0,0L45,30L0,60Z'></path>
+            <path d='M0,5H15V55H0ZM30,5H45V55H30Z'></path>
+        </svg>
+
+        <svg id='timeline'>
+            <text id='timeline-frequency-title' class='timeline-titles'>Frequency</text>
+            <text id='timeline-mean-mass-title' class='timeline-titles'>Total Mass</text>
+        </svg>
+
+        <svg id='restart-control' class='animation-controls'>
+            <path d='M60,20A30,30,0,1,0,60,60L66,66V48H48L54,54A21,21,0,1,1,54,26Z'></path>
+        </svg>
+
+    </body>
+
+</html>

@@ -106,7 +106,7 @@ function setUpTimeline(data) {
     TIMELINE.append('g')
               .attr('class', 'axes x-axes')
               .attr('transform', `translate(${TIMELINE_MARGINS.LEFT},
-                    ${TIMELINE_MARGINS.TOP + TIMELINE_CHART_DIMENSIONS.HEIGHT})`)
+                    ${TIMELINE_MARGINS.TOP + TIMELINE_CHART_DIMENSIONS.HEIGHT - 2})`)
               .call(xAxisTimeline);
     
     appendTimeIndicator();

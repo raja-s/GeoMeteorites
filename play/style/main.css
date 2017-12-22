@@ -30,8 +30,13 @@ body {
 
 #messages {
     position: fixed;
-    left: 75%;
-    top: 50%;
+    bottom: 18vh;
+    right: 1vw;
+    width: 25vw;
+    
+    font-size: 1vw;
+    
+    opacity: 0.8;
 }
 
 .axes text {

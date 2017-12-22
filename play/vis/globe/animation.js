@@ -7,6 +7,7 @@
 let time;
 
 let mainAnimationPlaying  = false;
+let mainAnimationDone     = true;
 
 let mainAnimationTimeouts = [];
 
@@ -56,21 +57,25 @@ function clearMinimumDurations() {
 
 function incrementTime() {
     
-    // Increment time
-    time++;
-    
-    // Update the timeline time indicator
-    updateTimeIndicator();
-    
-    // Check if there are callbacks
-    // scheduled for this year
-    if (time in yearCallbackSchedule) {
+    if (time < timelineEnd()) {
         
-        // Run the scheduled callbacks
-        yearCallbackSchedule[time].forEach(callback => callback(time));
+        // Increment time
+        time++;
         
-        // Remove the callbacks
-        delete yearCallbackSchedule[time];
+        // Update the timeline time indicator
+        updateTimeIndicator();
+        
+        // Check if there are callbacks
+        // scheduled for this year
+        if (time in yearCallbackSchedule) {
+            
+            // Run the scheduled callbacks
+            yearCallbackSchedule[time].forEach(callback => callback(time));
+            
+            // Remove the callbacks
+            delete yearCallbackSchedule[time];
+            
+        }
         
     }
     
@@ -149,6 +154,10 @@ function nextYear() {
         
         dropMeteorites();
         
+        if (time === timelineEnd()) {
+            mainAnimationDone = true;
+        }
+        
     }
     
 }
@@ -158,6 +167,7 @@ function resumeMainAnimation() {
     if (!mainAnimationPlaying) {
         
         mainAnimationPlaying = true;
+        mainAnimationDone    = false;
         
         resumeGlobeAnimation();
         
@@ -176,6 +186,7 @@ function startMainAnimation() {
     setMinimumDuration(dates, 5000);
     
     mainAnimationPlaying = true;
+    mainAnimationDone    = false;
     
     resumeGlobeAnimation();
     

@@ -274,7 +274,7 @@ function renderLoop() {
         updateMeteorites();
     }
     
-    if (METEORITES.length === 0) {
+    if ((METEORITES.length === 0) && !mainAnimationDone) {
         nextYear();
     }
     

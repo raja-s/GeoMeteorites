@@ -44,7 +44,8 @@ function setUpMeanMassTimeline(data) {
              .attr('x'    , d => xTimeline(d.year) - HALF_BAR_WIDTH)
              .attr('y'    , 0)
              .attr('width', timelineBarWidth)
-             .attr('class', 'timeline-bars timeline-mean-mass-bars');
+             .attr('class', 'timeline-bars timeline-mean-mass-bars')
+               .on('click', timelineBarsClickListener);
     
 }
 

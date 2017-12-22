@@ -121,8 +121,8 @@ function explodeMeteorite(i) {
 
 function explodeMeteoritesInMidAir() {
     
-    for (let i = 0 ; i < METEORITES.length ; i++) {
-        explodeMeteorite(i);
+    while (METEORITES.length > 0) {
+        explodeMeteorite(0);
     }
     
 }

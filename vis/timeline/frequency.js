@@ -43,7 +43,8 @@ function setUpFrequencyTimeline(data) {
              .attr('x'    , d => xTimeline(d.year) - HALF_BAR_WIDTH)
              .attr('y'    , TIMELINE_CHART_DIMENSIONS.HEIGHT)
              .attr('width', timelineBarWidth)
-             .attr('class', 'timeline-bars timeline-frequency-bars');
+             .attr('class', 'timeline-bars timeline-frequency-bars')
+               .on('click', timelineBarsClickListener);
     
 }
 

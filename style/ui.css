@@ -60,19 +60,28 @@
     Animation Controls
 */
 
-#animation-control {
+.animation-controls {
     position: fixed;
-    bottom: 35px;
-    left: 35px;
-    padding: 5px;
+    bottom: 3vh;
+    height: 6vw;
+    width: 6vw;
     
     cursor: pointer;
 }
 
-#animation-control > path {
+.animation-controls > path {
     fill: #ddd;
 }
 
-#animation-control > :first-child {
+#play-pause-control {
+    left: 6vw;
+    padding: 1vh;
+}
+
+#play-pause-control > :first-child {
     display: none;
+}
+
+#restart-control {
+    right: 6vw;
 }

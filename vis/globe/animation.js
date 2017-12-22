@@ -6,12 +6,12 @@
 
 let time;
 
-let mainAnimationPlaying = false;
+let mainAnimationPlaying  = false;
 
-let mainAnimationTimeout = -1;
+let mainAnimationTimeouts = [];
 
-let yearCallbackSchedule = {};
-let yearMinimumDurations = {};
+let yearCallbackSchedule  = {};
+let yearMinimumDurations  = {};
 
 /*
     Functions
@@ -81,6 +81,8 @@ function nextYear() {
     
     function dropMeteorites() {
         
+        mainAnimationTimeouts = [];
+        
         const FILTERED_DATA = meteoriteData.filter(entry => entry.year.getFullYear() === time);
         const COUNT = FILTERED_DATA.length;
         
@@ -123,9 +125,9 @@ function nextYear() {
             let duration = 0;
             FILTERED_DATA.forEach((meteorite, i) => {
                 
-                setTimeout(() => {
+                mainAnimationTimeouts.push(setTimeout(() => {
                     launchMeteorite(meteorite.long, meteorite.lat, meteorite.mass);
-                }, duration);
+                }, duration));
                 
                 duration += 50;
                 duration %= LAUNCH_DURATION;
@@ -175,13 +177,13 @@ function startMainAnimation() {
     
     mainAnimationPlaying = true;
     
+    resumeGlobeAnimation();
+    
 }
 
 function pauseMainAnimation() {
     
     mainAnimationPlaying = false;
-    
-    clearTimeout(mainAnimationTimeout);
     
     pauseGlobeAnimation();
     
@@ -197,4 +199,8 @@ function backToGlobalView() {
     
     showClassStatistics();
     
+}
+
+function clearMainAnimationTimeouts() {
+    mainAnimationTimeouts.forEach(timeout => clearTimeout(timeout));
 }

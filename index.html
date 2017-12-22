@@ -46,7 +46,7 @@
 
         <script src='vis/message.js' defer></script>
 
-        <script src='ui/animation-control.js' defer></script>
+        <script src='ui/animation-controls.js' defer></script>
         <script src='ui/search-field.js' defer></script>
 
         <script src='vis/globe/animation.js' defer></script>
@@ -98,14 +98,18 @@
             <input id='search-field' type='text'/>
         </div>
 
-        <svg id='animation-control'>
-            <path d='M0,0L30,20L0,40Z'></path>
-            <path d='M0,3H10V37H0ZM20,3H30V37H20Z'></path>
+        <svg id='play-pause-control' class='animation-controls'>
+            <path d='M0,0L45,30L0,60Z'></path>
+            <path d='M0,5H15V55H0ZM30,5H45V55H30Z'></path>
         </svg>
 
         <svg id='timeline'>
             <text id='timeline-frequency-title' class='timeline-titles'>Frequency</text>
             <text id='timeline-mean-mass-title' class='timeline-titles'>Total Mass</text>
+        </svg>
+
+        <svg id='restart-control' class='animation-controls'>
+            <path d='M60,20A30,30,0,1,0,60,60L66,66V48H48L54,54A21,21,0,1,1,54,26Z'></path>
         </svg>
 
     </body>

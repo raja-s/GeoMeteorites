@@ -20,7 +20,7 @@ const TIMELINE_MARGINS = Object.freeze({
     
     // Horizontal margins
     RIGHT  : 60,
-    LEFT   : 60
+    LEFT   : 80
     
 });
 
@@ -128,4 +128,14 @@ function timelineStart() {
 
 function timelineEnd() {
     return xTimeline.domain()[1].getFullYear() - 1;
+}
+
+function timelineBarsClickListener(d) {
+    
+    clearMainAnimationTimeouts();
+    explodeMeteoritesInMidAir();
+    
+    time = d.year.getFullYear();
+    updateTimeIndicator();
+    
 }

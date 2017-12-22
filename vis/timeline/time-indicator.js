@@ -93,6 +93,13 @@ window.addEventListener('mouseup', event => {
         
         updateTimeIndicator();
         
+        clearMainAnimationTimeouts();
+        explodeMeteoritesInMidAir();
+        
+        if (playPauseState) {
+            resumeMainAnimation();
+        }
+        
     }
     
     timeIndicatorHeld = false;

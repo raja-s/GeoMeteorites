@@ -63,7 +63,7 @@ The data come from the NASA’s Open Data Portal and have been downloaded from K
   The parentheses-enclose, comma-separated tuple that combines \texttt{reclat} and \texttt{reclong}.
 \end{description}
 
-Rows containing \texttt{NaN} values or presenting a year’s value smaller than $1800$ and bigger than $2013$ will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered. 
+Rows containing \texttt{NaN} values or presenting a year’s value smaller than $1800$ and bigger than $2013$ will not be considered in our visualization project. In addition, some of the entries having coordinates values equal to $0$ ---referring to meteorites found in Antarctica of which coordinates were not given--- will not be considered. The data have been cleaned with \texttt{R} language.
 
 % TODO: topojson & three
 
@@ -86,10 +86,36 @@ jQuery and Bootstrap were also used.
 Most files necessary for displaying the web page are served using GitHub pages (the libraries being fetched from various CDNs except for viz.js).
 
 All the data related to meteorites and countries is saved on Google Drive and served using a simple Google Apps Script web app, which also provides a few endpoints to get filtered or grouped data (see \href{https://github.com/RajaSoufi/GeoMeteorites/tree/master/gds-doc#google-drive-server-documentation}{here}).
+\begin{figure*}[]
+  \centering
+  \includegraphics[angle=-90,width=0.9\linewidth]{images/sketch1.jpg}
+  \vspace{-3mm}
+  \caption{First sketch of the visualization}
+  \label{fig:sketch1}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{images/scratch-paper-raja-1}
+  \caption{Sketch of camera FOV for globe}
+  \label{fig:timeline_sketch}
+\end{subfigure}%
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{images/scratch-paper-raja-2}
+  \caption{Sketch of camera FOV for 2D map}
+  \label{fig:timeline_final_without_label}
+\end{subfigure}
+\caption{Sketch of camera Field of View (FOV)}
+\label{fig:sketch_FOV}
+\end{figure*}
 
 \newpage
 \section{Evolution of visualization}
 \label{sec:evolution_of_visualization}
+
 
 The first step was to figure out which visualization could be appropriate to visualize the spatial distribution of the meteorites' impacts. A globe or a map with the georeferenced impacts as static points came to our mind, but the UX would have been limited. That's why we decided to animate the trajectory of the meteorite falls, in order to give a realistic dimension to the data. In order to enforce the realistic dimension we prioritized the 3D visualization, hence a globe has been chosen to visualize the geographical space. To give a more global point of view of the spatial distribution of this phenomena, the transition from the globe to a 2D map has been also taken into account. 
 
@@ -106,13 +132,6 @@ A time-line was by far the easiest way to visualize the temporal dimension. In o
 
 The first sketch of the visualization, which was drawn before starting the code, can be seen in figure \ref{fig:sketch1}.
 
-\begin{figure*}[]
-  \centering
-  \includegraphics[angle=-90,width=0.9\linewidth]{images/sketch1.jpg}
-  \vspace{-3mm}
-  \caption{First sketch of the visualization}
-  \label{fig:sketch1}
-\end{figure*}
 
 
 
@@ -121,13 +140,16 @@ Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered man
 
 We then created the globe, but a sticking point came up: how to handle the meteorites' animation with \texttt{d3}?
 
-We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one (explain why). % TODO
+We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one. In fact, this library is a framework build on top of WebGL which makes it easier to create 3D graphics in the browser. 
+Another reason why we chose this library is because we were not obligated to move the objects themselves, but just moving the main camera around the globe. 
 
-We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import \texttt{geoJSON} files in a \texttt{three.js} scene. The \texttt{three} library doesn't read automatically objects with geometry as \texttt{d3} does. First of all, the \texttt{geoJSON} file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a \texttt{three geometry} and a line has to be drawn between all these couples of vertices.
+We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import \texttt{geoJSON} files in a \texttt{three.js} scene. The \texttt{three} library doesn't read automatically objects with geometry as \texttt{d3} does. First of all, the \texttt{geoJSON} file containing the countries borders' multilinestring \cite{countryfile} coordinates are re-projected into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a \texttt{three} geometry and a line has to be drawn between all these couples of vertices.
 
 %Speak about the graticule TODO
 
-A white sphere was added as well in order not to see through the globe which ended up to figure \ref{fig:globe}.
+A white sphere was added as well in order not to see through the globe. In order to have a good view of the globe and the 2D map, we needed to adapt the main camera FOV and distances (Figure \ref{fig:sketch_FOV}).
+
+After that the camera was well adjusted, we ended up with the globe illustrated in figure \ref{fig:globe}.
 
 \begin{figure}[H]
   \centering
@@ -138,7 +160,7 @@ A white sphere was added as well in order not to see through the globe which end
 \end{figure}
 
 In order to add an interaction to the globe, the user can zoom-in, zoom-out, and drag the globe. 
-The 2D map has also been taken into account, but being our first aim to make this visualization as realistic as possible, we finally decided to keep only the globe.
+The 2D map has also been taken into account, but being our first aim to make this visualization the more realistic as possible, we finally decided to keep only the globe.
 
 \subsection{Meteorites' country}
 
@@ -148,6 +170,18 @@ Google Maps, which is likely to be the most famous web app for location, has its
 
 Open Street Map also has a system to prevent DDoS attack. But it does not have a limited number of requests per day. Actually their api sends the error $429$ which stands for ``too many requests'', requiring the script to block for several minutes. Eventually the script was run on a server for more than thirty hours.
 
+We created automatically countries' code, but they did not mean anything if we ever wanted to analyze with other countries' data available. Hence, we redo this process, but this time with Quantum GIS, an open source GIS\footnote{Geographic Information Systems} software. In this case, we just joined by location the countries vector layer containing the codes published by the International Organization for Standardization (ISO) to our meteorites falls points. This software gave us a general idea of the spatial distribution of the meteorites (Figure \ref{fig:met_qgis}). 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/meteorites_qgis}
+  \vspace{-3mm}
+  \caption{Meteorites points in Quantum GIS}
+  \label{fig:met_qgis}
+\end{figure}
+ 
+
+%%Speak about the country ISO
 \subsection{Time-line}
 
 The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, parts of the code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line.
@@ -160,7 +194,7 @@ The first idea was to create an animation close to a video. The starting and the
   \label{fig:timeline_brush}
 \end{figure}
 
-When the application started to work with the globe and the meteorites hitting it. It became obvious selecting the time range was not user friendly. Instead, a flag with the `current' year (of the animation) is moving like a cursor which can be dragged and dropped. This way, only one button to start and stop is needed.
+Selecting the time range was not as user friendly as expected. Instead, a flag with the `current' year (of the animation) is moving like a cursor which can be dragged and dropped. In this way, only one button to start and stop is needed.
 
 \begin{figure}[H]
   \centering
@@ -193,13 +227,39 @@ We had the temporal evolution of the meteorites falls but still did not give any
 \label{fig:test}
 \end{figure*}
 
-
-
 The last step was to add labels for vertical axes because the two plots are not intuitive on their own unlike the time axes.
 
 \subsection{Meteorites animation}
+After settling up the globe scene, the meteorites animation needed to be done. 
 
-% TODO
+Our first idea was to implement a user interaction with the meteorites, where the user could choose the origin of the meteorites and launch it. This idea would have enforced the UX but it was difficult to choose which meteorite has to be launch and it was far from our principal idea to represent the spatio-temporal evolution of this phenomena. 
+
+Another idea was to find in the literature the real origin point of the meteorites, but this idea was soon abandoned because the time scale of the meteorites was per year and we did not know what was the rotation axis when the meteorites fell and it was challenging to place the other asteroids or planets in our 3D scene. 
+
+From the beginning, the main idea of the animation function is to take as parameters the destination geographical coordinates and the mass of the meteorite, give it a random origin point and update its position with a loop until the destination point. 
+The mass was considered as well so that the size of the impacts of the meteorites are proportional to it. 
+
+In order to make the meteorites impacts as realistic as possible, we just created an additional geometry in the position of the impact and simply expanded it and changed its opacity with a loop. The meteorite impact is illustrated in figure \ref{fig:meteorite_impact}. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.5\columnwidth]{images/meteorite_impact}
+  \vspace{-3mm}
+  \caption{Meteorite impact}
+  \label{fig:meteorite_impact}
+\end{figure}
+
+The first animation called a function that scheduled other hundreds functions which at each meteorite launching incremented the position of the meteorite. This method lead sometimes to some bugs in the animation due to the high CPU cost.  
+
+The second and final attempt is now calling a function that add the meteorites to an array and a separated loop iterates this array to increment the position of each meteorites. 
+This method gave an important improvement in the animation and allowed to visualize thousand and thousand of meteorites without any bug. 
+
+Furthermore, we decided to add a light object to the meteorite to improve the realistic falls (FIgure light)
+
+
+
+
+Unfortunately, this option was too CPU expensive and after two meteorites falls the visualization crashed. 
 
 \subsection{Search bar}
 
@@ -294,7 +354,7 @@ cannot be connected to a recorded fall event \cite{weisberg_systematics_2006}.} 
 
 As the information of the meteorite classes was already given with the bipartite graph (Figure \ref{fig:bipartite_density}), the latter option was abandoned. Furthermore, we decided to do not take into account the differences between the $fell$ and $found$ meteorites because the number of fell meteorites was a way smaller than the found meteorites, leading the comparison between the two types difficult to interpret.   
 
-Another option that was taken into account was to visualize the three heaviest meteorite recorded that fell in the selected country. A simple text saying the names and the masses of the meteorites was considered a too simple solution; hence, we decided to create a geometry that could remind a meteorite shape as follow:
+Another option that was taken into account was to visualize the three heaviest meteorite recorded that fell in the selected country. A simple text saying the names and the masses of the meteorites was considered a too simple solution; hence, we decided to create a geometry that could remind a meteorite shape as illustrated in the sketch in figure \ref{fig:sketch_3_biggest}.
 
 \begin{figure}[]
   \centering
@@ -304,18 +364,18 @@ Another option that was taken into account was to visualize the three heaviest m
   \label{fig:sketch_3_biggest}
 \end{figure}
 
-We finally opted to only draw the heaviest meteorite by country giving that most of the countries had only few entries. The library \texttt{three.js} was again the best option to visualize 3D shapes. In order to draw the shape desired, we created a dodecahendrom geometry and pushed random positions to the its vertices. We obtained the following shape: 
+We finally opted to only draw the heaviest meteorite by country since most of the countries had only few entries. The library \texttt{three.js} was again the best option to visualize 3D shapes. In order to draw the shape desired, we created a dodecahendrom geometry and pushed random positions to the its vertices. We obtained the shape presented in figure \ref{fig:biggest_three}.
 
 \begin{figure}[]
   \centering
   \includegraphics[width=.5\columnwidth]{images/biggestmeteorite}
   \caption{Heaviest meteorite with \texttt{three.js}}
-  \label{fig:sketch_biggest}
+  \label{fig:biggest_three}
 \end{figure}
 
 Our initial idea was even to click on the meteorite and see the meteorite falling, but this idea was abandoned as well for a lack of time.
 
-Concerning the mass distribution, the first problem encountered was that the masses recorded are generally low, resulting then to very skewed distributions. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values.
+Concerning the mass distribution, the first problem encountered was that the masses recorded are generally low and it is difficult to visualize the upper outliers. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values.
 
 As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one}, \ref{fig:density_two}).
 
@@ -340,16 +400,15 @@ As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a li
   \label{fig:density_two}
 \end{figure}
 
-We then opted for a simple histogram of the mass values, the simplest but the clearest one (Figure ref figure histogram). 
+We finally opted for a histogram of the mass values, the simplest but the clearest one.
+The final country statistics panel is illustrated in figure \ref{fig:country_statistics_final}. 
 
-
-Figure histogram % TODO ????
-
-
-
-The final country statistics panel results as follow: 
-
-
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.7\columnwidth]{images/country_statistics_final}
+  \caption{Final country statistics panel}
+  \label{fig:country_statistics_final}
+\end{figure}
 
 
 \subsection{Messages}
@@ -361,32 +420,57 @@ In fact, the International Comet Quarterly publishes a list of all incidents rep
 % screen shot here
 
 \subsection{Final touches}
+Many final touches were needed in order to improve the UX. 
 
-The texture covering the Earth depends on the time of the day. The night we display a dark face while the day we display a bright face.
-
-When the user selects a country, let's say `France', then the camera moves closer in order to increase the surface of the chosen country. This creates more interaction with the interface.
-
-Finally, we have decided to adopt a black background with stars upon it which creates the illusion of our planet being hung somewhere in the universe.
-
-% Night-day texture\\
-% Zooming on the country selected\\
-% Layout\\
+Firstly, the texture covering the Earth depends on the user hour. From 6 p.m. until 6 a.m. the texture of the Earth globe is a night-time image (Figure \ref{fig:night_time}) . The remaining hours, the texture is a day-time image with clouds (Figure \ref{fig:day_time}). A black background with stars upon it has been adopted as well,  leading to the illusion that our planet is being hung somewhere in the universe.
 
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.7\columnwidth]{images/night_time_texture}
+  \caption{Night-time texture}
+  \label{fig:night_time}
+\end{figure}
 
-\section{Improvements}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/day_time_texture}
+  \caption{Day-time texture}
+  \label{fig:day_time}
+\end{figure}
+
+
+When the user selects a country, the camera zoom-in to the country desired. This creates more interaction with the interface. The camera position is taking the extreme coordinates and the centroid of the country, that have been still calculated with Quantum GIS. 
+
+The layout of all visualization needed to be done as well. In fact, we did not think at the beginning to resize the different visualizations depending on the user screen. We then tried to resize all the elements the more dynamically as possible. 
+
+
+
+\section{Improvements and limits}
 \label{sec:improvements}
+The time was limited, but plenty of ideas came to our mind in the process of the visualization. 
 
-To do.
+The limits of our visualization are the following: 
 
-\section{Work split}
+\begin{itemize}
+\item The countries' borders are missing. It is then difficult to understand where is the country, mostly when the country have no borders touching the sea
+
+\item The meteorites falls are not filtered out by country when we zoom on a country. Hence, the meteorites falls in the neighboring countries are seen as well. 
+ 
+\item ...
+\end{itemize}
+
+
+
+\section{Work split and peer evaluation}
 \label{sec:work_split}
 
 \begin{description}
 \item[Rehan Mulakhel] \ \\
   Web page centralizing links to the demo, code and process book. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
-  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected,  
+  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected, process book.  
 \item[Raja Soufi] \ \\
   Globe visualization (partly) as well as falling meteorites and world camera animations/movements.
   Improvements to various elements such as timeline and search field, as well as linking the various parts together.

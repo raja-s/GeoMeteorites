@@ -45,6 +45,36 @@ function removeChildren(element) {
     }
 }
 
+function fillUpDataHoles(data, accessor, constructor, min, max) {
+    
+    const RESULT_DATA = data.slice();
+    
+    // Fill up empty holes in the data
+    let previous = accessor(RESULT_DATA[0]);
+    for (let i = 1 ; i < RESULT_DATA.length ; i++) {
+        const CURRENT = accessor(RESULT_DATA[i]);
+        const DIFF = CURRENT - previous;
+        if (DIFF > 1) {
+            for (let k = 1 ; k < DIFF ; k++) {
+                RESULT_DATA.splice(i + k - 1, 0, constructor(previous + k));
+            }
+            i += DIFF - 1;
+        }
+        previous = CURRENT;
+    }
+    
+    for (let i = accessor(RESULT_DATA[0]) - 1 ; i >= min ; i--) {
+        RESULT_DATA.unshift(constructor(i));
+    }
+    
+    for (let i = accessor(RESULT_DATA[RESULT_DATA.length - 1]) + 1; i <= max ; i++) {
+        RESULT_DATA.push(constructor(i));
+    }
+    
+    return RESULT_DATA;
+    
+}
+
 function limitedIntegerTicks(max, limit) {
     
     const RATIO = max / (limit - 1);

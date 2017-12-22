@@ -51,8 +51,20 @@
     font-size: 1.5vw;
 }
 
-#mass-dist-chart path {
-    stroke: var(--color-mean-mass-bars);
+#mass-dist-chart rect {
+    fill: var(--color-mean-mass-bars);
+}
+
+.country-mass-dist-texts {
+    text-anchor: middle;
+    fill: #ccc;
+    font-size: 0.8vw;
+    
+    transition: opacity 0.3s;
+}
+
+.country-mass-dist-texts[data-hidden] {
+    opacity: 0;
 }
 
 #country-stats-container .axes > path,

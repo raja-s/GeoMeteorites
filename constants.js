@@ -43,6 +43,9 @@ const KEYCODES = Object.freeze({
     // Enter key
     ENTER       : 13,
     
+    // Escape key
+    ESC         : 27,
+    
     // Arrow keys
     ARROW_LEFT  : 37,
     ARROW_UP    : 38,

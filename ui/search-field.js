@@ -201,18 +201,22 @@ SEARCH_FIELD.addEventListener('input', event => {
     suggest();
     showSuggestions();
     
-    if (SEARCH_FIELD.value === '') {
+    /*if (SEARCH_FIELD.value === '') {
         
         backToGlobalView();
         
-    }
+    }*/
     
 });
 
 SEARCH_FIELD.addEventListener('keypress', event => {
     
-    if (event.keyCode === KEYCODES.ENTER) {
-        chooseCandidate();
+    switch (event.keyCode) {
+        
+        case KEYCODES.ENTER:
+            chooseCandidate();
+            break;
+        
     }
     
 });
@@ -248,6 +252,12 @@ SEARCH_FIELD.addEventListener('keydown', event => {
         
         event.stopPropagation();
         
+    }
+    
+    if (event.keyCode === KEYCODES.ESC) {
+        clearSuggestions();
+        SEARCH_FIELD.value = '';
+        backToGlobalView();
     }
     
 });

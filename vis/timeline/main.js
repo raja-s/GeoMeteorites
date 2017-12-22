@@ -60,46 +60,19 @@ TIMELINE.attr('width' , TIMELINE_DIMENSIONS.WIDTH);
 
 function setUpDataForTimeline(data) {
     
-    const RESULT_DATA = data.slice();
-    
-    // Fill up empty holes in the data
-    let previous = RESULT_DATA[0].year.getFullYear();
-    for (let i = 1 ; i < RESULT_DATA.length ; i++) {
-        const CURRENT = RESULT_DATA[i].year.getFullYear();
-        const DIFF = CURRENT - previous;
-        if (DIFF > 1) {
-            for (let k = 1 ; k < DIFF ; k++) {
-                RESULT_DATA.splice(i + k - 1, 0, {
-                    // year      : d3.timeParse('%Y')(previous + k),
-                    year      : new Date(previous + k, 0),
-                    number    : 0,
-                    totalMass : 0
-                });
-            }
-            i += DIFF - 1;
-        }
-        previous = CURRENT;
-    }
-    
-    for (let year = RESULT_DATA[0].year.getFullYear() - 1 ; year >= timelineStart() ; year--) {
-        RESULT_DATA.unshift({
-            year      : new Date(year, 0),
-            number    : 0,
-            totalMass : 0
-        });
-    }
-    
-    for (let year = RESULT_DATA[RESULT_DATA.length - 1].year.getFullYear() + 1;
-        year <= timelineEnd() ; year++)
-    {
-        RESULT_DATA.push({
-            year      : new Date(year, 0),
-            number    : 0,
-            totalMass : 0
-        });
-    }
-    
-    return RESULT_DATA;
+    return fillUpDataHoles(
+        data,
+        entry => entry.year.getFullYear(),
+        i => {
+            return {
+                year      : new Date(i, 0),
+                number    : 0,
+                totalMass : 0
+            };
+        },
+        timelineStart(),
+        timelineEnd()
+    );
     
 }
 

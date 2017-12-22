@@ -14,7 +14,7 @@ const MASS_DIST_MARGINS = Object.freeze({
     TOP    : LEFT_PANE_DIMENSIONS.HEIGHT * 0.05,
     BOTTOM : LEFT_PANE_DIMENSIONS.HEIGHT * 0.05,
     
-    LEFT   : LEFT_PANE_DIMENSIONS.WIDTH * 0.1,
+    LEFT   : LEFT_PANE_DIMENSIONS.WIDTH * 0.08,
     RIGHT  : LEFT_PANE_DIMENSIONS.WIDTH * 0.08
     
 });
@@ -74,10 +74,12 @@ let heaviestMeteoriteMeshTargetScale = HEAVIEST_METEORITE_MESH_MIN_SCALE;
 */
 
 const MASS_DIST_TRANSITION = d3.transition()
-                                 .duration(1000);
+                                 .duration(SECOND);
 
-let xCountryMassDist = d3.scaleLinear()
-                               .range([0, MASS_DIST_DIMENSIONS.WIDTH]);
+let xCountryMassDist = d3.scaleBand()
+                            .domain([ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 ])
+                             .range([0, MASS_DIST_DIMENSIONS.WIDTH])
+                           .padding(0.7);
 
 let yCountryMassDist = d3.scalePoint()
                               .range([MASS_DIST_DIMENSIONS.HEIGHT, 0]);
@@ -93,21 +95,32 @@ const MASS_DIST_CHART =
                          .attr('transform',
                             `translate(${MASS_DIST_MARGINS.LEFT}, ${MASS_DIST_MARGINS.TOP})`);
 
-const MASS_DIST_PATH =
-    MASS_DIST_CHART.append('path')
-                     .attr('fill', 'none')
-                     .attr('stroke-linejoin', 'round')
-                     .attr('stroke-linecap', 'round')
-                     .attr('stroke-width', 2);
+MASS_DIST_CHART.selectAll('rect')
+                    .data(xCountryMassDist.domain())
+                   .enter()
+                  .append('rect')
+                    .attr('x', d => xCountryMassDist(d))
+                    .attr('y', MASS_DIST_DIMENSIONS.HEIGHT)
+                    .attr('height', 0)
+                    .attr('width', xCountryMassDist.bandwidth());
+
+MASS_DIST_CHART.selectAll('text')
+                    .data(xCountryMassDist.domain())
+                   .enter()
+                  .append('text')
+                    .attr('class', 'country-mass-dist-texts')
+                    .data(xCountryMassDist.domain())
+                    .attr('x', d => xCountryMassDist(d) + xCountryMassDist.bandwidth() / 2)
+                    .attr('y', -3)
+                    .text(0);
 
 const MASS_DIST_X_AXIS =
     MASS_DIST_CHART.append('g')
                      .attr('class', 'axes x-axes')
                      .attr('transform', `translate(0, ${MASS_DIST_DIMENSIONS.HEIGHT})`);
 
-const MASS_DIST_Y_AXIS =
-    MASS_DIST_CHART.append('g')
-                     .attr('class', 'axes y-axes');
+MASS_DIST_X_AXIS.transition(MASS_DIST_TRANSITION)
+                          .call(d3.axisBottom(xCountryMassDist)/*.tickFormat(d3.format('d'))*/);
 
 /*
     Three.js code
@@ -222,31 +235,41 @@ function setUpCountryStatistics(countryCode) {
     massDistData.sort((d1, d2) =>
         (d1.massLog < d2.massLog) ? -1 : (d1.massLog > d2.massLog) ? 1 : 0);
 
+    console.log(massDistData);
+
     const MAX_FREQUENCY = d3.max(massDistData, d => d.frequency);
     const Y_DOMAIN = [];
     for (let i = 0 ; i <= MAX_FREQUENCY + 1 ; i++) {
         Y_DOMAIN.push(i);
     }
 
-    xCountryMassDist.domain((massDistData.length === 1) ?
-        [0, 2 * d3.max(massLogs)] : d3.extent(massDistData, d => d.massLog));
+    massDistData = fillUpDataHoles(
+        massDistData,
+        entry => entry.massLog,
+        i => {
+            return {
+                massLog   : i,
+                frequency : 0
+            };
+        },
+        0,
+        8
+    );
+
     yCountryMassDist.domain(Y_DOMAIN);
 
-    const LINE = d3.line()
-                  .curve(d3.curveCatmullRom)
-                      .x(d => xCountryMassDist(d.massLog))
-                      .y(d => yCountryMassDist(d.frequency));
-
-    MASS_DIST_PATH.datum(massDistData)
-             .transition(MASS_DIST_TRANSITION)
-                   .attr('d', LINE);
-
-    MASS_DIST_X_AXIS.transition(MASS_DIST_TRANSITION)
-                          .call(d3.axisBottom(xCountryMassDist)/*.tickFormat(d3.format('d'))*/);
-
-    MASS_DIST_Y_AXIS.transition(MASS_DIST_TRANSITION)
-                          .call(d3.axisLeft(yCountryMassDist)
-                            .tickValues(limitedIntegerTicks(MAX_FREQUENCY, 6)));
+    MASS_DIST_CHART.selectAll('rect')
+                        .data(massDistData)
+                        .transition(MASS_DIST_TRANSITION)
+                        .attr('y', d => yCountryMassDist(d.frequency))
+                        .attr('height', d => MASS_DIST_DIMENSIONS.HEIGHT - yCountryMassDist(d.frequency));
+    
+    MASS_DIST_CHART.selectAll('text')
+                        .data(massDistData)
+                        .attr('data-hidden', d => (d.frequency === 0) ? '' : null)
+                        .transition(MASS_DIST_TRANSITION)
+                        .attr('y', d => yCountryMassDist(d.frequency) - 3)
+                        .text(d => d.frequency);
 
     const HEAVIEST_METEORITE = countryData.reduce((d1, d2) =>
         (d1.mass > d2.mass) ? d1 : d2, { mass : -1 });

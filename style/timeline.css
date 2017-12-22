@@ -6,6 +6,20 @@
     overflow: visible;
 }
 
+.timeline-titles {
+    text-anchor: end;
+    font-size: 1vw;
+}
+
+#timeline-frequency-title {
+    fill: var(--color-frequency-bars);
+}
+
+#timeline-mean-mass-title {
+    alignment-baseline: mathematical;
+    fill: var(--color-mean-mass-bars);
+}
+
 #timeline .axes > path,
 #timeline .axes line {
     display: none;

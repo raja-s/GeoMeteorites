@@ -54,6 +54,14 @@ let timelineBarWidth = 0;
 TIMELINE.attr('height', TIMELINE_DIMENSIONS.HEIGHT);
 TIMELINE.attr('width' , TIMELINE_DIMENSIONS.WIDTH);
 
+d3.select('#timeline-frequency-title')
+    .attr('x', TIMELINE_MARGINS.LEFT - 8)
+    .attr('y', TIMELINE_MARGINS.TOP + TIMELINE_CHART_DIMENSIONS.HEIGHT);
+
+d3.select('#timeline-mean-mass-title')
+    .attr('x', TIMELINE_MARGINS.LEFT - 8)
+    .attr('y', TIMELINE_MARGINS.TOP + TIMELINE_CHART_DIMENSIONS.HEIGHT + TIMELINE_MARGINS.MIDDLE);
+
 /*
     Functions
 */

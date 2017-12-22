@@ -228,7 +228,7 @@ We soon abandoned this idea because we could have had only a local point of view
   \label{fig:bipartitesketch}
 \end{figure}
 
-Firstly we thought to just draw the lines of direct connections between the two different nodes with a constant thickness. We then realised that a thickness depending on the mass would have been more informative. The Sankey diagram came to our mind to vizualize the flows and a nice example proposed by Bremer \cite{BibEntry2017Dec} was our inspiration. Indeed, the latter example propose a bipartite Sankey diagram in the form of a Chord diagram. We discovered a simply way to build a bipartite graph with the \texttt{viz.js} library \cite{bipartite_viz}. This library takes as input parameters the primary key (meteorites' classes), the secondary key (countries) and a value that links the two keys (mass). We first considered all the countries, but we decided to filter out only the countries having a total \texttt{mass} of meteorites bigger than 500 kg and store the other countries as $Others$.
+Firstly we thought to just draw the lines of direct connections between the two different nodes with a constant thickness. We then realised that a thickness depending on the mass would have been more informative. The Sankey diagram came to our mind to vizualize the flows and a nice example proposed by Bremer \cite{BibEntry2017Dec} was our inspiration. Indeed, the latter example propose a Chord diagram in the form of a bipartite Sankey diagram. We discovered a simply way to build a bipartite graph with the \texttt{viz.js} library \cite{bipartite_viz}. This library takes as input parameters the primary key (meteorites' classes), the secondary key (countries) and a value that links the two keys (mass). We first considered all the countries, but we decided to filter out only the countries having a total \texttt{mass} of meteorites bigger than 500 kg and store the other countries as $Others$.
 
 
 The result of our first bipartite graph was as follow (Figure \ref{fig:bipartite_mass}): 
@@ -251,7 +251,7 @@ The percentages that you can see on the right of the countries correspond to the
   \label{fig:bipartite_mouse}
 \end{figure}
 
-We then noticed that the size of the country biased our first results. In order to do not give a higher weight to the biggest countries, we divided every \texttt{mass} by the area of the country where it fell, obtaining then the \texttt{density} of meteorites by country in $gr/km^{2}$. This time we filtered out the countries having a \texttt{density} bigger than $1$ $gr/km^{2}$ and store the remaining in $Others$.
+We then noticed that the size of the country biased our first results. In order to do not give a higher weight to the biggest countries, we divided every \texttt{mass} by the area of the country where it fell, obtaining then the \texttt{density} of meteorites by country in $gr/km^{2}$. This time we filtered out the countries having a \texttt{density} bigger than $1$ $gr/km^{2}$ and store the remaining in $Others$. The area of the countries was calculated thanks to Quantum GIS software, an open source GIS\footnote{Geographic Information Systems} software. 
 
 We ended up with the following graph (Figure \ref{fig:bipartite_density}): 
 
@@ -282,7 +282,7 @@ cannot be connected to a recorded fall event \cite{weisberg_systematics_2006}.} 
 \end{figure}
 
 
-As the information of the meteorite classes was already given with the bipartite graph (Figure \ref{fig:bipartite_density}), the latter option was abandoned. 
+As the information of the meteorite classes was already given with the bipartite graph (Figure \ref{fig:bipartite_density}), the latter option was abandoned. Furthermore, we decided to do not take into account the differences between the $fell$ and $found$ meteorites because the number of fell meteorites was a way smaller than the found meteorites, leading the comparison between the two types difficult to interpret.   
 
 Another option that was taken into account was to visualize the three heaviest meteorite recorded that fell in the selected country. A simple text saying the names and the masses of the meteorites was considered a too simple solution; hence, we decided to create a geometry that could remind a meteorite shape as follow:
 
@@ -306,10 +306,10 @@ We finally opted to only draw the heaviest meteorite by country giving that most
 
 Our initial idea was even to click on the meteorite and see the meteorite falling, but this idea was abandoned as well for a lack of time. 
 
-Concerning the mass distribution, the first problem encountered was that the masses had very different values, resulting in a very skewed distribution. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values. 
+Concerning the mass distribution, the first problem encountered was that the masses recorded are generally low, resulting then to very skewed distributions. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values. 
 
 
-As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one},\ref{fig:density_two}).
+As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one}, \ref{fig:density_two}).
 
 \begin{figure}[H]
   \centering
@@ -335,30 +335,31 @@ As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a li
   \label{fig:density_two}
 \end{figure}
 
-We then opted for a simple histogram of values. 
+We then opted for a simple histogram of the mass values, the simplest but the clearest one (Figure ref figure histogram). 
 
 
 Figure histogram
 
 
 
-The final statistics panel results as follow: 
+The final country statistics panel results as follow: 
 
 
 
 
 \subsection{Messages}
+After setting up all the spatial and statistical visualizations and going deeper in the domain, we discovered many funny (and a bit sketchy) stories about meteorites in human history. This has soon gave us new ideas to represent other information and make funnier our visualization. 
 
-The International Comet Quarterly publishes a list of all incidents reported related to meteorites \cite{international_comet_quarterly}. We took this data and adapted to make them appear next to the globe. The text does not appear all at once, but word by word. The reason behind is that it is easier to see it when a new message is displayed.
+In fact, the International Comet Quarterly publishes a list of all incidents reported related to meteorites \cite{international_comet_quarterly}. We took this data and adapted to make them appear next to the globe. The text does not appear all at once, but word by word. The reason behind is that it is easier to see it when a new message is displayed.
+
 
 % screen shot here
 
 \subsection{Final touches}
-Night-day texture
-Layout
 
-
-
+Night-day texture\\
+Zooming on the country selected\\
+Layout\\
 
 
 
@@ -374,7 +375,7 @@ To do.
 \item[Rehan Mulakhel] \ \\
   Web page centralizing links to the demo, code and process book. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
-  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected. 
+  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected,  
 \item[Raja Soufi] \ \\
   Globe visualization (partly) as well as falling meteorites and world camera animations/movements.
   Improvements to various elements such as timeline and search field, as well as linking the various parts together.

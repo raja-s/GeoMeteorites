@@ -136,11 +136,11 @@ The first sketch of the visualization, which was drawn before starting the code,
 
 
 \subsection{Globe}
-Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with \texttt{d3.js} \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the \texttt{d3.geo} library that allows an easy way to work with geographic information and different projections.
+Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorials allowing the creation of a globe with \texttt{d3.js} \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the \texttt{d3.geo} library that allows an easy way to work with geographic information and different projections.
 
 We then created the globe, but a sticking point came up: how to handle the meteorites' animation with \texttt{d3}?
 
-We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one. In fact, this library is a framework build on top of WebGL which makes it easier to create 3D graphics in the browser. 
+We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one. In fact, this library is a framework built on top of WebGL which makes it easier to create 3D graphics in the browser. 
 Another reason why we chose this library is because we were not obligated to move the objects themselves, but just moving the main camera around the globe. 
 
 We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import \texttt{geoJSON} files in a \texttt{three.js} scene. The \texttt{three} library doesn't read automatically objects with geometry as \texttt{d3} does. First of all, the \texttt{geoJSON} file containing the countries borders' multilinestring \cite{countryfile} coordinates are re-projected into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a \texttt{three} geometry and a line has to be drawn between all these couples of vertices.
@@ -160,17 +160,17 @@ After that the camera was well adjusted, we ended up with the globe illustrated 
 \end{figure}
 
 In order to add an interaction to the globe, the user can zoom-in, zoom-out, and drag the globe. 
-The 2D map has also been taken into account, but being our first aim to make this visualization the more realistic as possible, we finally decided to keep only the globe.
+The idea of a 2D map has also been considered, but our first aim being to make this visualization as realistic as possible, we finally decided to only keep the globe.
 
 \subsection{Meteorites' country}
 
-The original data set provided by Kaggle did not contain any information on countries name. The only way to map a country to a landing was through the geo coordinates. Since the \texttt{csv} file contains many thousands rows, it was impossible to do it manually. This lead us to write a script in python in order to fetch countries based on the tuple (latitude, longitude).
+The original dataset provided by Kaggle did not contain any information about country names. The only way to map a landing to a country was through the geo coordinates. Since the \texttt{csv} file contains many thousand rows, it was impossible to do it manually. This lead us to write a script in python in order to fetch countries based on the tuple (latitude, longitude).
 
 Google Maps, which is likely to be the most famous web app for location, has its services limited to users to prevent DDoS\footnote{Distributed Denial of Service} attack. According to their documentation, the number is limited to a ``a few thousands'' requests per day per person. This could have taken more than one week to get our new data! Clearly, we had to find a solution. That's why we dropped the idea of Google Maps and turned towards Open Street Map, an open source alternative.
 
 Open Street Map also has a system to prevent DDoS attack. But it does not have a limited number of requests per day. Actually their api sends the error $429$ which stands for ``too many requests'', requiring the script to block for several minutes. Eventually the script was run on a server for more than thirty hours.
 
-We created automatically countries' code, but they did not mean anything if we ever wanted to analyze with other countries' data available. Hence, we redo this process, but this time with Quantum GIS, an open source GIS\footnote{Geographic Information Systems} software. In this case, we just joined by location the countries vector layer containing the codes published by the International Organization for Standardization (ISO) to our meteorites falls points. This software gave us a general idea of the spatial distribution of the meteorites (Figure \ref{fig:met_qgis}). 
+We created automatically countries' code, but they did not mean anything if we ever wanted to analyze with other countries' data available. Hence, we redo this process, but this time with Quantum GIS, an open source GIS\footnote{Geographic Information Systems} software. In this case, we just joined by location the countries vector layer containing the codes published by the International Organization for Standardization (ISO) to our meteorites fall points. This software gave us a general idea of the spatial distribution of the meteorites (Figure \ref{fig:met_qgis}). 
 
 \begin{figure}[H]
   \centering
@@ -184,7 +184,7 @@ We created automatically countries' code, but they did not mean anything if we e
 %%Speak about the country ISO
 \subsection{Time-line}
 
-The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, parts of the code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line.
+The first idea was to create an animation close to a video. The starting and the ending moments were supposed to be parameters. The inspiration came from \cite{ocks_brush_and_zoom}, from which parts of code were taken and adapted to the latest version of ES6\footnote{ECMAScript 6}. There was a plot of the number of meteorites group by year inside the time-line.
 
 \begin{figure}[H]
   \centering
@@ -204,7 +204,7 @@ Selecting the time range was not as user friendly as expected. Instead, a flag w
   \label{fig:timeline_all_dates}
 \end{figure}
 
-The data contains date from $860$ to $2016$. The plot in figure \ref{fig:timeline_all_dates} shows that most meteorites hit the Earth recently. This is unlikely to be the reality. We can interpret it like humans have almost no information on the subject until the 19\textsuperscript{th} century. This information leads us to filter from $1801$ to $2016$.
+The data contains date from $860$ to $2016$. The plot in figure \ref{fig:timeline_all_dates} shows that most meteorites hit the Earth recently. This is unlikely to be the reality. We can interpret it like humans have almost no information on the subject until the 19\textsuperscript{th} century. This information lead us to only take into account data between $1801$ to $2013$.
 
 We had the temporal evolution of the meteorites falls but still did not give any information about the masses of the meteorites. We then decided to add to the initial timeline the average mass per year (Figure \ref{fig:timeline_sketch},\ref{fig:timeline_final_without_label}).
 
@@ -278,11 +278,11 @@ Users may want to choose and change some parameters like the speed or the dimens
   \label{fig:box_tool}
 \end{figure}
 
-The animation of the meteorites falling from the space can be done without much effort in a 3d world. Unfortunately, the 2d version does not allow it. That's why this option was removed.
+We decided not to include the feature that allows switching to 2D mode and instead concentrate on the 3D visualization.
 
 Since the visualization is intended to a general public, the range of the mass is useless. This option was also removed.
 
-What about the animation speed? Our first feeling was to create something constant over the time. The sparse number of landing per year makes it impossible. Let's assume that we set a constant $\lambda$ for the speed. Since the frequencies of the number of meteorites increases, at some point the number of meteorites in the visualization will reach a threshold which will make the script crashing. If we decrease the value of $\lambda$, then animation would be to slow when the frequency is low. Therefore, the only way to do it is to make $\lambda$ changing depending on the frequency. Thus, the cursor for the \texttt{speed} value was removed too.
+What about the animation speed? Our first feeling was to create something constant over the time. The sparse number of landing per year makes it impossible. Let's assume that we set a constant $\lambda$ for the speed. Since the frequencies of the number of meteorites increases, at some point the number of meteorites in the visualization will reach a threshold which will cause the visualization to crash. If we decrease the value of $\lambda$, then the animation would become too slow when the frequency is low. Therefore, the only way to do it is to make $\lambda$ changing depending on the frequency. Thus, the cursor for the \texttt{speed} value was removed too.
 
 Eventually we only kept the country input.
 

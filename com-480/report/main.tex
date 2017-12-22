@@ -249,17 +249,22 @@ In order to make the meteorites impacts as realistic as possible, we just create
   \label{fig:meteorite_impact}
 \end{figure}
 
-The first animation called a function that scheduled other hundreds functions which at each meteorite launching incremented the position of the meteorite. This method lead sometimes to some bugs in the animation due to the high CPU cost.  
+The first approach used a function that scheduled hundreds of other functions at successive timeouts, each incrementing the position of the meteorite. This method lead sometimes to some bugs in the animation due to the high CPU cost.
 
-The second and final attempt is now calling a function that add the meteorites to an array and a separated loop iterates this array to increment the position of each meteorites. 
-This method gave an important improvement in the animation and allowed to visualize thousand and thousand of meteorites without any bug. 
+The second and final approach consists of calling a function that simply adds the meteorite to an array while a separate loop (the rendering loop) iterates over this array to increment the position of each meteorite.
+This method resulted in an important improvement in the animation and allowed to visualize many more meteorites, up to a few thousands in some cases, without any bugs.
 
-Furthermore, we decided to add a light object to the meteorite to improve the realistic falls (FIgure light)
+Furthermore, we tried to add a light object to each meteorite to improve the realistic falls (Figure \ref{fig:meteorite_ligths}).
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{images/screenshot-meteorites-with-lights}
+  \vspace{-3mm}
+  \caption{Meteorite impact}
+  \label{fig:meteorite_ligths}
+\end{figure}
 
-
-
-Unfortunately, this option was too CPU expensive and after two meteorites falls the visualization crashed. 
+Unfortunately, this option was too CPU expensive and made the browser hang completely in most cases. 
 
 \subsection{Search bar}
 

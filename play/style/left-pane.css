@@ -55,6 +55,18 @@
     fill: var(--color-mean-mass-bars);
 }
 
+#mass-dist-chart-x-axis-label {
+    position: absolute;
+    top: 36.5vh;
+    width: var(--left-pane-width);
+    
+    text-align: center;
+    font-size: 1vw;
+    color: #ccc;
+    
+    opacity: 0.3;
+}
+
 .country-mass-dist-texts {
     text-anchor: middle;
     fill: #ccc;

@@ -6,6 +6,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{subcaption}
 
 
 \usepackage{xcolor}
@@ -28,9 +29,11 @@
 
 \section{Introduction}
 
-Over human history, thousands and thousands of meteorites fell to the Earth ground; chunk of rock and metal disagreggating in the atmosphere, hitting the ground and causing sometimes vast disasters. 
+Over human history, thousands and thousands of meteorites fell to the Earth ground; chunk of rock and metal disagreggating in the atmosphere, hitting the ground and causing sometimes vast disasters from natural and economical point of view.
 
-The goal of this project is to visualize this fascinating phenomenon occurred over the last centuries by means of georeferenced location of the impacts recorded by the \textit{Meteoritical society}\footnote{Meteoritical society: \href{http://www.meteoriticalsociety.org/}{http://www.meteoriticalsociety.org/}}. In this visualization, our principal aim is to give a general overview of the spatio-temporal evolution of this natural phenomenon, emphasizing on the user experience and the exploration of the data. This visualization targets a general public who has not strong knowledge in the field. 
+Where are the points which have the most chances to be hit? Can we trust the data gathered? Why do some places have less chances to be receive rocks coming from space?
+
+The goal of this project is to visualize this fascinating phenomenon occurring over the last centuries by means of georeferenced location of the impacts recorded by the \textit{Meteoritical society}\footnote{Meteoritical society: \href{http://www.meteoriticalsociety.org/}{http://www.meteoriticalsociety.org/}}. In this visualization, our principal aim is to give a general overview of the spatio-temporal evolution of this natural phenomenon, emphasizing on the user experience and the exploration of the data. This visualization targets a general public who has not strong knowledge in the field.
 
 
 \section{Data}
@@ -99,34 +102,34 @@ Having the coordinates of the impacts, it was crucial to get the country where t
 \item Histogram of the type of meteorite by country
 \end{itemize}
 
-A time-line was by far the easiest way to visualize the temporal dimension. In order to add an interaction to it, we decided to allow the selection of an interval of time to the user. The animation of the meteorites falls will be then performed in the interval of time selected and activated/deactivated with a start/pause button. 
-Our first sketch of the visualization is illustrated in Figure \ref{fig:sketch1}.
+A time-line was by far the easiest way to visualize the temporal dimension. In order to add an interaction to it, we decided to allow the selection of an interval of time to the user. The animation of the meteorites falls will then be performed in the interval of time selected and activated/deactivated with a start/pause button.
 
-\begin{figure}[]
+The first sketch of the visualization, which was drawn before starting the code, can be seen in figure \ref{fig:sketch1}.
+
+\begin{figure*}[]
   \centering
-  \includegraphics[angle=-90,width=\columnwidth]{images/sketch1.jpg}
+  \includegraphics[angle=-90,width=0.9\linewidth]{images/sketch1.jpg}
   \vspace{-3mm}
   \caption{First sketch of the visualization}
   \label{fig:sketch1}
-\end{figure}
+\end{figure*}
 
 
 
 \subsection{Globe}
-Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with $d3.js$ \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the \texttt{d3.geo} library that allows an easy way to work with geographic information and different projections.
+Exploring the Mike Bostock's Blocks \cite{bostock_mike_nodate} we discovered many tutorial allowing the creation of a globe with \texttt{d3.js} \cite{bostock_see-through_nodate,bostock_globe_nodate}.  These works are performed with the \texttt{d3.geo} library that allows an easy way to work with geographic information and different projections.
 
 We then created the globe, but a sticking point came up: how to handle the meteorites' animation with \texttt{d3}?
 
-We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one (explain why).
+We then explored other javascript libraries that could handle in a simpler way the animation of 3D objects and we figured out that the \texttt{three.js} library \cite{BibEntry2017Nov} is the most suitable one (explain why). % TODO
 
 We inspired our globe from another Mike Bostock example \cite{BibEntry2017Aug} that shows how to import \texttt{geoJSON} files in a \texttt{three.js} scene. The \texttt{three} library doesn't read automatically objects with geometry as \texttt{d3} does. First of all, the \texttt{geoJSON} file containing the countries borders' multilinestring \cite{countryfile} and re-projected the coordinates of the latter into spherical projection. Then, all the starting and ending vertices of the multilinestring have to be pushed in a \texttt{three geometry} and a line has to be drawn between all these couples of vertices.
 
 %Speak about the graticule TODO
 
+A white sphere was added as well in order not to see through the globe which ended up to figure \ref{fig:globe}.
 
-A white sphere has been added as well in order to do not see through the globe.
-We finally ended up with the following globe:
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{images/globe.jpg}
   \vspace{-3mm}
@@ -141,7 +144,7 @@ The 2D map has also been taken into account, but being our first aim to make thi
 
 The original data set provided by Kaggle did not contain any information on countries name. The only way to map a country to a landing was through the geo coordinates. Since the \texttt{csv} file contains many thousands rows, it was impossible to do it manually. This lead us to write a script in python in order to fetch countries based on the tuple (latitude, longitude).
 
-Google Maps, which is likely to be the most famous web app for location, has its services limited to users to avoid DDoS\footnote{Distributed Denial of Service} attack. According to their documentation, the number is limited to a ``a few thousands'' requests by day per person. This could have taken more than one week to get our new data! Clearly, we had to find a solution. That's why we dropped the idea of Google Maps and turned towards Open Street Map, an open source alternative.
+Google Maps, which is likely to be the most famous web app for location, has its services limited to users to prevent DDoS\footnote{Distributed Denial of Service} attack. According to their documentation, the number is limited to a ``a few thousands'' requests per day per person. This could have taken more than one week to get our new data! Clearly, we had to find a solution. That's why we dropped the idea of Google Maps and turned towards Open Street Map, an open source alternative.
 
 Open Street Map also has a system to prevent DDoS attack. But it does not have a limited number of requests per day. Actually their api sends the error $429$ which stands for ``too many requests'', requiring the script to block for several minutes. Eventually the script was run on a server for more than thirty hours.
 
@@ -171,30 +174,36 @@ The data contains date from $860$ to $2016$. The plot in figure \ref{fig:timelin
 
 We had the temporal evolution of the meteorites falls but still did not give any information about the masses of the meteorites. We then decided to add to the initial timeline the average mass per year (Figure \ref{fig:timeline_sketch},\ref{fig:timeline_final_without_label}).
 
-\begin{figure}[H]
+
+\begin{figure*}
+\centering
+\begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=\columnwidth]{images/timeline_sketch}
-  \vspace{-3mm}
+  \includegraphics[width=.8\linewidth]{images/timeline_sketch}
   \caption{Sketch of time line with the frequency of the meteorite falls per year on the top and average mass per year on the bottom}
   \label{fig:timeline_sketch}
-\end{figure}
-
-\begin{figure}[H]
+\end{subfigure}%
+\begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=\columnwidth]{images/timeline_final_without_label.png}
-  \vspace{-3mm}
+  \includegraphics[width=.8\linewidth]{images/timeline_final_without_label.png}
   \caption{Time line with plots of frequencies (top top) and average mass (bottom) for each year.}
   \label{fig:timeline_final_without_label}
-\end{figure}
+\end{subfigure}
+\caption{The evolution of the time line from the paper to the final version.}
+\label{fig:test}
+\end{figure*}
+
+
 
 The last step was to add labels for vertical axes because the two plots are not intuitive on their own unlike the time axes.
 
 \subsection{Meteorites animation}
 
+% TODO
 
 \subsection{Search bar}
 
-Users may want to choose and change some parameters like the speed or the dimension of the map (2d vs 3d). The initial version is shown in figure \ref{fig:box_tool}. The opacity was set to $0.5$ in order to let the map (which was not ready at that time) be visible. When the mouse was hover the box, the transparency property was removed as long as the mouse was not outside of it.
+Users may want to choose and change some parameters like the speed or the dimension of the map (2D vs 3D). The initial version is shown in figure \ref{fig:box_tool}. The opacity was set to $0.5$ in order to let the map (which was not ready at that time) be visible. When the mouse was hover the box, the transparency property was removed as long as the mouse was not outside of it.
 
 \begin{figure}[H]
   \centering
@@ -213,14 +222,18 @@ What about the animation speed? Our first feeling was to create something consta
 Eventually we only kept the country input.
 
 \subsection{Meteorites classification}
-At the beginning, the meteorite classification was not taken into account because we did not have any knowledge in the domain, and targeting a general public, it would have been an irrelevant information to present. Going deeper in the domain, we discovered that the type of meteorites depends on the chemical elements of which they are composed by. The attribute \texttt{recclass} presents more than 300 unique classes of meteorites that belong to a defined hierachy well presented in Weisberg et al.  \cite{weisberg_systematics_2006}.
-Going up in the nodes of the hierarchy, we ended up with three main classes that describe the material of the meteorites: $stony$, $stony-iron$ and $iron$. 
-We firstly checked on the name of the unique classes and classify them by looking at the first letter of \texttt{reclass}. The classification was that easy because the $stony-iron$ meteorites have only two sub-classes ($Pallasite$ and $Mesosiderite$), and the $iron$ meteorites are always classified as $Iron$+$code$. The $stony$ class contains much more sub-classes. Giving that  $iron$ and the $stony-iron$ meteorites contain a limited number of sub-classes, we just checked if the remaining meteorites classes were actually $stony$ (and it was the case!) and assigned to them this class. This simple classification could then draws more attention of the user and make him more familiar with this domain. Indeed, we did not want to go much deeper in the details of the classes because it could have been useless for the public targeted.
 
-Concerning the visualization, the first idea that  came to our mind  was to make a simple bar-chart for every country selected (Figure \ref{fig:sketch1}). 
+At the beginning, the meteorite classification was not taken into account because we did not have any knowledge in the domain, and targeting a general public, it would have been an irrelevant information to present. Going deeper in the domain, we discovered that the type of meteorites depends on the chemical elements of which they are composed by. The attribute \texttt{recclass} presents more than $300$ unique classes of meteorites that belong to a defined hierarchy well presented in Weisberg et al.  \cite{weisberg_systematics_2006}.
+
+Going up in the nodes of the hierarchy, we ended up with three main classes that describe the material of the meteorites: \textit{stony}, \textit{stony-iron} and \textit{iron}.
+ 
+We firstly checked on the name of the unique classes and classify them by looking at the first letter of \texttt{reclass}. The classification was that easy because the \textit{stony-iron} meteorites have only two sub-classes (\textit{Pallasite} and \textit{Mesosiderite}), and the \textit{iron} meteorites are always classified as \textit{Iron}+\textit{code}. The \textit{stony} class contains much more sub-classes. Giving that \textit{iron} and the \textit{stony-iron} meteorites contain a limited number of sub-classes, we just checked if the remaining meteorites classes were actually \textit{stony} (and it was the case!) and assigned to them this class. This simple classification could then draws more attention of the user and make him more familiar with this domain. Indeed, we did not want to go much deeper in the details of the classes because it could have been useless for the public targeted.
+
+Concerning the visualization, the first idea that came to our mind was to make a simple bar-chart for every country selected (Figure \ref{fig:sketch1}).
+ 
 We soon abandoned this idea because we could have had only a local point of view. In order to do a comparison with the other countries and have a more global point of view, we thought to visualize flows between the type of meteorites and the different countries (Figure \ref{fig:bipartitesketch}). 
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=\columnwidth]{images/bipartite}
   \vspace{-3mm}
@@ -228,52 +241,49 @@ We soon abandoned this idea because we could have had only a local point of view
   \label{fig:bipartitesketch}
 \end{figure}
 
-Firstly we thought to just draw the lines of direct connections between the two different nodes with a constant thickness. We then realised that a thickness depending on the mass would have been more informative. The Sankey diagram came to our mind to vizualize the flows and a nice example proposed by Bremer \cite{BibEntry2017Dec} was our inspiration. Indeed, the latter example propose a bipartite Sankey diagram in the form of a Chord diagram. We discovered a simply way to build a bipartite graph with the \texttt{viz.js} library \cite{bipartite_viz}. This library takes as input parameters the primary key (meteorites' classes), the secondary key (countries) and a value that links the two keys (mass). We first considered all the countries, but we decided to filter out only the countries having a total \texttt{mass} of meteorites bigger than 500 kg and store the other countries as $Others$.
+Firstly we thought to just draw the lines of direct connections between the two different nodes with a constant thickness. We then realised that a thickness depending on the mass would have been more informative. The Sankey diagram came to our mind to vizualize the flows and a nice example proposed by Bremer \cite{BibEntry2017Dec} was our inspiration. Indeed, the latter example propose a Chord diagram in the form of a bipartite Sankey diagram. We discovered a simply way to build a bipartite graph with the \texttt{viz.js} library \cite{bipartite_viz}. This library takes as input parameters the primary key (meteorites' classes), the secondary key (countries) and a value that links the two keys (mass). We first considered all the countries, but we decided to filter out only the countries having a total \texttt{mass} of meteorites bigger than $500$ kg and store the other countries as `Others'.
 
 
-The result of our first bipartite graph was as follow (Figure \ref{fig:bipartite_mass}): 
+The result of our first bipartite graph was as follow (Figure \ref{fig:bipartite_mass}):
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
-  \includegraphics[height=\columnwidth]{images/bipartite_mass}
-  \vspace{-3mm}
+  \includegraphics[width=0.7\columnwidth]{images/bipartite_mass}
+  \vspace{3mm}
   \caption{First bipartite graph with thickness of flow depending on the mass}
   \label{fig:bipartite_mass}
 \end{figure}
 
 The percentages that you can see on the right of the countries correspond to the sum of all meteorites that fell on that country divided by the mass of all meteorites. If you mouse over a class of meteorite or a country, it will filter out the class selected or the country selected as you can see in figure \ref{fig:bipartite_mouse}. The percentages update dynamically as well.
- 
-\begin{figure}[H]
+
+\begin{figure}[]
   \centering
-  \includegraphics[height=\columnwidth]{images/example_mouse_bipartite}
-  \vspace{-3mm}
-  \caption{Bipartite graph - on mouse over $stony-iron$ class}
+  \includegraphics[width=0.7\columnwidth]{images/example_mouse_bipartite}
+  \vspace{3mm}
+  \caption{Bipartite graph - on mouse over \textit{stony-iron} class}
   \label{fig:bipartite_mouse}
 \end{figure}
 
-We then noticed that the size of the country biased our first results. In order to do not give a higher weight to the biggest countries, we divided every \texttt{mass} by the area of the country where it fell, obtaining then the \texttt{density} of meteorites by country in $gr/km^{2}$. This time we filtered out the countries having a \texttt{density} bigger than $1$ $gr/km^{2}$ and store the remaining in $Others$.
+Then we noticed that the size of the country biased our first results. In order not to give a higher weight to the biggest countries, we divided every \texttt{mass} by the area of the country where it fell, obtaining then the \texttt{density} of meteorites by country in g/km$^2$. This time we filtered out the countries having a \texttt{density} bigger than $1$ g/km$^2$ and store the remaining in `Others'. The area of the countries was calculated thanks to Quantum GIS software, an open source GIS\footnote{Geographic Information Systems} software. 
 
-We ended up with the following graph (Figure \ref{fig:bipartite_density}): 
+We ended up with the graph in figure \ref{fig:bipartite_density}. Countries as Australia, United States and China clearly diminished on importance and Russia was even incorporated to `Others'.
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
-  \includegraphics[height=\columnwidth]{images/bipartite_density}
-  \vspace{-3mm}
+  \includegraphics[width=0.7\columnwidth]{images/bipartite_density}
+  \vspace{3mm}
   \caption{Final bipartite graph with thickness of flow depending on the density}
   \label{fig:bipartite_density}
 \end{figure}
 
-Countries as Australia, United States and China clearly diminished on importance and Russia was even incorporated to $Others$.
-
 \subsection{Country statistics}
 The country statistics panel was from the beginning thought to appear when a country was selected in the search-bar. Hence, we tried to figure out which country's data  could be interesting to visualize. 
 
-Firstly, we decided to visualize the mass distribution of the meteorite falls and finds\footnote{Meteorites are considered falls if they can be
-associated with an observed fall event and finds if they
+Firstly, we decided to visualize the mass distribution of the meteorite falls and find\footnote{Meteorites are considered falls if they can be associated with an observed fall event and finds if they
 cannot be connected to a recorded fall event \cite{weisberg_systematics_2006}.} and the frequency by meteorite classes (Figure \ref{fig:density_plot}).
 
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=\columnwidth]{images/densityplot}
   \vspace{-3mm}
@@ -282,83 +292,85 @@ cannot be connected to a recorded fall event \cite{weisberg_systematics_2006}.} 
 \end{figure}
 
 
-As the information of the meteorite classes was already given with the bipartite graph (Figure \ref{fig:bipartite_density}), the latter option was abandoned. 
+As the information of the meteorite classes was already given with the bipartite graph (Figure \ref{fig:bipartite_density}), the latter option was abandoned. Furthermore, we decided to do not take into account the differences between the $fell$ and $found$ meteorites because the number of fell meteorites was a way smaller than the found meteorites, leading the comparison between the two types difficult to interpret.   
 
 Another option that was taken into account was to visualize the three heaviest meteorite recorded that fell in the selected country. A simple text saying the names and the masses of the meteorites was considered a too simple solution; hence, we decided to create a geometry that could remind a meteorite shape as follow:
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=\columnwidth]{images/3biggestmeteorites}
-  \vspace{-3mm}
+  %\vspace{-3mm}
   \caption{Sketch meteorite shape}
   \label{fig:sketch_3_biggest}
 \end{figure}
 
 We finally opted to only draw the heaviest meteorite by country giving that most of the countries had only few entries. The library \texttt{three.js} was again the best option to visualize 3D shapes. In order to draw the shape desired, we created a dodecahendrom geometry and pushed random positions to the its vertices. We obtained the following shape: 
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=.5\columnwidth]{images/biggestmeteorite}
-  \vspace{-3mm}
   \caption{Heaviest meteorite with \texttt{three.js}}
   \label{fig:sketch_biggest}
 \end{figure}
 
-Our initial idea was even to click on the meteorite and see the meteorite falling, but this idea was abandoned as well for a lack of time. 
+Our initial idea was even to click on the meteorite and see the meteorite falling, but this idea was abandoned as well for a lack of time.
 
-Concerning the mass distribution, the first problem encountered was that the masses had very different values, resulting in a very skewed distribution. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values. 
+Concerning the mass distribution, the first problem encountered was that the masses recorded are generally low, resulting then to very skewed distributions. In order to have a smaller range and have a more normal distribution, the mass values considered were transformed in logarithmic values.
 
+As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one}, \ref{fig:density_two}).
 
-As you can see in Figure \ref{fig:density_plot}, the first idea was to plot a line following the frequency of each mass. With countries having a big amount of data recorded it worked well (Figure \ref{fig:density_good}), but giving that most of the countries have only few entries or even only one recorded meteorite, the visualization showed false information (Figure \ref{fig:density_one},\ref{fig:density_two}).
-
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=.5\columnwidth]{images/good_density_plot}
-  \vspace{-3mm}
   \caption{Density plot with many entries with \texttt{d3.js}}
   \label{fig:density_good}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=.5\columnwidth]{images/one_point_density_plot}
-  \vspace{-3mm}
   \caption{Density plot with one entry with \texttt{d3.js}}
   \label{fig:density_one}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[]
   \centering
   \includegraphics[width=.5\columnwidth]{images/two_point_density_plot}
-  \vspace{-3mm}
   \caption{Density plot with two entries with \texttt{d3.js}}
   \label{fig:density_two}
 \end{figure}
 
-We then opted for a simple histogram of values. 
+We then opted for a simple histogram of the mass values, the simplest but the clearest one (Figure ref figure histogram). 
 
 
-Figure histogram
+Figure histogram % TODO ????
 
 
 
-The final statistics panel results as follow: 
+The final country statistics panel results as follow: 
 
 
 
 
 \subsection{Messages}
+After setting up all the spatial and statistical visualizations and going deeper in the domain, we discovered many funny (and a bit sketchy) stories about meteorites in human history. This has soon gave us new ideas to represent other information and make funnier our visualization. 
 
-The International Comet Quarterly publishes a list of all incidents reported related to meteorites \cite{international_comet_quarterly}. We took this data and adapted to make them appear next to the globe. The text does not appear all at once, but word by word. The reason behind is that it is easier to see it when a new message is displayed.
+In fact, the International Comet Quarterly publishes a list of all incidents reported related to meteorites \cite{international_comet_quarterly}. We took this data and adapted to make them appear next to the globe. The text does not appear all at once, but word by word. The reason behind is that it is easier to see it when a new message is displayed.
+
 
 % screen shot here
 
 \subsection{Final touches}
-Night-day texture
-Layout
 
+The texture covering the Earth depends on the time of the day. The night we display a dark face while the day we display a bright face.
 
+When the user selects a country, let's say `France', then the camera moves closer in order to increase the surface of the chosen country. This creates more interaction with the interface.
 
+Finally, we have decided to adopt a black background with stars upon it which creates the illusion of our planet being hung somewhere in the universe.
+
+% Night-day texture\\
+% Zooming on the country selected\\
+% Layout\\
 
 
 
@@ -374,7 +386,7 @@ To do.
 \item[Rehan Mulakhel] \ \\
   Web page centralizing links to the demo, code and process book. Brushing time line. Dynamic suggestion for the countries. Country to each meteorite based on coordinates. 
 \item[Noemi Romano] \ \\
-  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected. 
+  Data cleaning, globe visualization (partly), country statistics, meteorites classification, ISO codes for countries, getting minimum latitude and longitude for every country to facilitate the zooming on the country selected,  
 \item[Raja Soufi] \ \\
   Globe visualization (partly) as well as falling meteorites and world camera animations/movements.
   Improvements to various elements such as timeline and search field, as well as linking the various parts together.

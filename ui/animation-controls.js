@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-    Constants
+	Constants
 */
 
 const PLAY_PAUSE_CONTROL = document.getElementById('play-pause-control');
@@ -15,48 +15,48 @@ const PAUSE_BUTTON       = PLAY_PAUSE_CONTROL.children[1];
 let playPauseState = true;
 
 /*
-    Functions
+	Functions
 */
 
 function play() {
-    
-    resumeMainAnimation();
-    
-    PLAY_BUTTON.style.setProperty('display', 'none');
-    PAUSE_BUTTON.style.setProperty('display', 'inline');
-    
-    playPauseState = true;
-    
+
+	resumeMainAnimation();
+
+	PLAY_BUTTON.style.setProperty('display', 'none');
+	PAUSE_BUTTON.style.setProperty('display', 'inline');
+
+	playPauseState = true;
+
 }
 
 function pause() {
-    
-    pauseMainAnimation();
-    
-    PLAY_BUTTON.style.setProperty('display', 'inline');
-    PAUSE_BUTTON.style.setProperty('display', 'none');
-    
-    playPauseState = false;
-    
+
+	pauseMainAnimation();
+
+	PLAY_BUTTON.style.setProperty('display', 'inline');
+	PAUSE_BUTTON.style.setProperty('display', 'none');
+
+	playPauseState = false;
+
 }
 
 /*
-    Event Listeners
+	Event Listeners
 */
 
 PLAY_PAUSE_CONTROL.addEventListener('click', event => {
-    
-    playPauseState ? pause() : play();
-    
+
+	playPauseState ? pause() : play();
+
 });
 
 RESTART_CONTROL.addEventListener('click', event => {
-    
-    clearMainAnimationTimeouts();
-    explodeMeteoritesInMidAir();
-    
-    startMainAnimation();
-    
-    play();
-    
+
+	clearMainAnimationTimeouts();
+	explodeMeteoritesInMidAir();
+
+	startMainAnimation();
+
+	play();
+
 });

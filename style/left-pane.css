@@ -1,127 +1,126 @@
-
 #left-pane {
-    --left-pane-height: 60vh;
-    --left-pane-width: 30vw;
-    
-    position: fixed;
-    top: 19vh;
-    left: 2vw;
-    height: var(--left-pane-height);
-    width: var(--left-pane-width);
-    
-    border-radius: 0.8vw;
-    
-    background-color: var(--color-ui-bg);
+	--left-pane-height: 60vh;
+	--left-pane-width: 30vw;
+
+	position: fixed;
+	top: 19vh;
+	left: 2vw;
+	height: var(--left-pane-height);
+	width: var(--left-pane-width);
+
+	border-radius: 0.8vw;
+
+	background-color: var(--color-ui-bg);
 }
 
 .left-pane-containers {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    
-    transition: opacity 0.3s;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+
+	transition: opacity 0.3s;
 }
 
 .left-pane-containers[data-hidden] {
-    opacity: 0;
-    z-index: -1;
+	opacity: 0;
+	z-index: -1;
 }
 
 /*
-    Country statistics
+	Country statistics
 */
 
 #country-stats-back-button {
-    position: absolute;
-    top: 1vw;
-    left: 1vw;
-    
-    cursor: pointer;
+	position: absolute;
+	top: 1vw;
+	left: 1vw;
+
+	cursor: pointer;
 }
 
-#country-stats-back-button > path {
-    fill: #aaa;
+#country-stats-back-button>path {
+	fill: #aaa;
 }
 
 #country-stats-country-name {
-    width: 100%;
-    margin-top: 1.5vh;
-    
-    text-align: center;
-    font-size: 1.5vw;
+	width: 100%;
+	margin-top: 1.5vh;
+
+	text-align: center;
+	font-size: 1.5vw;
 }
 
 #mass-dist-chart rect {
-    fill: var(--color-mean-mass-bars);
+	fill: var(--color-mean-mass-bars);
 }
 
 #mass-dist-chart-x-axis-label {
-    position: absolute;
-    top: 36.5vh;
-    width: var(--left-pane-width);
-    
-    text-align: center;
-    font-size: 1vw;
-    color: #ccc;
-    
-    opacity: 0.3;
+	position: absolute;
+	top: 36.5vh;
+	width: var(--left-pane-width);
+
+	text-align: center;
+	font-size: 1vw;
+	color: #ccc;
+
+	opacity: 0.3;
 }
 
 .country-mass-dist-texts {
-    text-anchor: middle;
-    fill: #ccc;
-    font-size: 0.8vw;
-    
-    transition: opacity 0.3s;
+	text-anchor: middle;
+	fill: #ccc;
+	font-size: 0.8vw;
+
+	transition: opacity 0.3s;
 }
 
 .country-mass-dist-texts[data-hidden] {
-    opacity: 0;
+	opacity: 0;
 }
 
-#country-stats-container .axes > path,
+#country-stats-container .axes>path,
 #country-stats-container .axes line {
-    stroke: #ccc;
-    opacity: 0.3;
+	stroke: #ccc;
+	opacity: 0.3;
 }
 
 #heaviest-meteorite-title {
-    margin: 1.5vw 0 1vw 2vw;
-    
-    font-size: 1.5vw;
+	margin: 1.5vw 0 1vw 2vw;
+
+	font-size: 1.5vw;
 }
 
 .heaviest-meteorite-info {
-    margin-left: 2vw;
+	margin-left: 2vw;
 }
 
-#country-stats-container > canvas {
-    position: absolute;
-    bottom: 3vh;
-    right: 3vw;
+#country-stats-container>canvas {
+	position: absolute;
+	bottom: 3vh;
+	right: 3vw;
 }
 
 #country-stats-no-data-text {
-    margin: 0;
-    
-    text-align: center;
-    line-height: var(--left-pane-height);
-    font-size: 1.5vw;
-    
-    opacity: 0.5;
+	margin: 0;
+
+	text-align: center;
+	line-height: var(--left-pane-height);
+	font-size: 1.5vw;
+
+	opacity: 0.5;
 }
 
 #country-stats-no-data-text[data-hidden] {
-    opacity: 0;
+	opacity: 0;
 }
 
 /*
 #divMassDist{
-    position: relative;
+	position: relative;
 }
 
 #biggestMeteorite {
-    position: relative;
+	position: relative;
 }
 
 #nameMeteorite {
@@ -146,85 +145,86 @@
 */
 
 /*
-    Class statistics
+	Class statistics
 */
 
 #class-stats text {
-    fill: #ccc;
+	fill: #ccc;
 }
 
 #class-stats .perc {
-    font-size: 7px;
+	font-size: 7px;
 }
 
 #class-stats .label {
-    font-size: 7px;
+	font-size: 7px;
 }
 
 #MassDistribution {
-    height: 350px;
-    position: fixed;
-    top: 200px;
-    left: 5px;
-    float: right;
+	height: 350px;
+	position: fixed;
+	top: 200px;
+	left: 5px;
+	float: right;
 }
 
 path.bins1 {
-    stroke: var(--color-meteorites);
-    stroke-width: 4px;
-    fill: none;
+	stroke: var(--color-meteorites);
+	stroke-width: 4px;
+	fill: none;
 }
 
-   .bar1 rect {
-     fill: var(--color-meteorites);
-   }
+.bar1 rect {
+	fill: var(--color-meteorites);
+}
 
-   path.bins1 {
-     stroke: var(--color-meteorites);
-     stroke-width: 4px;
-     fill: none;
-   }
+path.bins1 {
+	stroke: var(--color-meteorites);
+	stroke-width: 4px;
+	fill: none;
+}
 
-   .bar1:hover rect {
-     fill: black;
-   }
+.bar1:hover rect {
+	fill: black;
+}
 
-   .bar1 text {
-     fill: #fff;
-     font: 10px sans-serif;
-   }
+.bar1 text {
+	fill: #fff;
+	font: 10px sans-serif;
+}
 
-   .bar2 rect {
-     fill:var(--color-meteorites);
-   }
+.bar2 rect {
+	fill: var(--color-meteorites);
+}
 
-   path.bins2 {
-     stroke: var(--color-meteorites);
-     stroke-width: 4px;
-     fill: none;
-   }
+path.bins2 {
+	stroke: var(--color-meteorites);
+	stroke-width: 4px;
+	fill: none;
+}
 
-   .bar2:hover rect {
-     fill:black;
-   }
+.bar2:hover rect {
+	fill: black;
+}
 
-   .bar2 text {
-     fill: #fff;
-     font: 10px sans-serif;
-   }
+.bar2 text {
+	fill: #fff;
+	font: 10px sans-serif;
+}
 
-   .subBars{
-   	shape-rendering:crispEdges;
-   }
-   .edges{
-   	stroke:none;
-   	fill-opacity:0.3;
-   }
+.subBars {
+	shape-rendering: crispEdges;
+}
 
- .mainBars rect{
-     shape-rendering: auto;
-     fill-opacity: 0;
-     stroke-width: 0.5px;
-     stroke:grey;
-     stroke-opacity: 0;
-   }
+.edges {
+	stroke: none;
+	fill-opacity: 0.3;
+}
+
+.mainBars rect {
+	shape-rendering: auto;
+	fill-opacity: 0;
+	stroke-width: 0.5px;
+	stroke: grey;
+	stroke-opacity: 0;
+}

@@ -1,66 +1,65 @@
-
 #timeline {
-    position: fixed;
-    bottom: 0.5vh;
-    right: 15vw;
-    overflow: visible;
+	position: fixed;
+	bottom: 0.5vh;
+	right: 15vw;
+	overflow: visible;
 }
 
 .timeline-titles {
-    text-anchor: end;
-    font-size: 1vw;
+	text-anchor: end;
+	font-size: 1vw;
 }
 
 #timeline-frequency-title {
-    fill: var(--color-frequency-bars);
+	fill: var(--color-frequency-bars);
 }
 
 #timeline-mean-mass-title {
-    alignment-baseline: mathematical;
-    fill: var(--color-mean-mass-bars);
+	alignment-baseline: mathematical;
+	fill: var(--color-mean-mass-bars);
 }
 
-#timeline .axes > path,
+#timeline .axes>path,
 #timeline .axes line {
-    display: none;
+	display: none;
 }
 
 #timeline .x-axes .tick:first-of-type {
-    display: none;
+	display: none;
 }
 
 #time-indicator {
-    cursor: pointer;
-    
-    text-anchor: middle;
+	cursor: pointer;
+
+	text-anchor: middle;
 }
 
-#time-indicator > text {
-    fill: #ccc;
+#time-indicator>text {
+	fill: #ccc;
 }
 
 #time-handle {
-    fill: var(--color-ui-bg);
-    stroke-width: 0;
-    z-index: 2;
+	fill: var(--color-ui-bg);
+	stroke-width: 0;
+	z-index: 2;
 }
 
 .timeline-bars {
-    cursor: pointer;
-    
-    opacity: 0.7;
-    
-    transition: opacity 0.3s;
+	cursor: pointer;
+
+	opacity: 0.7;
+
+	transition: opacity 0.3s;
 }
 
 .timeline-bars[data-present] {
-    opacity: 1;
+	opacity: 1;
 }
 
 .timeline-frequency-bars {
-    fill: var(--color-frequency-bars);
+	fill: var(--color-frequency-bars);
 }
 
 .timeline-mean-mass-bars {
-    fill: var(--color-mean-mass-bars);
+	fill: var(--color-mean-mass-bars);
 }

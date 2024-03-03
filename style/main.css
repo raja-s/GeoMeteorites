@@ -1,46 +1,45 @@
-
 html {
-    
-    --color-bg: #070a1b;
-    
-    --color-ui-bg: #282a30;
-    
-    --color-meteorites: #ffad5b;
-    
-    --color-frequency-bars: var(--color-meteorites);
-    --color-mean-mass-bars: #1884bc;
-    
+
+	--color-bg: #070a1b;
+
+	--color-ui-bg: #282a30;
+
+	--color-meteorites: #ffad5b;
+
+	--color-frequency-bars: var(--color-meteorites);
+	--color-mean-mass-bars: #1884bc;
+
 }
 
 body {
-    
-    margin: 0;
-    
-    color: #ccc;
-    
-    background-color: var(--color-bg);
-    
+
+	margin: 0;
+
+	color: #ccc;
+
+	background-color: var(--color-bg);
+
 }
 
 #globe-container {
-    position: fixed;
-    height: 0;
-    width: 0;
+	position: fixed;
+	height: 0;
+	width: 0;
 }
 
 #messages {
-    position: fixed;
-    bottom: 18vh;
-    right: 1vw;
-    width: 25vw;
-    
-    font-size: 1vw;
-    
-    opacity: 0.8;
+	position: fixed;
+	bottom: 18vh;
+	right: 1vw;
+	width: 25vw;
+
+	font-size: 1vw;
+
+	opacity: 0.8;
 }
 
 .axes text {
-    font-size: 0.7vw;
-    
-    fill: #ccc;
+	font-size: 0.7vw;
+
+	fill: #ccc;
 }

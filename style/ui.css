@@ -1,87 +1,86 @@
-
 /*
-    Search Field
+	Search Field
 */
 
 #search-field-container {
-    --search-field-height: 4vw;
-    
-    position: fixed;
-    top: 5vh;
-    left: 4.5vw;
-    /*height: var(--search-field-height);*/
-    width: 25vw;
-    
-    /*margin: 2vw;*/
-    border-radius: 0.8vw;
-    
-    /*overflow: hidden;*/
-    background-color: var(--color-ui-bg);
-    box-shadow: 0 0 2vw 0.1vw #1a1a1a;
-    
-    /*transition: height 0.3s;*/
+	--search-field-height: 4vw;
+
+	position: fixed;
+	top: 5vh;
+	left: 4.5vw;
+	/*height: var(--search-field-height);*/
+	width: 25vw;
+
+	/*margin: 2vw;*/
+	border-radius: 0.8vw;
+
+	/*overflow: hidden;*/
+	background-color: var(--color-ui-bg);
+	box-shadow: 0 0 2vw 0.1vw #1a1a1a;
+
+	/*transition: height 0.3s;*/
 }
 
-#search-field-container > * {
-    text-align: center;
-    color: #ccc;
+#search-field-container>* {
+	text-align: center;
+	color: #ccc;
 }
 
-#search-field-container > p {
-    cursor: pointer;
-    opacity: 0.4;
-    
-    font-size: 1.2vw;
-    
-    transition: opacity 0.3s;
+#search-field-container>p {
+	cursor: pointer;
+	opacity: 0.4;
+
+	font-size: 1.2vw;
+
+	transition: opacity 0.3s;
 }
 
-#search-field-container > p[data-candidate] {
-    opacity: 1;
+#search-field-container>p[data-candidate] {
+	opacity: 1;
 }
 
 #search-field {
-    height: var(--search-field-height);
-    width: 25vw;
-    
-    box-sizing: border-box;
-    border: 0;
-    
-    padding: 1vw;
-    
-    font-size: 1.5vw;
-    
-    resize: none;
-    outline: none;
-    background: none;
+	height: var(--search-field-height);
+	width: 25vw;
+
+	box-sizing: border-box;
+	border: 0;
+
+	padding: 1vw;
+
+	font-size: 1.5vw;
+
+	resize: none;
+	outline: none;
+	background: none;
 }
 
 /*
-    Animation Controls
+	Animation Controls
 */
 
 .animation-controls {
-    position: fixed;
-    bottom: 3vh;
-    height: 6vw;
-    width: 6vw;
-    
-    cursor: pointer;
+	position: fixed;
+	bottom: 3vh;
+	height: 6vw;
+	width: 6vw;
+
+	cursor: pointer;
 }
 
-.animation-controls > path {
-    fill: #ddd;
+.animation-controls>path {
+	fill: #ddd;
 }
 
 #play-pause-control {
-    left: 6vw;
-    padding: 1vh;
+	left: 6vw;
+	padding: 1vh;
 }
 
-#play-pause-control > :first-child {
-    display: none;
+#play-pause-control> :first-child {
+	display: none;
 }
 
 #restart-control {
-    right: 6vw;
+	right: 6vw;
 }

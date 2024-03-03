@@ -43,7 +43,9 @@ const TIMELINE_TRANSITION = d3.transition()
 let xTimeline = d3.scaleTime()
 					  .range([0, TIMELINE_CHART_DIMENSIONS.WIDTH]);
 
-let xAxisTimeline = d3.axisBottom(xTimeline);
+let xAxisTimeline = d3.axisBottom(xTimeline)
+						   .ticks(d3.timeYear.every(20))
+					  .tickFormat(d3.timeFormat('%Y'));
 
 let timelineBarWidth = 0;
 
@@ -135,7 +137,6 @@ function timelineBarsClickListener(d) {
 	clearMainAnimationTimeouts();
 	explodeMeteoritesInMidAir();
 
-	time = d.year.getFullYear();
-	updateTimeIndicator();
+	setYear(d.year.getFullYear());
 
 }

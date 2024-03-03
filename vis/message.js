@@ -117,3 +117,7 @@ function showMessage(year) {
 		$(this).delay(50 * i).fadeIn(300);
 	});
 }
+
+function hideMessage() {
+	$("#messages").empty();
+}

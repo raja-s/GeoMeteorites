@@ -271,11 +271,13 @@ function renderLoop() {
 	}
 
 	if (mainAnimationPlaying) {
-		updateMeteorites();
-	}
 
-	if ((METEORITES.length === 0) && !mainAnimationDone) {
-		nextYear();
+		updateMeteorites();
+
+		if (!droppingMeteorites && !mainAnimationDone) {
+			nextYear();
+		}
+
 	}
 
 	adjustCameraZoom();

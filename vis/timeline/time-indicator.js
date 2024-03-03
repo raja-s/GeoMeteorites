@@ -91,12 +91,10 @@ window.addEventListener('mouseup', event => {
 
 		const X = clamp(event.clientX, LEFT_LIMIT, RIGHT_LIMIT) - LEFT_LIMIT;
 
-		time = clamp(xTimeline.invert(X).getFullYear(), timelineStart(), timelineEnd());
-
-		updateTimeIndicator();
-
 		clearMainAnimationTimeouts();
 		explodeMeteoritesInMidAir();
+
+		setYear(clamp(xTimeline.invert(X).getFullYear(), timelineStart(), timelineEnd()));
 
 		if (playPauseState) {
 			resumeMainAnimation();

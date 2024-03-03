@@ -211,9 +211,9 @@ SEARCH_FIELD.addEventListener('input', event => {
 
 SEARCH_FIELD.addEventListener('keypress', event => {
 
-	switch (event.keyCode) {
+	switch (event.key) {
 
-		case KEYCODES.ENTER:
+		case 'Enter':
 			chooseCandidate();
 			break;
 
@@ -227,21 +227,21 @@ SEARCH_FIELD.addEventListener('keydown', event => {
 
 	if (CANDIDATE !== undefined) {
 
-		switch (event.keyCode) {
+		switch (event.key) {
 
-			case KEYCODES.ARROW_RIGHT:
-			case KEYCODES.TAB:
+			case 'ArrowRight':
+			case 'Tab':
 				chooseCandidate();
 				break;
 
-			case KEYCODES.ARROW_UP:
+			case 'ArrowUp':
 				if (CANDIDATE.previousElementSibling !== SEARCH_FIELD) {
 					clearCandidate();
 					CANDIDATE.previousElementSibling.dataset.candidate = '';
 				}
 				break;
 
-			case KEYCODES.ARROW_DOWN:
+			case 'ArrowDown':
 				if (CANDIDATE.nextElementSibling !== null) {
 					clearCandidate();
 					CANDIDATE.nextElementSibling.dataset.candidate = '';
@@ -254,7 +254,7 @@ SEARCH_FIELD.addEventListener('keydown', event => {
 
 	}
 
-	if (event.keyCode === KEYCODES.ESC) {
+	if (event.key === 'Escape') {
 		clearSuggestions();
 		SEARCH_FIELD.value = '';
 		backToGlobalView();

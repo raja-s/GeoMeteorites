@@ -67,6 +67,8 @@ function updateTimeIndicator() {
 	const Y = TIMELINE_MARGINS.TOP  + TIMELINE_CHART_DIMENSIONS.HEIGHT -
 		presentFrequencyBar.height.baseVal.value - TIME_HANDLE_HEIGHT - 2;
 
+	timeIndicator.interrupt();
+
 	timeIndicator.transition(TIME_INDICATOR_TRANSITION)
 		.attr('transform', `translate(${X}, ${Y})`);
 

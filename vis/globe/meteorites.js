@@ -67,8 +67,8 @@ function launchMeteorite(long, lat, mass) {
 
 	// DANGER: Do you want to have your browser crash? Because
 	//         that's how you have your browser crash!
-	// const LIGHT = new THREE.PointLight(0xffad5b, 3, 150, 2);
-	// addToScene(LIGHT);
+//	const LIGHT = new THREE.PointLight(0xffad5b, 3, 150, 2);
+//	addToScene(LIGHT);
 
 	const TARGET_PHI   = THREE.Math.degToRad(long);
 	const TARGET_THETA = THREE.Math.degToRad(lat);
@@ -85,7 +85,7 @@ function launchMeteorite(long, lat, mass) {
 
 	METEORITES.push({
 		meteorite : METEORITE,
-		// light     : LIGHT,
+//		light     : LIGHT,
 		ttl       : TTL,
 		mass      : mass,
 		r         : START_R,
@@ -139,7 +139,7 @@ function updateMeteorites() {
 
 			explodeMeteorite(i);
 
-			// removeFromScene(ENTRY.light);
+//			removeFromScene(ENTRY.light);
 
 		} else {
 
@@ -149,7 +149,7 @@ function updateMeteorites() {
 
 			let { x , y , z } = sphericalToCartesian(ENTRY.r, ENTRY.phi, ENTRY.theta);
 			ENTRY.meteorite.position.set(x, y, z);
-			// ENTRY.light.position.set(x, y, z);
+//			ENTRY.light.position.set(x, y, z);
 
 			ENTRY.ttl--;
 			i++;

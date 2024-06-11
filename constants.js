@@ -1,7 +1,7 @@
 'use strict';
 
 // Google Drive server address
-const GD_SERVER_ADDRESS = 'https://script.google.com/macros/s/AKfycbwgjNyIvsT0NCp-TviTk5Tvc9i279eKE9hBWPxshoZwLCkJfd82/exec';
+const GD_SERVER_ADDRESS = 'https://script.google.com/macros/s/AKfycbwPzbOP6CMqtj4LA6EcmctOmy4IDJFsz08IwoYsxG7gysA6Ownnorzbkx3aY7AMWYqibg/exec';
 
 // Cubic-Bezier(0.25,0.1,0.25,1)
 // For x in [ 0 ; 1 ] (in this case in steps of 0.01)

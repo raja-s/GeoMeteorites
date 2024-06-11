@@ -102,9 +102,14 @@ function focusOnCountry(countryCode) {
 
 	if (COUNTRY !== undefined) {
 
+		const maxLong = parseFloat(COUNTRY.maxLong);
+		const minLong = parseFloat(COUNTRY.minLong);
+		const maxLat  = parseFloat(COUNTRY.maxLat);
+		const minLat  = parseFloat(COUNTRY.minLat);
+
 		const R = CAMERA_BOUNDS.MIN + Math.floor(Math.max(
-			parseFloat(COUNTRY.maxLong) - parseFloat(COUNTRY.minLong),
-			parseFloat(COUNTRY.maxLat)  - parseFloat(COUNTRY.minLat)
+			maxLong - minLong,
+			maxLat  - minLat
 		));
 
 		moveCameraTo(

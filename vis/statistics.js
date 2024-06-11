@@ -63,6 +63,8 @@ const BACK_BUTTON_SIZE = LEFT_PANE_DIMENSIONS.WIDTH * 0.1;
 
 const HEAVIEST_METEORITE_MESH_MIN_SCALE = 0.0001;
 
+const ANTARCTICA_AREA = 14200000;
+
 /*
 	Variables
 */
@@ -306,7 +308,11 @@ function setUpBipartiteGraph() {
 		dataFinal.forEach(e=>e.CountryName=(groupByCountry.filter(f=>f.country==e.country).map(f=>parseFloat(f.totalMass)/(countries.filter(d=>d.country==f.country).map(d=>parseInt(d.area))))>1) && e.country!=='_' ?
 			countries.filter(d=>d.country===e.country).map(d=>d.name)[0]:'Others');
 		//Density [gr/km2]
-		dataFinal.forEach(e=>e.Density=parseFloat(e.mass)/(countries.filter(d=>d.country==e.country).map(d=>parseInt(d.area))));
+		dataFinal.forEach(entry => {
+			const entryCountry = countries.find(country => country.country == entry.country);
+			const area = entry.country === '0' ? ANTARCTICA_AREA : parseInt(entryCountry.area);
+			entry.Density = parseFloat(entry.mass) / area;
+		});
 
 		//----------------Iron Meteorites-----------------------------------------------
 		let ironMeteorites = dataFinal.filter(e=>e.recclass.includes('Iron') || e.recclass.includes('Relict iron'));
